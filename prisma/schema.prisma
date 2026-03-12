@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                   String          @id @default(cuid())
+  clerkId              String          @unique
+  email                String          @unique
+  plan                 Plan            @default(FREE)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  analysesUsed         Int             @default(0)
+  analysesReset        DateTime        @default(now())
+  generationsUsed      Int             @default(0)
+  brandProfiles        BrandProfile[]
+  savedIdeas           SavedIdea[]
+  savedContents        SavedContent[]
+  scheduledPosts       ScheduledPost[]
+  activities           Activity[]
+  socialAccounts       SocialAccount[]
+  createdAt            DateTime        @default(now())
+}
+
+model BrandProfile {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  name       String
+  voice      String
+  tone       String
+  audience   String   @default("")
+  guidelines String   @default("")
+  examples   String   @default("")
+  colors     String   @default("")
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model SavedIdea {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  angle     String
+  hook      String
+  platform  String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SavedContent {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  topic          String
+  platform       String
+  copy           String
+  hook           String   @default("")
+  cta            String   @default("")
+  hashtags       String   @default("[]")
+  viralityScore  Int      @default(0)
+  tone           String   @default("")
+  postType       String   @default("")
+  imagePrompt    String   @default("")
+  brandProfileId String?
+  tags           String   @default("[]")
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([platform])
+}
+
+model ScheduledPost {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  content        String
+  platform       String
+  hashtags       String     @default("[]")
+  imagePrompt    String     @default("")
+  scheduledFor   DateTime?
+  status         PostStatus @default(DRAFT)
+  brandProfileId String?
+  calendarColor  String     @default("#06b6d4")
+  notes          String     @default("")
+  tags           String     @default("[]")
+  mediaUrls      String     @default("[]")
+  approvedBy     String?
+  publishLogs    PublishLog[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  publishedAt    DateTime?
+
+  @@index([userId])
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+model Activity {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  type      ActivityType
+  title     String
+  metadata  String       @default("{}")
+  createdAt DateTime     @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model SocialAccount {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  platform      String
+  accountId     String
+  accountName   String    @default("")
+  accountAvatar String    @default("")
+  accessToken   String
+  refreshToken  String?
+  tokenExpiresAt DateTime?
+  scope         String    @default("")
+  isActive      Boolean   @default(true)
+  connectedAt   DateTime  @default(now())
+
+  @@unique([userId, platform])
+  @@index([userId])
+}
+
+model PublishLog {
+  id              String        @id @default(cuid())
+  scheduledPostId String
+  scheduledPost   ScheduledPost @relation(fields: [scheduledPostId], references: [id])
+  platform        String
+  status          PublishStatus
+  platformPostId  String?
+  errorMessage    String?
+  attemptedAt     DateTime      @default(now())
+  completedAt     DateTime?
+
+  @@index([scheduledPostId])
+  @@index([status])
+}
+
+enum Plan {
+  FREE
+  PRO
+  AGENCY
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PENDING_APPROVAL
+  PUBLISHED
+  FAILED
+}
+
+enum PublishStatus {
+  SUCCESS
+  FAILED
+  RETRYING
+}
+
+enum ActivityType {
+  ANALYSIS
+  GENERATION
+  CONTENT_SAVED
+  CONTENT_SCHEDULED
+  CONTENT_PUBLISHED
+  BRAND_PROFILE_CREATED
+  BRAND_PROFILE_UPDATED
+}

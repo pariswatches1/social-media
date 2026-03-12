@@ -120,10 +120,12 @@ body.hov #cd { opacity: 0; }
 body.hov #cr { width: 54px; height: 54px; border-color: var(--ac); }
 
 /* STL dual-text hover */
-.stl { display: inline-flex; flex-direction: column; overflow: hidden; }
-.stli { display: flex; flex-direction: column; transition: transform .5s cubic-bezier(.16,1,.3,1); }
-.stl:hover .stli, .stl-parent:hover .stli { transform: translateY(-50%); }
-.stl span { display: block; white-space: nowrap; }
+.stl { display: inline-flex; }
+.stli { display: flex; flex-direction: column; }
+.stli > span:last-child { display: none; }
+.stl span { white-space: nowrap; }
+.stl:hover, .stl-parent:hover .stl { opacity: .7; }
+.stl, .stl-parent .stl { transition: opacity .25s; }
 
 /* Nav scroll state */
 #signal-nav { transition: background .4s, border-color .4s, backdrop-filter .4s; }

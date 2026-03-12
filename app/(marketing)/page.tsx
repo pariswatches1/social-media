@@ -314,11 +314,17 @@ export default function MarketingPage() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginLeft: "auto", flexShrink: 0 }}>
-          <Link href="/sign-up" className="stl" style={{ background: "#fff", borderRadius: 99, padding: "11px 26px", overflow: "hidden", transition: "background .25s, transform .3s" }}>
-            <span className="stli">
-              <span style={{ fontSize: 14, fontWeight: 700, color: "#060C3D", letterSpacing: ".05em" }}>Get started &rarr;</span>
-              <span style={{ fontSize: 14, fontWeight: 700, color: "#060C3D", letterSpacing: ".05em" }}>Get started &rarr;</span>
-            </span>
+          <Link href="/sign-up" style={{
+            background: "#fff", borderRadius: 99, padding: "10px 24px",
+            fontSize: 13, fontWeight: 700, color: "#060C3D", letterSpacing: ".04em",
+            fontFamily: "var(--fd)", textDecoration: "none",
+            display: "inline-flex", alignItems: "center", gap: 6,
+            transition: "background .25s, transform .3s, box-shadow .3s",
+            border: "1px solid rgba(255,255,255,.9)",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "var(--ac)"; e.currentTarget.style.transform = "scale(1.04)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(0,237,212,.3)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
+            Get started <span style={{ fontSize: 12, transition: "transform .3s" }}>&rarr;</span>
           </Link>
         </div>
       </nav>
@@ -417,10 +423,7 @@ export default function MarketingPage() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ textAlign: "right", fontSize: 11, fontWeight: 400, color: "rgba(255,255,255,.40)", lineHeight: 1.55 }}>
-              Built on <a href="#" style={{ color: "rgba(255,255,255,.40)", transition: "color .2s" }}>Claude AI</a> &middot; <a href="#" style={{ color: "rgba(255,255,255,.40)", transition: "color .2s" }}>Anthropic</a><br />Est.&nbsp;2025
-            </div>
-            <div style={{ width: 38, height: 38, background: "rgba(0,237,212,.14)", border: "1px solid rgba(0,237,212,.30)", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <svg viewBox="0 0 24 24" fill="none" style={{ width: 19 }}><path d="M14 2L6 13h7L11 22L19 11h-7z" fill="#00EDD4" opacity=".9" /></svg>
+              Est.&nbsp;2025
             </div>
           </div>
         </div>
@@ -820,7 +823,7 @@ export default function MarketingPage() {
         <div style={{ borderTop: "1px solid var(--glassbr)", paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <p style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)" }}>&copy; 2025 SIGNAL. Built to beat Sprout Social. <em style={{ color: "var(--ac)", fontStyle: "normal", fontWeight: 600 }}>&#9889;</em></p>
           <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-            {["Legal mentions", "Privacy policy", "Built with Claude AI"].map(t => (
+            {["Legal mentions", "Privacy policy"].map(t => (
               <a key={t} href="#" style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>{t}</a>
             ))}
           </div>

@@ -176,18 +176,23 @@ export async function fetchInstagramData(
   })) as any;
 
   // Posts may be in different locations depending on API version
-  const rawPosts: unknown[] =
+  // The "Instagram Scraper Stable API" returns { posts: [{ node: {...} }] }
+  const rawPostsArray: unknown[] =
+    postsRes?.posts ||
     postsRes?.items ||
     postsRes?.data?.items ||
     postsRes?.user_posts ||
     postsRes?.data ||
     [];
 
-  // Normalize posts
-  const posts: InstagramPost[] = (Array.isArray(rawPosts) ? rawPosts : [])
+  // Unwrap { node: {...} } wrappers if present, then normalize
+  const posts: InstagramPost[] = (Array.isArray(rawPostsArray) ? rawPostsArray : [])
     .slice(0, 20)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((post: any) => extractPostData(post, followerCount));
+    .map((item: any) => {
+      const post = item?.node || item;
+      return extractPostData(post, followerCount);
+    });
 
   // Calculate average engagement
   const avgEngagementRate =

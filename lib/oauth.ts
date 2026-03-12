@@ -63,6 +63,14 @@ export const OAUTH_CONFIGS: Record<string, OAuthConfig> = {
     clientSecretEnv: "FACEBOOK_CLIENT_SECRET",
     profileUrl: "https://graph.facebook.com/me?fields=id,name,picture",
   },
+  snapchat: {
+    authUrl: "https://accounts.snapchat.com/login/oauth2/authorize",
+    tokenUrl: "https://accounts.snapchat.com/login/oauth2/access_token",
+    scopes: ["https://auth.snapchat.com/oauth2/api/user.display_name", "https://auth.snapchat.com/oauth2/api/user.bitmoji.avatar"],
+    clientIdEnv: "SNAPCHAT_CLIENT_ID",
+    clientSecretEnv: "SNAPCHAT_CLIENT_SECRET",
+    profileUrl: "https://kit.snapchat.com/v1/me",
+  },
   reddit: {
     authUrl: "https://www.reddit.com/api/v1/authorize",
     tokenUrl: "https://www.reddit.com/api/v1/access_token",

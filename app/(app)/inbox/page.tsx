@@ -188,7 +188,7 @@ export default function InboxPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {items.map((activity) => {
               const cfg = TYPE_CONFIG[activity.type] || { icon: "📋", color: "#94a3b8", bg: "rgba(100,116,139,0.1)" };
-              let meta: Record<string, unknown> = {};
+              let meta: Record<string, string> = {};
               try { meta = JSON.parse(activity.metadata); } catch { /* ignore */ }
 
               return (

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import { ensureUser } from "@/lib/ensure-user";
 
 // GET all brand profiles for the current user
 export async function GET() {
@@ -11,10 +12,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({ where: { clerkId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = await ensureUser(clerkId);
 
     const profiles = await prisma.brandProfile.findMany({
       where: { userId: user.id },
@@ -36,10 +34,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({ where: { clerkId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = await ensureUser(clerkId);
 
     const body = await request.json();
     const { name, voice, tone, audience, guidelines, examples, colors, isDefault } = body;

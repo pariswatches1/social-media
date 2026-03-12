@@ -5,6 +5,7 @@ import { decrypt } from "@/lib/encrypt";
 import { publishPost } from "@/lib/publishers";
 import { logActivity } from "@/lib/activity";
 import { isTokenExpired, refreshAccessToken } from "@/lib/token-refresh";
+import { ensureUser } from "@/lib/ensure-user";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,10 +14,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({ where: { clerkId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = await ensureUser(clerkId);
 
     const { scheduledPostId } = await request.json();
     if (!scheduledPostId) {

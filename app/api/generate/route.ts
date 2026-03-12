@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { callClaude } from "@/lib/anthropic";
 import { getPlanLimits } from "@/lib/usage";
 import prisma from "@/lib/prisma";
+import { ensureUser } from "@/lib/ensure-user";
 
 const PLATFORMS: Record<string, { label: string; limit: number }> = {
   instagram: { label: "Instagram", limit: 2200 },
@@ -21,10 +22,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({ where: { clerkId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    const user = await ensureUser(clerkId);
 
     const body = await request.json();
     const { topic, angle, hook, tone, postType, platforms, variations, brandVoice } = body;

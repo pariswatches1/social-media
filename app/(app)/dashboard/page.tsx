@@ -156,6 +156,45 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* ── To Do Section (Sprout pattern) ── */}
+      <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 14, padding: 20, marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2 }}>TO DO</div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+          <Link href="/schedule?status=DRAFT" style={{
+            background: "#060810", border: "1px solid #1e2535", borderRadius: 10, padding: "16px 14px",
+            textDecoration: "none", display: "flex", alignItems: "center", gap: 12, transition: "border-color 0.15s",
+          }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(100,116,139,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📝</div>
+            <div>
+              <div style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#94a3b8" }}>{data?.stats.scheduledCount || 0}</div>
+              <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 0.5 }}>Drafts to review</div>
+            </div>
+          </Link>
+          <Link href="/schedule" style={{
+            background: "#060810", border: "1px solid #1e2535", borderRadius: 10, padding: "16px 14px",
+            textDecoration: "none", display: "flex", alignItems: "center", gap: 12, transition: "border-color 0.15s",
+          }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(6,182,212,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📅</div>
+            <div>
+              <div style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#06b6d4" }}>{data?.stats.scheduledCount || 0}</div>
+              <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 0.5 }}>Scheduled posts</div>
+            </div>
+          </Link>
+          <Link href="/settings/accounts" style={{
+            background: "#060810", border: "1px solid #1e2535", borderRadius: 10, padding: "16px 14px",
+            textDecoration: "none", display: "flex", alignItems: "center", gap: 12, transition: "border-color 0.15s",
+          }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(34,197,94,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🔗</div>
+            <div>
+              <div style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#22c55e" }}>{data?.stats.brandCount || 0}</div>
+              <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 0.5 }}>Connected accounts</div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       {/* Two-column: Recent Activity + Upcoming Posts */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 32 }}>
         {/* Recent Activity */}

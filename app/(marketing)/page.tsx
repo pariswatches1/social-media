@@ -308,9 +308,9 @@ export default function MarketingPage() {
           <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}>
             <a href="#cases" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap" }}>Results</a>
           </div>
-          {/* About */}
+          {/* Free Tools */}
           <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}>
-            <a href="#" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap" }}>About</a>
+            <Link href="/tools" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap", textDecoration: "none" }}>Free Tools</Link>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginLeft: "auto", flexShrink: 0 }}>

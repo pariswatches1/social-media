@@ -59,8 +59,8 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Subscriber Count Hero */}
-            <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
+            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
                 {result.channelName || "Subscribers"}
               </div>
               <div style={{ fontSize: 52, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#FF0000" }}>
@@ -79,17 +79,17 @@ export default function ToolContent() {
                 { label: "Category", value: result.channelCategory },
                 { label: "Milestone", value: result.milestoneProgress },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 18 }}>
-                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#e2e8f0" }}>{stat.value}</div>
+                <div key={stat.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
+                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{stat.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Milestone Progress Bar */}
             {result.subscriberCount && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Milestone Progress</div>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Milestone Progress</div>
                 {(() => {
                   const milestones = [1000, 10000, 100000, 1000000, 10000000, 100000000];
                   const next = milestones.find((m) => m > result.subscriberCount) || milestones[milestones.length - 1];
@@ -99,10 +99,10 @@ export default function ToolContent() {
                   return (
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                        <span style={{ fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: "#94a3b8" }}>{formatNum(prev)}</span>
+                        <span style={{ fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: "#0a1e5e" }}>{formatNum(prev)}</span>
                         <span style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#FF0000" }}>{formatNum(next)}</span>
                       </div>
-                      <div style={{ height: 8, borderRadius: 4, background: "#1e2535" }}>
+                      <div style={{ height: 8, borderRadius: 4, background: "rgba(255,255,255,0.3)" }}>
                         <div style={{ height: 8, borderRadius: 4, background: "linear-gradient(90deg, #FF0000, #ff4444)", width: `${progress}%`, transition: "width 0.5s ease" }} />
                       </div>
                     </div>
@@ -113,9 +113,9 @@ export default function ToolContent() {
 
             {/* Summary */}
             {result.summary && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Analysis</div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#e2e8f0", margin: 0, lineHeight: 1.6 }}>{result.summary}</p>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Analysis</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.summary}</p>
               </div>
             )}
 

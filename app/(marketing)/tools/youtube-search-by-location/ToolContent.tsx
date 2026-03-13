@@ -49,9 +49,9 @@ export default function ToolContent() {
     flex: 1,
     padding: "12px 14px",
     borderRadius: 8,
-    border: "1px solid #1e2535",
-    background: "#060810",
-    color: "#e2e8f0",
+    border: "1px solid rgba(10,30,94,0.12)",
+    background: "rgba(255,255,255,0.9)",
+    color: "#1a1a2e",
     fontSize: 14,
     fontFamily: "'DM Sans', sans-serif",
     outline: "none",
@@ -65,7 +65,7 @@ export default function ToolContent() {
       subtitle="Discover YouTube creators in any region. Find local influencers for your marketing campaigns."
       platform="youtube"
     >
-      <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 14, padding: 24 }}>
+      <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 14, padding: 24 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 10 }}>
           <input
             type="text"
@@ -90,8 +90,8 @@ export default function ToolContent() {
               padding: "12px 24px",
               borderRadius: 8,
               border: "none",
-              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "#1e2535",
-              color: canSubmit ? "#fff" : "#4a5568",
+              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "rgba(255,255,255,0.3)",
+              color: canSubmit ? "#fff" : "rgba(255,255,255,0.6)",
               fontSize: 13,
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
@@ -111,12 +111,12 @@ export default function ToolContent() {
             {/* Regional Insights */}
             {result.regionalInsights && (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 4 }}>
-                <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 16 }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Dominant Language</div>
-                  <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#e2e8f0" }}>{result.regionalInsights.dominantLanguage}</div>
+                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16 }}>
+                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Dominant Language</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{result.regionalInsights.dominantLanguage}</div>
                 </div>
-                <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 16 }}>
-                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Popular Categories</div>
+                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16 }}>
+                  <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Popular Categories</div>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {result.regionalInsights.popularCategories?.map((cat: string, i: number) => (
                       <span key={i} style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", padding: "2px 8px", borderRadius: 8, background: "rgba(255,0,0,0.08)", border: "1px solid rgba(255,0,0,0.2)", color: "#FF0000" }}>
@@ -130,9 +130,9 @@ export default function ToolContent() {
 
             {/* Market Notes */}
             {result.regionalInsights?.marketNotes && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 16, marginBottom: 4 }}>
-                <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Market Notes</div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#94a3b8", margin: 0, lineHeight: 1.5 }}>{result.regionalInsights.marketNotes}</p>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, marginBottom: 4 }}>
+                <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Market Notes</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#0a1e5e", margin: 0, lineHeight: 1.5 }}>{result.regionalInsights.marketNotes}</p>
               </div>
             )}
 
@@ -141,8 +141,8 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "#0a0d14",
-                  border: "1px solid #1e2535",
+                  background: "rgba(255,255,255,0.2)",
+                  border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
                   display: "flex",
@@ -155,7 +155,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "#1e2535",
+                    color: "rgba(255,255,255,0.3)",
                     lineHeight: 1,
                     minWidth: 36,
                   }}
@@ -164,7 +164,7 @@ export default function ToolContent() {
                 </span>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#fff" }}>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#ffffff" }}>
                       {ch.channelName}
                     </span>
                     <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#FF0000", letterSpacing: 1 }}>
@@ -176,11 +176,11 @@ export default function ToolContent() {
                       </span>
                     )}
                   </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#94a3b8", margin: "0 0 4px" }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#0a1e5e", margin: "0 0 4px" }}>
                     {ch.contentFocus}
                   </p>
                   {ch.notableFor && (
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#64748b", margin: 0, fontStyle: "italic" }}>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(10,30,94,0.65)", margin: 0, fontStyle: "italic" }}>
                       Notable for: {ch.notableFor}
                     </p>
                   )}

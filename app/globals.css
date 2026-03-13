@@ -95,6 +95,14 @@ html.marketing-page body {
 html.marketing-page a,
 html.marketing-page button { cursor: none; }
 
+/* Tool pages: restore normal cursor */
+html.marketing-page [data-tool-page],
+html.marketing-page [data-tool-page] a,
+html.marketing-page [data-tool-page] button,
+html.marketing-page [data-tool-page] input { cursor: auto; }
+html.marketing-page [data-tool-page] button:not(:disabled) { cursor: pointer; }
+html.marketing-page [data-tool-page] a { cursor: pointer; }
+
 /* Grain overlay */
 #grain {
   position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .14;

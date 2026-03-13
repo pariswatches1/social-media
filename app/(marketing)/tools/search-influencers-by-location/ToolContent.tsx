@@ -42,9 +42,9 @@ export default function ToolContent() {
     flex: 1,
     padding: "12px 14px",
     borderRadius: 8,
-    border: "1px solid #1e2535",
-    background: "#060810",
-    color: "#e2e8f0",
+    border: "1px solid rgba(10,30,94,0.12)",
+    background: "rgba(255,255,255,0.9)",
+    color: "#1a1a2e",
     fontSize: 14,
     fontFamily: "'DM Sans', sans-serif",
     outline: "none",
@@ -60,7 +60,7 @@ export default function ToolContent() {
       subtitle="Find Instagram influencers in any city or country. Discover local creators for partnerships and campaigns."
       platform="instagram"
     >
-      <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 14, padding: 24 }}>
+      <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 14, padding: 24 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 10 }}>
           <input
             type="text"
@@ -85,8 +85,8 @@ export default function ToolContent() {
               padding: "12px 24px",
               borderRadius: 8,
               border: "none",
-              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "#1e2535",
-              color: canSubmit ? "#fff" : "#4a5568",
+              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "rgba(255,255,255,0.3)",
+              color: canSubmit ? "#fff" : "rgba(255,255,255,0.6)",
               fontSize: 13,
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
@@ -107,8 +107,8 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "#0a0d14",
-                  border: "1px solid #1e2535",
+                  background: "rgba(255,255,255,0.2)",
+                  border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
                   display: "flex",
@@ -121,7 +121,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "#1e2535",
+                    color: "rgba(255,255,255,0.3)",
                     lineHeight: 1,
                     minWidth: 36,
                   }}
@@ -135,7 +135,7 @@ export default function ToolContent() {
                         fontFamily: "'Syne', sans-serif",
                         fontSize: 15,
                         fontWeight: 700,
-                        color: "#fff",
+                        color: "#ffffff",
                       }}
                     >
                       @{inf.handle.replace(/^@/, "")}
@@ -155,7 +155,7 @@ export default function ToolContent() {
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: 13,
-                      color: "#64748b",
+                      color: "rgba(10,30,94,0.65)",
                       margin: 0,
                     }}
                   >

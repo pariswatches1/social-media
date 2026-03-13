@@ -64,10 +64,10 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Quality Score Hero */}
-            <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Quality Score</div>
+            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Quality Score</div>
               <div style={{ fontSize: 56, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: getScoreColor(result.qualityScore) }}>
-                {result.qualityScore}<span style={{ fontSize: 24, color: "#4a5568" }}>/100</span>
+                {result.qualityScore}<span style={{ fontSize: 24, color: "rgba(10,30,94,0.5)" }}>/100</span>
               </div>
               <span style={{ display: "inline-block", marginTop: 10, padding: "4px 14px", borderRadius: 20, fontSize: 12, fontWeight: 600, fontFamily: "'DM Sans', sans-serif", background: `${getScoreColor(result.qualityScore)}18`, color: getScoreColor(result.qualityScore), border: `1px solid ${getScoreColor(result.qualityScore)}40` }}>
                 {getScoreLabel(result.qualityScore)}
@@ -82,37 +82,37 @@ export default function ToolContent() {
                 { label: "Upload Frequency", value: result.uploadFrequency },
                 { label: "Growth", value: result.growthTrajectory?.split(" ")[0] || "—" },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 18 }}>
-                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
-                  <div style={{ fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#e2e8f0" }}>{stat.value}</div>
+                <div key={stat.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
+                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
+                  <div style={{ fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{stat.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Content Quality */}
             {result.contentQualityAssessment && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Content Quality</div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#e2e8f0", margin: 0, lineHeight: 1.6 }}>{result.contentQualityAssessment}</p>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Content Quality</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.contentQualityAssessment}</p>
               </div>
             )}
 
             {/* Engagement Level */}
             {result.audienceEngagementLevel && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Audience Engagement</div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#e2e8f0", margin: 0, lineHeight: 1.6 }}>{result.audienceEngagementLevel}</p>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Audience Engagement</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.audienceEngagementLevel}</p>
               </div>
             )}
 
             {/* Improvements */}
             {result.improvements && result.improvements.length > 0 && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Recommendations</div>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Recommendations</div>
                 {result.improvements.map((item: string, i: number) => (
                   <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10 }}>
                     <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#FF0000" }}>{i + 1}.</span>
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#e2e8f0" }}>{item}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e" }}>{item}</span>
                   </div>
                 ))}
               </div>

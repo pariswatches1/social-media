@@ -68,8 +68,8 @@ export default function ToolContent() {
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {/* Source Info */}
             {result.sourceChannel && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 16, textAlign: "center", marginBottom: 4 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Similar To</div>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center", marginBottom: 4 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Similar To</div>
                 <div style={{ fontSize: 18, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#FF0000" }}>{result.sourceChannel}</div>
                 {result.sharedAudienceTraits && (
                   <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 10 }}>
@@ -88,8 +88,8 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "#0a0d14",
-                  border: "1px solid #1e2535",
+                  background: "rgba(255,255,255,0.2)",
+                  border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
                   display: "flex",
@@ -102,7 +102,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "#1e2535",
+                    color: "rgba(255,255,255,0.3)",
                     lineHeight: 1,
                     minWidth: 36,
                   }}
@@ -111,7 +111,7 @@ export default function ToolContent() {
                 </span>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#fff" }}>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#ffffff" }}>
                       {ch.channelName}
                     </span>
                     <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#FF0000", letterSpacing: 1 }}>
@@ -121,11 +121,11 @@ export default function ToolContent() {
                       {ch.overlapScore} overlap
                     </span>
                   </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#94a3b8", margin: "0 0 4px" }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#0a1e5e", margin: "0 0 4px" }}>
                     {ch.similarityReason}
                   </p>
                   {ch.uniqueAngle && (
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#64748b", margin: 0, fontStyle: "italic" }}>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(10,30,94,0.65)", margin: 0, fontStyle: "italic" }}>
                       Unique angle: {ch.uniqueAngle}
                     </p>
                   )}

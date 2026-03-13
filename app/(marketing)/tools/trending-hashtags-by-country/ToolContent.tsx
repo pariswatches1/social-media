@@ -55,9 +55,9 @@ export default function ToolContent() {
     flex: 1,
     padding: "12px 14px",
     borderRadius: 8,
-    border: "1px solid #1e2535",
-    background: "#060810",
-    color: "#e2e8f0",
+    border: "1px solid rgba(10,30,94,0.12)",
+    background: "rgba(255,255,255,0.9)",
+    color: "#1a1a2e",
     fontSize: 14,
     fontFamily: "'DM Sans', sans-serif",
     outline: "none",
@@ -79,7 +79,7 @@ export default function ToolContent() {
       subtitle="Discover trending Instagram hashtags in any country. Get 30 categorized hashtags for maximum reach."
       platform="instagram"
     >
-      <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 14, padding: 24 }}>
+      <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 14, padding: 24 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 10 }}>
           <input
             type="text"
@@ -104,8 +104,8 @@ export default function ToolContent() {
               padding: "12px 24px",
               borderRadius: 8,
               border: "none",
-              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "#1e2535",
-              color: canSubmit ? "#fff" : "#4a5568",
+              background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "rgba(255,255,255,0.3)",
+              color: canSubmit ? "#fff" : "rgba(255,255,255,0.6)",
               fontSize: 13,
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
@@ -131,14 +131,14 @@ export default function ToolContent() {
                       style={{
                         fontSize: 11,
                         fontFamily: "'DM Mono', monospace",
-                        color: "#4a5568",
+                        color: "rgba(10,30,94,0.5)",
                         letterSpacing: 2,
                         textTransform: "uppercase",
                       }}
                     >
                       {section.category}
                     </span>
-                    <div style={{ flex: 1, height: 1, background: "#1e2535" }} />
+                    <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.3)" }} />
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {section.hashtags.map((h: Hashtag, hi: number) => (
@@ -167,7 +167,7 @@ export default function ToolContent() {
                           style={{
                             fontSize: 10,
                             fontFamily: "'DM Mono', monospace",
-                            color: "#4a5568",
+                            color: "rgba(10,30,94,0.5)",
                           }}
                         >
                           {h.estimatedPosts}

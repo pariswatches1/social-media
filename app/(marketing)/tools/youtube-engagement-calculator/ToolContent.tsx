@@ -58,8 +58,8 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Engagement Rate Hero */}
-            <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Engagement Rate</div>
+            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Engagement Rate</div>
               <div style={{ fontSize: 48, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: getRatingColor(result.engagementRating) }}>
                 {result.engagementRate}
               </div>
@@ -76,26 +76,26 @@ export default function ToolContent() {
                 { label: "Avg Comments", value: result.averageCommentsPerVideo },
                 { label: "View-to-Sub Ratio", value: result.viewToSubscriberRatio },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 18 }}>
-                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
-                  <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#e2e8f0" }}>{stat.value}</div>
+                <div key={stat.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
+                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{stat.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Engagement Breakdown */}
             {result.engagementBreakdown && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Engagement Breakdown</div>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Engagement Breakdown</div>
                 {[
                   { label: "Likes Score", value: `${result.engagementBreakdown.likesScore}/10` },
                   { label: "Comments Score", value: `${result.engagementBreakdown.commentsScore}/10` },
                   { label: "Shares Estimate", value: result.engagementBreakdown.sharesEstimate },
                   { label: "Community Interaction", value: result.engagementBreakdown.communityInteraction },
                 ].map((item) => (
-                  <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #1e2535" }}>
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#94a3b8" }}>{item.label}</span>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#e2e8f0" }}>{item.value}</span>
+                  <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.3)" }}>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#0a1e5e" }}>{item.label}</span>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#1a1a2e" }}>{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -103,9 +103,9 @@ export default function ToolContent() {
 
             {/* Summary */}
             {result.summary && (
-              <div style={{ background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 20, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Summary</div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#e2e8f0", margin: 0, lineHeight: 1.6 }}>{result.summary}</p>
+              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Summary</div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.summary}</p>
               </div>
             )}
 

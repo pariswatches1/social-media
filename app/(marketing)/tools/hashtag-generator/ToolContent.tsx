@@ -91,9 +91,9 @@ export default function ToolContent() {
                 style={{
                   padding: "6px 16px",
                   borderRadius: 8,
-                  border: "1px solid #1e2535",
-                  background: copied === "ALL" ? "rgba(34,197,94,0.15)" : "#0a0d14",
-                  color: copied === "ALL" ? "#22c55e" : "#94a3b8",
+                  border: "1px solid rgba(10,30,94,0.12)",
+                  background: copied === "ALL" ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.15)",
+                  color: copied === "ALL" ? "#22c55e" : "rgba(255,255,255,0.8)",
                   fontSize: 12,
                   fontFamily: "'DM Mono', monospace",
                   cursor: "pointer",
@@ -113,14 +113,14 @@ export default function ToolContent() {
                       style={{
                         fontSize: 11,
                         fontFamily: "'DM Mono', monospace",
-                        color: "#4a5568",
+                        color: "rgba(10,30,94,0.5)",
                         letterSpacing: 2,
                         textTransform: "uppercase",
                       }}
                     >
                       {section.category}
                     </span>
-                    <div style={{ flex: 1, height: 1, background: "#1e2535" }} />
+                    <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.3)" }} />
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {section.hashtags.map((tag: string, hi: number) => {

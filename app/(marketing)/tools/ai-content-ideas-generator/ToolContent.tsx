@@ -68,8 +68,8 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "#0a0d14",
-                  border: "1px solid #1e2535",
+                  background: "rgba(255,255,255,0.2)",
+                  border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
                 }}
@@ -80,7 +80,7 @@ export default function ToolContent() {
                       fontFamily: "'Syne', sans-serif",
                       fontSize: 28,
                       fontWeight: 800,
-                      color: "#1e2535",
+                      color: "rgba(255,255,255,0.3)",
                       lineHeight: 1,
                     }}
                   >
@@ -108,7 +108,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 16,
                     fontWeight: 700,
-                    color: "#fff",
+                    color: "#ffffff",
                     margin: "0 0 6px",
                   }}
                 >
@@ -118,7 +118,7 @@ export default function ToolContent() {
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 13,
-                    color: "#94a3b8",
+                    color: "#0a1e5e",
                     fontStyle: "italic",
                     margin: "0 0 8px",
                   }}
@@ -129,7 +129,7 @@ export default function ToolContent() {
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 13,
-                    color: "#64748b",
+                    color: "rgba(10,30,94,0.65)",
                     margin: 0,
                   }}
                 >

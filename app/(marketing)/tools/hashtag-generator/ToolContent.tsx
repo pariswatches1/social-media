@@ -27,9 +27,16 @@ export default function ToolContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: "hashtag-generator", topic: input }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      // Transform API response into sections format
+      const d = json.data || {};
+      const h = d.hashtags || {};
+      const sections: HashtagSection[] = [];
+      if (h.popular?.length) sections.push({ category: "Popular", hashtags: h.popular.map((t: any) => typeof t === "string" ? t : t.tag) });
+      if (h.niche?.length) sections.push({ category: "Niche", hashtags: h.niche.map((t: any) => typeof t === "string" ? t : t.tag) });
+      if (h.brandedUnique?.length) sections.push({ category: "Branded/Unique", hashtags: h.brandedUnique.map((t: any) => typeof t === "string" ? t : t.tag) });
+      setResult({ ...json, sections, tips: d.usageTips || [] });
     } catch (e: any) {
       setError(e.message);
     } finally {

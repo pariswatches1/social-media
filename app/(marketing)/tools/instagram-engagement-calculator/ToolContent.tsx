@@ -20,9 +20,33 @@ export default function ToolContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: "instagram-engagement-calculator", handle }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      const d = json.data || {};
+      const parseRate = (v: any) => typeof v === "string" ? parseFloat(v) : (v ?? 0);
+      const mediaDist = d.mediaTypeDistribution
+        ? Object.entries(d.mediaTypeDistribution).map(([type, pct]) => ({
+            type,
+            percentage: parseFloat(String(pct)),
+          }))
+        : undefined;
+      const topPosts = (d.top3PostsByEngagement || d.topPosts)?.map((p: any) => ({
+        type: p.mediaType || p.type,
+        date: p.date || "",
+        engagement: (p.likes || 0) + (p.comments || 0) + (p.shares || 0),
+        engagementRate: parseRate(p.engagementRate),
+      }));
+      setResult({
+        ...json,
+        ...d,
+        engagementRate: parseRate(d.overallEngagementRate),
+        avgLikes: d.averageLikesPerPost,
+        avgComments: d.averageCommentsPerPost,
+        likesRatio: parseRate(d.likesToFollowerRatio),
+        commentsRatio: parseRate(d.commentsToFollowerRatio),
+        mediaDistribution: mediaDist,
+        topPosts,
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

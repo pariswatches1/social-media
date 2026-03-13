@@ -22,7 +22,16 @@ export default function ToolContent() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const d = data.data || {};
+      setResult({
+        ...data,
+        ...d,
+        riskLevel: d.assessment?.fraudRiskLevel,
+        fraudScore: d.assessment?.fraudRiskScore,
+        redFlags: d.assessment?.redFlags || [],
+        greenFlags: d.assessment?.greenFlags || [],
+        explanation: d.assessment?.explanation,
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

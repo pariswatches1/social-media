@@ -22,7 +22,34 @@ export default function ToolContent() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+
+      // Flatten nested API response for component consumption
+      const advice = data.data?.advice || {};
+      const bestTimes = advice.bestPostingTimes || [];
+      const caption = advice.captionStyleAnalysis || {};
+
+      setResult({
+        success: data.success,
+        dataSource: data.dataSource,
+        bestPostingTime: bestTimes.length > 0
+          ? `${bestTimes[0].day} ${bestTimes[0].timeRange}`
+          : null,
+        bestContentType: advice.bestContentType || null,
+        captionStyle: caption.toneDescription || null,
+        bestPostingTimes: bestTimes.map((slot: any) => ({
+          time: slot.timeRange,
+          day: slot.day,
+        })),
+        recommendations: advice.recommendations || [],
+        captionAnalysis: {
+          avgLength: caption.avgLength ?? "N/A",
+          avgHashtags: caption.usesHashtags ? "Yes" : "No",
+          emojiUsage: caption.usesEmojis ? "Yes" : "No",
+          ctaUsage: caption.suggestions?.length
+            ? `${caption.suggestions.length} suggestions`
+            : "N/A",
+        },
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

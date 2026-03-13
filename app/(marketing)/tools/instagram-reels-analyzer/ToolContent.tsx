@@ -22,7 +22,23 @@ export default function ToolContent() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const ra = data.data?.reelsAnalysis;
+      setResult({
+        success: data.success,
+        dataSource: data.dataSource,
+        reelsCount: ra?.reelsCount ?? data.data?.reelsCount,
+        reelsPercentage: ra?.reelsPercentage ? parseFloat(ra.reelsPercentage) : undefined,
+        avgPlayCount: ra?.avgPlayCount,
+        reelsEngagement: ra?.avgReelEngagementRate ? parseFloat(ra.avgReelEngagementRate) : undefined,
+        overallEngagement: ra?.overallEngagementRate ? parseFloat(ra.overallEngagementRate) : undefined,
+        topReels: ra?.top3ReelsByEngagement?.map((r: any) => ({
+          caption: r.caption,
+          date: r.date,
+          plays: r.playCount,
+          likes: r.likes,
+          comments: r.comments,
+        })),
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

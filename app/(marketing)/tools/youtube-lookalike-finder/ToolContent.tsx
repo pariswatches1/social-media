@@ -33,7 +33,7 @@ export default function ToolContent() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      setResult({ ...data, ...(data.data || {}) });
     } catch (e: any) {
       setError(e.message);
     } finally {

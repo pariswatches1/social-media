@@ -92,7 +92,7 @@ export default function ToolsIndexContent() {
       </div>
 
       {/* Tool Grid */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 60px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320, 1fr))", gap: 16 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 60px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
         {filtered.map((tool) => (
           <Link
             key={tool.slug}

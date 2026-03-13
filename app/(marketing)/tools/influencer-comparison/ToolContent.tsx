@@ -20,9 +20,52 @@ export default function ToolContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: "influencer-comparison", handle, handle2 }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      const d = json.data || {};
+      const a1 = d.account1 || {};
+      const a2 = d.account2 || {};
+      const comp = d.comparison || {};
+      const w = comp.winners || {};
+
+      // Build comparisons array that the UI expects
+      const comparisons: { metric: string; value1: string; value2: string; winner: number }[] = [];
+      const add = (metric: string, v1: number | string, v2: number | string, winnerHandle: string) => {
+        const fmt = (v: number | string) => typeof v === "number" ? v.toLocaleString() : String(v);
+        const h1 = a1.profile?.username || "";
+        const h2 = a2.profile?.username || "";
+        comparisons.push({
+          metric,
+          value1: fmt(v1),
+          value2: fmt(v2),
+          winner: winnerHandle === h1 ? 1 : winnerHandle === h2 ? 2 : 0,
+        });
+      };
+
+      add("Followers", a1.profile?.followerCount ?? 0, a2.profile?.followerCount ?? 0, w.followers);
+      add("Engagement Rate", a1.engagementRate ?? "0%", a2.engagementRate ?? "0%", w.engagementRate);
+      add("Avg Likes", a1.avgLikesPerPost ?? 0, a2.avgLikesPerPost ?? 0, w.avgLikes);
+      add("Avg Comments", a1.avgCommentsPerPost ?? 0, a2.avgCommentsPerPost ?? 0, w.avgComments);
+      add("Total Content", a1.profile?.mediaCount ?? 0, a2.profile?.mediaCount ?? 0, w.totalContent);
+
+      // Determine overall winner by counting wins
+      const wins1 = comparisons.filter((r) => r.winner === 1).length;
+      const wins2 = comparisons.filter((r) => r.winner === 2).length;
+      const h1 = a1.profile?.username || "";
+      const h2 = a2.profile?.username || "";
+      const overallWinner = wins1 > wins2 ? h1 : wins2 > wins1 ? h2 : null;
+      const winnerSummary = overallWinner
+        ? `Wins ${Math.max(wins1, wins2)} out of ${comparisons.length} categories.`
+        : "Both accounts are evenly matched.";
+
+      setResult({
+        ...json,
+        account1: { handle: h1, followers: a1.profile?.followerCount ?? 0, ...a1 },
+        account2: { handle: h2, followers: a2.profile?.followerCount ?? 0, ...a2 },
+        comparisons,
+        overallWinner,
+        winnerSummary,
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

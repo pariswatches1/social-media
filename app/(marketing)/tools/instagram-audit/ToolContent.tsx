@@ -20,9 +20,26 @@ export default function ToolContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: "instagram-audit", handle }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      const d = json.data || {};
+      const audit = d.audit || {};
+      const m = d.metrics || {};
+      const metrics = [
+        { label: "Engagement Rate", value: m.engagementRate || "—" },
+        { label: "Avg Likes", value: m.averageLikesPerPost?.toLocaleString?.() ?? m.averageLikesPerPost ?? "—" },
+        { label: "Avg Comments", value: m.averageCommentsPerPost?.toLocaleString?.() ?? m.averageCommentsPerPost ?? "—" },
+      ];
+      setResult({
+        ...json,
+        ...d,
+        metrics,
+        healthScore: audit.healthScore,
+        healthLabel: audit.healthLabel,
+        strengths: audit.strengths || [],
+        weaknesses: audit.weaknesses || [],
+        recommendations: audit.recommendations || [],
+      });
     } catch (e: any) {
       setError(e.message);
     } finally {

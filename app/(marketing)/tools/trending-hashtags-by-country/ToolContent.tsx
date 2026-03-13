@@ -32,9 +32,18 @@ export default function ToolContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tool: "trending-hashtags-by-country", country, niche }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setResult(data);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed");
+      const d = json.data || {};
+      const h = d.hashtags || {};
+      const toHashtag = (t: any): Hashtag => typeof t === "string"
+        ? { tag: t, estimatedPosts: "" }
+        : { tag: t.tag || "", estimatedPosts: t.estimatedPosts || "" };
+      const sections: HashtagSection[] = [];
+      if (h.highVolume?.length) sections.push({ category: "High Volume", hashtags: h.highVolume.map(toHashtag) });
+      if (h.mediumVolume?.length) sections.push({ category: "Medium", hashtags: h.mediumVolume.map(toHashtag) });
+      if (h.niche?.length) sections.push({ category: "Niche", hashtags: h.niche.map(toHashtag) });
+      setResult({ ...json, sections });
     } catch (e: any) {
       setError(e.message);
     } finally {

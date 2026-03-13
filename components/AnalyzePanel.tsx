@@ -147,7 +147,7 @@ export default function AnalyzePanel({ savedIdeas, setSavedIdeas, setCreatePrefi
           <button
             onClick={analyze}
             disabled={loading || !handle.trim()}
-            style={{ width: "100%", padding: "12px", borderRadius: 10, cursor: loading || !handle.trim() ? "not-allowed" : "pointer", background: loading || !handle.trim() ? "#0d1017" : "linear-gradient(135deg, #0891b2, #0e7490)", border: "none", color: loading ? "#4a5568" : "#fff", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 1, transition: "all 0.2s", position: "relative", overflow: "hidden" }}
+            style={{ width: "100%", padding: "12px", borderRadius: 10, cursor: loading || !handle.trim() ? "not-allowed" : "pointer", background: loading || !handle.trim() ? "#0d1017" : "linear-gradient(135deg, #0891b2, #0e7490)", border: "none", color: loading ? "#4a5568" : "#000000", fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 800, letterSpacing: 1.5, textShadow: "none", transition: "all 0.2s", position: "relative", overflow: "hidden" }}
           >
             {loading ? (
               <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>

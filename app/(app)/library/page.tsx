@@ -77,8 +77,8 @@ export default function LibraryPage() {
         setSelectedItem(null);
         fetchItems();
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert("Failed to delete. Please try again.");
     } finally {
       setDeletingId(null);
     }

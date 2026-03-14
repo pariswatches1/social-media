@@ -54,8 +54,8 @@ export default function SocialAccountsPanel() {
       if (res.ok) {
         setAccounts((prev) => prev.filter((a) => a.id !== id));
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert("Failed to disconnect account. Please try again.");
     } finally {
       setDisconnecting(null);
     }

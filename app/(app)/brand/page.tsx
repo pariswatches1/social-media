@@ -143,8 +143,8 @@ export default function BrandPage() {
         resetForm();
         fetchProfiles();
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -157,8 +157,8 @@ export default function BrandPage() {
       if (res.ok) {
         fetchProfiles();
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     } finally {
       setDeletingId(null);
     }
@@ -172,8 +172,8 @@ export default function BrandPage() {
         body: JSON.stringify({ isDefault: true }),
       });
       fetchProfiles();
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     }
   }
 

@@ -19,5 +19,13 @@ export async function GET() {
     scope: config.scopes.join(" "),
   });
 
-  return NextResponse.redirect(`${config.authUrl}?${params.toString()}`);
+  const response = NextResponse.redirect(`${config.authUrl}?${params.toString()}`);
+  response.cookies.set("oauth_state_reddit", state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 600,
+    path: "/",
+  });
+  return response;
 }

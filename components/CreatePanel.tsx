@@ -80,7 +80,7 @@ export default function CreatePanel({ prefill, clearPrefill }: Props) {
           }
         }
       })
-      .catch(() => {});
+      .catch(() => { /* Brand fetch failed, continue without brand context */ });
   }, []);
 
   useEffect(() => {
@@ -165,8 +165,8 @@ export default function CreatePanel({ prefill, clearPrefill }: Props) {
       if (res.ok) {
         setSavedVariations((prev) => new Set(prev).add(key));
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert("Failed to save to library.");
     } finally {
       setSavingToLibrary(false);
     }

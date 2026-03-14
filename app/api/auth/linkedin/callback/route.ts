@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=linkedin_denied", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_linkedin")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=linkedin_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.linkedin;
     const tokenRes = await fetch(config.tokenUrl, {
       method: "POST",
@@ -50,8 +56,8 @@ export async function GET(request: NextRequest) {
       accountId = profile.sub || "";
       accountName = profile.name || "";
       accountAvatar = profile.picture || "";
-    } catch {
-      // best-effort
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[LinkedIn OAuth] profile fetch failed:", err);
     }
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -84,7 +90,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.redirect(new URL("/settings/accounts?connected=linkedin", request.url));
+    const response = NextResponse.redirect(new URL("/settings/accounts?connected=linkedin", request.url));
+    response.cookies.delete("oauth_state_linkedin");
+    return response;
   } catch (error) {
     console.error("[LinkedIn OAuth callback]", error);
     return NextResponse.redirect(new URL("/settings/accounts?error=linkedin_error", request.url));

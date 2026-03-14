@@ -32,5 +32,12 @@ export async function GET() {
     maxAge: 600,
     path: "/",
   });
+  response.cookies.set("oauth_state_twitter", state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 600,
+    path: "/",
+  });
   return response;
 }

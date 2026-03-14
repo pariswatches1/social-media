@@ -34,7 +34,7 @@ export async function checkAndIncrementUsage(
 
   const limit = getLimit(user.plan);
 
-  if (user.plan === "FREE" && user.analysesUsed >= limit) {
+  if ((user.plan === "FREE" || user.plan === "CREATOR") && user.analysesUsed >= limit) {
     return {
       allowed: false,
       reason: "LIMIT_REACHED",
@@ -72,6 +72,8 @@ export async function getUsage(clerkId: string) {
 
 function getLimit(plan: string): number {
   switch (plan) {
+    case "CREATOR":
+      return 25;
     case "PRO":
     case "AGENCY":
       return 999999; // Unlimited
@@ -82,10 +84,12 @@ function getLimit(plan: string): number {
 
 export function getPlanLimits(plan: string) {
   switch (plan) {
+    case "CREATOR":
+      return { analyses: 25, platforms: 9, variations: 2 };
     case "PRO":
-      return { analyses: 999999, platforms: 7, variations: 3 };
+      return { analyses: 999999, platforms: 9, variations: 3 };
     case "AGENCY":
-      return { analyses: 999999, platforms: 7, variations: 3, teamSeats: 5 };
+      return { analyses: 999999, platforms: 9, variations: 3, teamSeats: 10 };
     default:
       return { analyses: 3, platforms: 1, variations: 1 };
   }

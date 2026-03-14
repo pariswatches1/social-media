@@ -1,283 +1,161 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useUser } from "@clerk/nextjs";
 
-// ─── Types ──────────────────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Creator {
   id: string;
-  name: string;
+  platform: string;
   handle: string;
-  platform: "instagram" | "tiktok" | "youtube" | "x" | "linkedin";
-  avatar_color: string;
-  followers: number;
-  engagement_rate: number;
-  trust_score: number;
-  niche: string;
-  location: string;
-  verified: boolean;
+  displayName: string;
+  avatarUrl: string | null;
+  bio: string | null;
+  followerCount: number;
+  engagementRate: number | null;
+  trustScore: number | null;
+  niche: string | null;
+  location: string | null;
+  email: string | null;
+  avgLikes: number | null;
+  avgComments: number | null;
+  lastUpdated: string | null;
 }
 
-// ─── Mock Data ─────────────────────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-const MOCK_CREATORS: Creator[] = [
-  {
-    id: "1",
-    name: "Aria Chen",
-    handle: "ariachen",
-    platform: "instagram",
-    avatar_color: "#7c3aed",
-    followers: 1240000,
-    engagement_rate: 6.8,
-    trust_score: 92,
-    niche: "Fashion",
-    location: "New York, US",
-    verified: true,
-  },
-  {
-    id: "2",
-    name: "Marcus Volta",
-    handle: "marcusvolta",
-    platform: "tiktok",
-    avatar_color: "#0891b2",
-    followers: 3800000,
-    engagement_rate: 12.4,
-    trust_score: 87,
-    niche: "Fitness",
-    location: "Los Angeles, US",
-    verified: true,
-  },
-  {
-    id: "3",
-    name: "Priya Nair",
-    handle: "priyacooks",
-    platform: "youtube",
-    avatar_color: "#dc2626",
-    followers: 892000,
-    engagement_rate: 4.1,
-    trust_score: 78,
-    niche: "Food",
-    location: "London, UK",
-    verified: false,
-  },
-  {
-    id: "4",
-    name: "Jake Reeves",
-    handle: "jakereeves",
-    platform: "tiktok",
-    avatar_color: "#ea580c",
-    followers: 560000,
-    engagement_rate: 9.3,
-    trust_score: 81,
-    niche: "Gaming",
-    location: "Toronto, CA",
-    verified: true,
-  },
-  {
-    id: "5",
-    name: "Sofia Laurent",
-    handle: "sofialaurent",
-    platform: "instagram",
-    avatar_color: "#db2777",
-    followers: 285000,
-    engagement_rate: 3.7,
-    trust_score: 69,
-    niche: "Beauty",
-    location: "Paris, FR",
-    verified: false,
-  },
-  {
-    id: "6",
-    name: "Deven Patel",
-    handle: "devenpatel",
-    platform: "youtube",
-    avatar_color: "#059669",
-    followers: 2100000,
-    engagement_rate: 5.6,
-    trust_score: 94,
-    niche: "Tech",
-    location: "San Francisco, US",
-    verified: true,
-  },
-  {
-    id: "7",
-    name: "Mia Torres",
-    handle: "miatravels",
-    platform: "instagram",
-    avatar_color: "#0284c7",
-    followers: 178000,
-    engagement_rate: 7.2,
-    trust_score: 75,
-    niche: "Travel",
-    location: "Barcelona, ES",
-    verified: false,
-  },
-  {
-    id: "8",
-    name: "Leo Hammond",
-    handle: "leohammond",
-    platform: "x",
-    avatar_color: "#64748b",
-    followers: 430000,
-    engagement_rate: 2.1,
-    trust_score: 62,
-    niche: "Business",
-    location: "Austin, US",
-    verified: true,
-  },
-  {
-    id: "9",
-    name: "Yuki Tanaka",
-    handle: "yukitanaka",
-    platform: "tiktok",
-    avatar_color: "#9333ea",
-    followers: 6700000,
-    engagement_rate: 15.8,
-    trust_score: 89,
-    niche: "Music",
-    location: "Tokyo, JP",
-    verified: true,
-  },
-  {
-    id: "10",
-    name: "Camille Dubois",
-    handle: "camilledubois",
-    platform: "linkedin",
-    avatar_color: "#1d4ed8",
-    followers: 95000,
-    engagement_rate: 1.4,
-    trust_score: 88,
-    niche: "Business",
-    location: "Amsterdam, NL",
-    verified: true,
-  },
-  {
-    id: "11",
-    name: "Ryan Okafor",
-    handle: "ryanokafor",
-    platform: "youtube",
-    avatar_color: "#b45309",
-    followers: 1550000,
-    engagement_rate: 4.9,
-    trust_score: 83,
-    niche: "Lifestyle",
-    location: "Lagos, NG",
-    verified: true,
-  },
-  {
-    id: "12",
-    name: "Zoe Bright",
-    handle: "zoebright",
-    platform: "instagram",
-    avatar_color: "#be185d",
-    followers: 68000,
-    engagement_rate: 8.5,
-    trust_score: 44,
-    niche: "Fitness",
-    location: "Sydney, AU",
-    verified: false,
-  },
-];
+const PLATFORM_COLORS: Record<string, string> = {
+  instagram: "#06b6d4",
+  tiktok: "#10b981",
+  youtube: "#ef4444",
+  twitter: "#3b82f6",
+  linkedin: "#8b5cf6",
+  facebook: "#1877f2",
+  reddit: "#ff4500",
+  pinterest: "#e60023",
+  snapchat: "#fffc00",
+};
 
-// ─── Constants ────────────────────────────────────────────────────────────────────────────
-
-const PLATFORM_EMOJIS: Record<string, string> = {
-  instagram: "📸",
-  tiktok: "🎵",
-  youtube: "▶️",
-  x: "✖️",
-  linkedin: "💼",
+const PLATFORM_ICONS: Record<string, string> = {
+  instagram: "\u{1f4f8}",
+  tiktok: "\u{1f3b5}",
+  youtube: "\u25b6\ufe0f",
+  twitter: "\u{1f426}",
+  linkedin: "\u{1f4bc}",
+  facebook: "\u{1f310}",
+  reddit: "\u{1f4e2}",
+  pinterest: "\u{1f4cc}",
+  snapchat: "\u{1f47b}",
 };
 
 const PLATFORM_LABELS: Record<string, string> = {
   instagram: "Instagram",
   tiktok: "TikTok",
   youtube: "YouTube",
-  x: "X",
+  twitter: "X / Twitter",
   linkedin: "LinkedIn",
+  facebook: "Facebook",
+  reddit: "Reddit",
+  pinterest: "Pinterest",
+  snapchat: "Snapchat",
 };
 
-const PLATFORM_COLORS: Record<string, string> = {
-  instagram: "#e1306c",
-  tiktok: "#69c9d0",
-  youtube: "#ff0000",
-  x: "#94a3b8",
-  linkedin: "#0a66c2",
-};
-
-const FOLLOWER_RANGES = [
-  { label: "1K–10K", min: 1000, max: 10000 },
-  { label: "10K–50K", min: 10000, max: 50000 },
-  { label: "50K–100K", min: 50000, max: 100000 },
-  { label: "100K–500K", min: 100000, max: 500000 },
-  { label: "500K–1M", min: 500000, max: 1000000 },
-  { label: "1M+", min: 1000000, max: Infinity },
+const PLATFORM_OPTIONS = [
+  "all", "instagram", "tiktok", "youtube", "twitter", "linkedin", "reddit", "facebook", "pinterest", "snapchat",
 ];
-
-const ENGAGEMENT_RATES = [
-  { label: ">1%", min: 1 },
-  { label: ">3%", min: 3 },
-  { label: ">5%", min: 5 },
-  { label: ">10%", min: 10 },
-];
-
-const NICHES = [
-  "Fashion", "Beauty", "Fitness", "Food", "Tech",
-  "Gaming", "Travel", "Lifestyle", "Business", "Music",
-];
-
-const TRUST_SCORES = [
-  { label: ">50", min: 50 },
-  { label: ">70", min: 70 },
-  { label: ">90", min: 90 },
-];
-
-const PLATFORMS = ["all", "instagram", "tiktok", "youtube", "x", "linkedin"];
 
 const CARDS_PER_PAGE = 9;
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────────────────
+const selectStyle: Record<string, unknown> = {
+  background: "#060810",
+  border: "1px solid #1e2535",
+  borderRadius: 8,
+  padding: "8px 12px",
+  color: "#94a3b8",
+  fontSize: 12,
+  fontFamily: "'DM Mono', monospace",
+  outline: "none",
+  cursor: "pointer",
+  minWidth: 120,
+  boxSizing: "border-box",
+};
+
+const filterInputStyle: Record<string, unknown> = {
+  background: "#060810",
+  border: "1px solid #1e2535",
+  borderRadius: 8,
+  padding: "8px 12px",
+  color: "#e2e8f0",
+  fontSize: 12,
+  fontFamily: "'DM Mono', monospace",
+  outline: "none",
+  minWidth: 100,
+  width: 120,
+  boxSizing: "border-box",
+};
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatFollowers(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${Math.round(n / 1_000)}K`;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
   return String(n);
 }
 
-function engagementColor(rate: number): string {
+function engagementColor(rate: number | null): string {
+  if (rate === null) return "#2d3748";
   if (rate >= 5) return "#22c55e";
   if (rate >= 2) return "#f59e0b";
   return "#ef4444";
 }
 
-function trustColor(score: number): string {
+function trustColor(score: number | null): string {
+  if (score === null) return "#2d3748";
   if (score >= 80) return "#22c55e";
   if (score >= 50) return "#f59e0b";
   return "#ef4444";
 }
 
-// ─── Sub-components ─────────────────────────────────────────────────────────────────────────────
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
 
-function CreatorCard({
-  creator,
-  onAddToList,
-  onViewProfile,
-}: {
-  creator: Creator;
-  onAddToList: (id: string) => void;
-  onViewProfile: (id: string) => void;
-}) {
+function getAvatarColor(name: string): string {
+  const colors = ["#7c3aed", "#0891b2", "#ef4444", "#f59e0b", "#10b981", "#ec4899", "#3b82f6", "#f97316"];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+// ─── Creator Card ─────────────────────────────────────────────────────────────
+
+function CreatorCard({ creator }: { creator: Creator }) {
   const [addedToList, setAddedToList] = useState(false);
   const [hoverAdd, setHoverAdd] = useState(false);
   const [hoverView, setHoverView] = useState(false);
 
-  const engColor = engagementColor(creator.engagement_rate);
-  const tColor = trustColor(creator.trust_score);
+  const engColor = engagementColor(creator.engagementRate);
+  const tColor = trustColor(creator.trustScore);
+  const platColor = PLATFORM_COLORS[creator.platform] || "#94a3b8";
+  const platIcon = PLATFORM_ICONS[creator.platform] || "\u{1f310}";
+  const platLabel = PLATFORM_LABELS[creator.platform] || creator.platform;
+  const displayName = creator.displayName || creator.handle;
+  const handle = creator.handle.startsWith("@") ? creator.handle : `@${creator.handle}`;
 
-  function handleAdd() {
+  function handleAddToList() {
     setAddedToList(true);
-    onAddToList(creator.id);
+    alert(`"${displayName}" added to list (list selector coming soon)`);
     setTimeout(() => setAddedToList(false), 2000);
+  }
+
+  function handleViewProfile() {
+    alert(`Profile view for ${displayName} coming soon`);
   }
 
   return (
@@ -295,27 +173,33 @@ function CreatorCard({
     >
       {/* Top row: avatar + name + platform */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        {/* Avatar */}
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: "50%",
-            background: creator.avatar_color,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 20,
-            fontFamily: "'Syne', sans-serif",
-            fontWeight: 800,
-            color: "#fff",
-            flexShrink: 0,
-          }}
-        >
-          {creator.name.charAt(0)}
-        </div>
+        {creator.avatarUrl ? (
+          <img
+            src={creator.avatarUrl}
+            alt={displayName}
+            style={{ width: 48, height: 48, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+          />
+        ) : (
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              background: getAvatarColor(displayName),
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 16,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 800,
+              color: "#fff",
+              flexShrink: 0,
+            }}
+          >
+            {getInitials(displayName)}
+          </div>
+        )}
 
-        {/* Name + handle */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div
             style={{
@@ -323,18 +207,12 @@ function CreatorCard({
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
               color: "#e2e8f0",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
             }}
           >
-            {creator.name}
-            {creator.verified && (
-              <span style={{ color: "#06b6d4", fontSize: 12 }}>✓</span>
-            )}
+            {displayName}
           </div>
           <div
             style={{
@@ -346,7 +224,7 @@ function CreatorCard({
               whiteSpace: "nowrap",
             }}
           >
-            @{creator.handle}
+            {handle}
           </div>
         </div>
 
@@ -355,152 +233,66 @@ function CreatorCard({
           style={{
             padding: "3px 8px",
             borderRadius: 6,
-            background: "rgba(30,37,53,0.8)",
-            border: `1px solid ${PLATFORM_COLORS[creator.platform]}33`,
+            background: `${platColor}15`,
+            border: `1px solid ${platColor}33`,
             fontSize: 11,
             fontFamily: "'DM Mono', monospace",
-            color: PLATFORM_COLORS[creator.platform],
+            color: platColor,
             display: "flex",
             alignItems: "center",
             gap: 4,
             flexShrink: 0,
           }}
         >
-          <span>{PLATFORM_EMOJIS[creator.platform]}</span>
-          <span>{PLATFORM_LABELS[creator.platform]}</span>
+          <span>{platIcon}</span>
+          <span>{platLabel}</span>
         </div>
       </div>
 
       {/* Stats row */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 10,
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         {/* Followers */}
-        <div
-          style={{
-            background: "#060810",
-            borderRadius: 8,
-            padding: "8px 10px",
-            border: "1px solid #1e2535",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 9,
-              fontFamily: "'DM Mono', monospace",
-              color: "#4a5568",
-              letterSpacing: 1.5,
-              marginBottom: 4,
-            }}
-          >
+        <div style={{ background: "#060810", borderRadius: 8, padding: "8px 10px", border: "1px solid #1e2535" }}>
+          <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 4 }}>
             FOLLOWERS
           </div>
-          <div
-            style={{
-              fontSize: 16,
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              color: "#e2e8f0",
-            }}
-          >
-            {formatFollowers(creator.followers)}
+          <div style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0" }}>
+            {formatFollowers(creator.followerCount)}
           </div>
         </div>
 
         {/* Engagement */}
-        <div
-          style={{
-            background: "#060810",
-            borderRadius: 8,
-            padding: "8px 10px",
-            border: "1px solid #1e2535",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 9,
-              fontFamily: "'DM Mono', monospace",
-              color: "#4a5568",
-              letterSpacing: 1.5,
-              marginBottom: 4,
-            }}
-          >
+        <div style={{ background: "#060810", borderRadius: 8, padding: "8px 10px", border: "1px solid #1e2535" }}>
+          <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 4 }}>
             ENGAGEMENT
           </div>
-          <div
-            style={{
-              fontSize: 16,
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              color: engColor,
-              display: "flex",
-              alignItems: "center",
-              gap: 5,
-            }}
-          >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: engColor,
-                display: "inline-block",
-                flexShrink: 0,
-              }}
-            />
-            {creator.engagement_rate.toFixed(1)}%
+          <div style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: engColor, display: "flex", alignItems: "center", gap: 5 }}>
+            {creator.engagementRate !== null ? (
+              <>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: engColor, display: "inline-block", flexShrink: 0 }} />
+                {creator.engagementRate.toFixed(1)}%
+              </>
+            ) : (
+              <span style={{ color: "#2d3748" }}>{"\u2014"}</span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Trust Score */}
       <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 6,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 9,
-              fontFamily: "'DM Mono', monospace",
-              color: "#4a5568",
-              letterSpacing: 1.5,
-            }}
-          >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+          <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1.5 }}>
             TRUST SCORE
           </div>
-          <div
-            style={{
-              fontSize: 12,
-              fontFamily: "'DM Mono', monospace",
-              color: tColor,
-              fontWeight: 700,
-            }}
-          >
-            {creator.trust_score}
+          <div style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: tColor, fontWeight: 700 }}>
+            {creator.trustScore !== null ? creator.trustScore : "\u2014"}
           </div>
         </div>
-        {/* Bar */}
-        <div
-          style={{
-            width: "100%",
-            height: 4,
-            background: "#1e2535",
-            borderRadius: 999,
-            overflow: "hidden",
-          }}
-        >
+        <div style={{ width: "100%", height: 4, background: "#1e2535", borderRadius: 999, overflow: "hidden" }}>
           <div
             style={{
-              width: `${creator.trust_score}%`,
+              width: `${creator.trustScore || 0}%`,
               height: "100%",
               background: tColor,
               borderRadius: 999,
@@ -511,49 +303,44 @@ function CreatorCard({
       </div>
 
       {/* Tags row */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          flexWrap: "wrap" as const,
-        }}
-      >
-        {/* Niche */}
-        <span
-          style={{
-            padding: "2px 8px",
-            borderRadius: 20,
-            background: "rgba(6,182,212,0.1)",
-            border: "1px solid rgba(6,182,212,0.2)",
-            fontSize: 10,
-            fontFamily: "'DM Mono', monospace",
-            color: "#06b6d4",
-            letterSpacing: 0.5,
-          }}
-        >
-          {creator.niche}
-        </span>
-        {/* Location */}
-        <span
-          style={{
-            padding: "2px 8px",
-            borderRadius: 20,
-            background: "#060810",
-            border: "1px solid #1e2535",
-            fontSize: 10,
-            fontFamily: "'DM Mono', monospace",
-            color: "#4a5568",
-          }}
-        >
-          📍 {creator.location}
-        </span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+        {creator.niche && (
+          <span
+            style={{
+              padding: "2px 8px",
+              borderRadius: 20,
+              background: "rgba(6,182,212,0.1)",
+              border: "1px solid rgba(6,182,212,0.2)",
+              fontSize: 10,
+              fontFamily: "'DM Mono', monospace",
+              color: "#06b6d4",
+              letterSpacing: 0.5,
+            }}
+          >
+            {creator.niche}
+          </span>
+        )}
+        {creator.location && (
+          <span
+            style={{
+              padding: "2px 8px",
+              borderRadius: 20,
+              background: "#060810",
+              border: "1px solid #1e2535",
+              fontSize: 10,
+              fontFamily: "'DM Mono', monospace",
+              color: "#4a5568",
+            }}
+          >
+            {"\u{1f4cd}"} {creator.location}
+          </span>
+        )}
       </div>
 
       {/* Action buttons */}
       <div style={{ display: "flex", gap: 8 }}>
         <button
-          onClick={handleAdd}
+          onClick={handleAddToList}
           onMouseEnter={() => setHoverAdd(true)}
           onMouseLeave={() => setHoverAdd(false)}
           style={{
@@ -561,11 +348,7 @@ function CreatorCard({
             padding: "8px 0",
             borderRadius: 8,
             border: `1px solid ${addedToList ? "rgba(6,182,212,0.5)" : "#1e2535"}`,
-            background: addedToList
-              ? "rgba(6,182,212,0.1)"
-              : hoverAdd
-              ? "#1e2535"
-              : "transparent",
+            background: addedToList ? "rgba(6,182,212,0.1)" : hoverAdd ? "#1e2535" : "transparent",
             color: addedToList ? "#06b6d4" : "#94a3b8",
             fontSize: 11,
             fontFamily: "'DM Mono', monospace",
@@ -574,10 +357,10 @@ function CreatorCard({
             letterSpacing: 0.5,
           }}
         >
-          {addedToList ? "✓ ADDED" : "+ ADD TO LIST"}
+          {addedToList ? "\u2713 ADDED" : "+ ADD TO LIST"}
         </button>
         <button
-          onClick={() => onViewProfile(creator.id)}
+          onClick={handleViewProfile}
           onMouseEnter={() => setHoverView(true)}
           onMouseLeave={() => setHoverView(false)}
           style={{
@@ -585,9 +368,7 @@ function CreatorCard({
             padding: "8px 0",
             borderRadius: 8,
             border: "none",
-            background: hoverView
-              ? "linear-gradient(135deg, #0e7490, #0891b2)"
-              : "linear-gradient(135deg, #0891b2, #0e7490)",
+            background: hoverView ? "linear-gradient(135deg, #0e7490, #0891b2)" : "linear-gradient(135deg, #0891b2, #0e7490)",
             color: "#fff",
             fontSize: 11,
             fontFamily: "'DM Mono', monospace",
@@ -596,178 +377,182 @@ function CreatorCard({
             letterSpacing: 0.5,
           }}
         >
-          VIEW PROFILE →
+          VIEW PROFILE {"\u2192"}
         </button>
       </div>
     </div>
   );
 }
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────────────────
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function DiscoverPage() {
+  const { user } = useUser();
+
+  // Data
+  const [creators, setCreators] = useState<Creator[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Filters
+  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePlatform, setActivePlatform] = useState("all");
-  const [followerRange, setFollowerRange] = useState("");
-  const [engagementFilter, setEngagementFilter] = useState("");
+  const [platformFilter, setPlatformFilter] = useState("all");
   const [nicheFilter, setNicheFilter] = useState("");
-  const [locationFilter, setLocationFilter] = useState("");
-  const [trustFilter, setTrustFilter] = useState("");
+  const [minFollowers, setMinFollowers] = useState("");
+  const [minEngagement, setMinEngagement] = useState("");
+  const [minTrust, setMinTrust] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ─── Filtering ──────────────────────────────────────────────────────────────────────
+  // ── Fetch ──────────────────────────────────────────────────────────────────
 
-  const filtered = useMemo(() => {
-    let results = [...MOCK_CREATORS];
+  const fetchCreators = useCallback(async (page: number) => {
+    try {
+      setError(null);
+      setIsLoading(true);
 
-    // Search
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      results = results.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.handle.toLowerCase().includes(q) ||
-          c.niche.toLowerCase().includes(q) ||
-          c.location.toLowerCase().includes(q)
-      );
-    }
-
-    // Platform
-    if (activePlatform !== "all") {
-      results = results.filter((c) => c.platform === activePlatform);
-    }
-
-    // Follower range
-    if (followerRange) {
-      const range = FOLLOWER_RANGES.find((r) => r.label === followerRange);
-      if (range) {
-        results = results.filter(
-          (c) => c.followers >= range.min && c.followers < range.max
-        );
+      const params = new URLSearchParams();
+      if (searchQuery.trim()) params.set("q", searchQuery.trim());
+      if (platformFilter !== "all") params.set("platform", platformFilter);
+      if (nicheFilter.trim()) params.set("niche", nicheFilter.trim());
+      if (minFollowers.trim()) {
+        const val = parseInt(minFollowers);
+        if (!isNaN(val) && val > 0) params.set("minFollowers", String(val));
       }
-    }
-
-    // Engagement rate
-    if (engagementFilter) {
-      const eng = ENGAGEMENT_RATES.find((e) => e.label === engagementFilter);
-      if (eng) {
-        results = results.filter((c) => c.engagement_rate >= eng.min);
+      if (minEngagement.trim()) {
+        const val = parseFloat(minEngagement);
+        if (!isNaN(val) && val > 0) params.set("minEngagement", String(val));
       }
-    }
-
-    // Niche
-    if (nicheFilter) {
-      results = results.filter((c) => c.niche === nicheFilter);
-    }
-
-    // Location
-    if (locationFilter.trim()) {
-      const loc = locationFilter.toLowerCase();
-      results = results.filter((c) => c.location.toLowerCase().includes(loc));
-    }
-
-    // Trust score
-    if (trustFilter) {
-      const trust = TRUST_SCORES.find((t) => t.label === trustFilter);
-      if (trust) {
-        results = results.filter((c) => c.trust_score >= trust.min);
+      if (minTrust.trim()) {
+        const val = parseInt(minTrust);
+        if (!isNaN(val) && val > 0) params.set("minTrust", String(val));
       }
+      params.set("page", String(page));
+      params.set("limit", String(CARDS_PER_PAGE));
+
+      const res = await fetch(`/api/creators/search?${params.toString()}`);
+      if (!res.ok) throw new Error(`Failed to search creators (${res.status})`);
+
+      const data = await res.json();
+      setCreators(data.creators || []);
+      setTotal(data.total || 0);
+      setTotalPages(data.totalPages || 1);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to search creators";
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
+  }, [searchQuery, platformFilter, nicheFilter, minFollowers, minEngagement, minTrust]);
 
-    return results;
-  }, [
-    searchQuery,
-    activePlatform,
-    followerRange,
-    engagementFilter,
-    nicheFilter,
-    locationFilter,
-    trustFilter,
-  ]);
+  useEffect(() => {
+    fetchCreators(currentPage);
+  }, [fetchCreators, currentPage]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / CARDS_PER_PAGE));
-  const safePage = Math.min(currentPage, totalPages);
-  const paginated = filtered.slice(
-    (safePage - 1) * CARDS_PER_PAGE,
-    safePage * CARDS_PER_PAGE
-  );
+  // ── Search handler ─────────────────────────────────────────────────────────
 
-  // Reset to page 1 when filters change
-  function handleFilterChange<T>(setter: (v: T) => void, value: T) {
-    setter(value);
+  function handleSearch() {
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+  }
+
+  function handleSearchKeyDown(e: { key: string }) {
+    if (e.key === "Enter") handleSearch();
+  }
+
+  function handleFilterChange() {
     setCurrentPage(1);
   }
 
   function clearAllFilters() {
+    setSearchInput("");
     setSearchQuery("");
-    setActivePlatform("all");
-    setFollowerRange("");
-    setEngagementFilter("");
+    setPlatformFilter("all");
     setNicheFilter("");
-    setLocationFilter("");
-    setTrustFilter("");
+    setMinFollowers("");
+    setMinEngagement("");
+    setMinTrust("");
     setCurrentPage(1);
   }
 
-  const hasActiveFilters =
-    searchQuery ||
-    activePlatform !== "all" ||
-    followerRange ||
-    engagementFilter ||
-    nicheFilter ||
-    locationFilter ||
-    trustFilter;
+  const hasActiveFilters = searchQuery || platformFilter !== "all" || nicheFilter || minFollowers || minEngagement || minTrust;
 
-  const selectStyle: React.CSSProperties = {
-    background: "#060810",
-    border: "1px solid #1e2535",
-    borderRadius: 8,
-    padding: "8px 12px",
-    color: "#94a3b8",
-    fontSize: 12,
-    fontFamily: "'DM Mono', monospace",
-    outline: "none",
-    cursor: "pointer",
-    appearance: "none" as const,
-    WebkitAppearance: "none" as const,
-    paddingRight: 28,
-    minWidth: 140,
-  };
+  // ── Loading State ──────────────────────────────────────────────────────────
+
+  if (isLoading && creators.length === 0) {
+    return (
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        {/* Header shimmer */}
+        <div style={{ marginBottom: 24 }}>
+          <div className="shimmer" style={{ height: 28, width: 260, borderRadius: 6, marginBottom: 8 }} />
+          <div className="shimmer" style={{ height: 14, width: 300, borderRadius: 4 }} />
+        </div>
+        {/* Search bar shimmer */}
+        <div className="shimmer" style={{ height: 48, borderRadius: 10, marginBottom: 16 }} />
+        {/* Filter row shimmer */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="shimmer" style={{ height: 36, width: 120, borderRadius: 8 }} />
+          ))}
+        </div>
+        {/* Cards shimmer */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="shimmer" style={{ height: 300, borderRadius: 12 }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Error State ────────────────────────────────────────────────────────────
+
+  if (error && creators.length === 0) {
+    return (
+      <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center", paddingTop: 120 }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>{"\u26a0\ufe0f"}</div>
+        <h2 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 8 }}>
+          Unable to load creators
+        </h2>
+        <p style={{ fontSize: 13, color: "#4a5568", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
+          {error}
+        </p>
+        <button
+          onClick={() => fetchCreators(currentPage)}
+          style={{
+            padding: "10px 24px",
+            borderRadius: 8,
+            background: "linear-gradient(135deg, #0891b2, #0e7490)",
+            color: "#fff",
+            border: "none",
+            fontSize: 13,
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       {/* ── Page Header ── */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: 24,
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
         <div>
-          <h1
-            style={{
-              fontSize: 24,
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 800,
-              color: "#e2e8f0",
-              marginBottom: 4,
-            }}
-          >
-            Creator Discovery
+          <h1 style={{ fontSize: 24, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0", marginBottom: 4, display: "flex", alignItems: "center", gap: 10 }}>
+            <span>{"\u{1f50d}"}</span> Discover Creators
           </h1>
-          <p
-            style={{
-              fontSize: 13,
-              color: "#4a5568",
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
+          <p style={{ fontSize: 13, color: "#4a5568", fontFamily: "'DM Mono', monospace", margin: 0 }}>
             Find & vet influencers across every platform
           </p>
         </div>
-
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
@@ -783,341 +568,172 @@ export default function DiscoverPage() {
               letterSpacing: 0.5,
             }}
           >
-            ✕ CLEAR FILTERS
+            {"\u2715"} CLEAR FILTERS
           </button>
         )}
       </div>
 
       {/* ── Search Bar ── */}
-      <div style={{ position: "relative", marginBottom: 16 }}>
-        <span
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <div style={{ position: "relative", flex: 1 }}>
+          <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", fontSize: 16, pointerEvents: "none", zIndex: 1 }}>
+            {"\u{1f50d}"}
+          </span>
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Search creators by name, niche, or keyword..."
+            style={{
+              width: "100%",
+              background: "#0a0d14",
+              border: "1px solid #1e2535",
+              borderRadius: 10,
+              padding: "14px 16px 14px 46px",
+              color: "#e2e8f0",
+              fontSize: 14,
+              fontFamily: "'DM Sans', sans-serif",
+              outline: "none",
+              boxSizing: "border-box",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(6,182,212,0.4)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#1e2535")}
+          />
+        </div>
+        <button
+          onClick={handleSearch}
           style={{
-            position: "absolute",
-            left: 16,
-            top: "50%",
-            transform: "translateY(-50%)",
-            fontSize: 16,
-            pointerEvents: "none",
-            zIndex: 1,
+            padding: "14px 24px",
+            borderRadius: 10,
+            border: "none",
+            background: "linear-gradient(135deg, #0891b2, #0e7490)",
+            color: "#fff",
+            fontSize: 13,
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 700,
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
-          🔍
-        </span>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) =>
-            handleFilterChange(setSearchQuery, e.target.value)
-          }
-          placeholder="Search 350M+ creators by name, niche, or keyword..."
-          style={{
-            width: "100%",
-            background: "#0a0d14",
-            border: "1px solid #1e2535",
-            borderRadius: 10,
-            padding: "14px 16px 14px 46px",
-            color: "#e2e8f0",
-            fontSize: 14,
-            fontFamily: "'DM Sans', sans-serif",
-            outline: "none",
-            boxSizing: "border-box",
-            transition: "border-color 0.15s",
-          }}
-          onFocus={(e) =>
-            (e.currentTarget.style.borderColor = "rgba(6,182,212,0.4)")
-          }
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#1e2535")}
-        />
+          Search
+        </button>
       </div>
 
-      {/* ── Platform Pills ── */}
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          flexWrap: "wrap" as const,
-          marginBottom: 14,
-        }}
-      >
-        {PLATFORMS.map((p) => {
-          const isActive = activePlatform === p;
-          return (
-            <button
-              key={p}
-              onClick={() => handleFilterChange(setActivePlatform, p)}
-              style={{
-                padding: "6px 14px",
-                borderRadius: 20,
-                border: isActive
-                  ? "1px solid rgba(6,182,212,0.4)"
-                  : "1px solid #1e2535",
-                background: isActive ? "rgba(6,182,212,0.1)" : "transparent",
-                color: isActive ? "#06b6d4" : "#94a3b8",
-                fontSize: 12,
-                fontFamily: "'DM Mono', monospace",
-                cursor: "pointer",
-                transition: "all 0.15s",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                letterSpacing: 0.3,
-              }}
-            >
-              {p !== "all" && <span>{PLATFORM_EMOJIS[p]}</span>}
-              {p === "all"
-                ? "All"
-                : PLATFORM_LABELS[p as keyof typeof PLATFORM_LABELS]}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ── Filter Dropdowns Row ── */}
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          flexWrap: "wrap" as const,
-          marginBottom: 28,
-          alignItems: "center",
-        }}
-      >
-        {/* Follower Range */}
+      {/* ── Filter Row ── */}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28, alignItems: "center" }}>
+        {/* Platform dropdown */}
         <div style={{ position: "relative" }}>
           <select
-            value={followerRange}
-            onChange={(e) =>
-              handleFilterChange(setFollowerRange, e.target.value)
-            }
+            value={platformFilter}
+            onChange={(e) => {
+              setPlatformFilter(e.target.value);
+              handleFilterChange();
+            }}
             style={{
               ...selectStyle,
-              color: followerRange ? "#e2e8f0" : "#4a5568",
-              borderColor: followerRange ? "rgba(6,182,212,0.3)" : "#1e2535",
-            }}
+              color: platformFilter !== "all" ? "#e2e8f0" : "#4a5568",
+              borderColor: platformFilter !== "all" ? "rgba(6,182,212,0.3)" : "#1e2535",
+              appearance: "none" as const,
+              paddingRight: 28,
+            } as React.CSSProperties}
           >
-            <option value="">Follower Range</option>
-            {FOLLOWER_RANGES.map((r) => (
-              <option key={r.label} value={r.label}>
-                {r.label}
-              </option>
+            <option value="all">All Platforms</option>
+            {PLATFORM_OPTIONS.filter((p) => p !== "all").map((p) => (
+              <option key={p} value={p}>{PLATFORM_LABELS[p] || p}</option>
             ))}
           </select>
-          <span
-            style={{
-              position: "absolute",
-              right: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontSize: 10,
-              color: "#4a5568",
-              pointerEvents: "none",
-            }}
-          >
-            ▼
-          </span>
-        </div>
-
-        {/* Engagement Rate */}
-        <div style={{ position: "relative" }}>
-          <select
-            value={engagementFilter}
-            onChange={(e) =>
-              handleFilterChange(setEngagementFilter, e.target.value)
-            }
-            style={{
-              ...selectStyle,
-              color: engagementFilter ? "#e2e8f0" : "#4a5568",
-              borderColor: engagementFilter
-                ? "rgba(6,182,212,0.3)"
-                : "#1e2535",
-            }}
-          >
-            <option value="">Engagement Rate</option>
-            {ENGAGEMENT_RATES.map((r) => (
-              <option key={r.label} value={r.label}>
-                {r.label}
-              </option>
-            ))}
-          </select>
-          <span
-            style={{
-              position: "absolute",
-              right: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontSize: 10,
-              color: "#4a5568",
-              pointerEvents: "none",
-            }}
-          >
-            ▼
+          <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 10, color: "#4a5568", pointerEvents: "none" }}>
+            {"\u25bc"}
           </span>
         </div>
 
         {/* Niche */}
-        <div style={{ position: "relative" }}>
-          <select
-            value={nicheFilter}
-            onChange={(e) =>
-              handleFilterChange(setNicheFilter, e.target.value)
-            }
-            style={{
-              ...selectStyle,
-              color: nicheFilter ? "#e2e8f0" : "#4a5568",
-              borderColor: nicheFilter ? "rgba(6,182,212,0.3)" : "#1e2535",
-            }}
-          >
-            <option value="">Niche</option>
-            {NICHES.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-          <span
-            style={{
-              position: "absolute",
-              right: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontSize: 10,
-              color: "#4a5568",
-              pointerEvents: "none",
-            }}
-          >
-            ▼
-          </span>
-        </div>
+        <input
+          type="text"
+          value={nicheFilter}
+          onChange={(e) => {
+            setNicheFilter(e.target.value);
+            handleFilterChange();
+          }}
+          placeholder="Niche"
+          style={{
+            ...filterInputStyle,
+            borderColor: nicheFilter ? "rgba(6,182,212,0.3)" : "#1e2535",
+          } as React.CSSProperties}
+        />
 
-        {/* Location */}
-        <div style={{ position: "relative" }}>
-          <input
-            type="text"
-            value={locationFilter}
-            onChange={(e) =>
-              handleFilterChange(setLocationFilter, e.target.value)
-            }
-            placeholder="Location"
-            style={{
-              ...selectStyle,
-              minWidth: 130,
-              paddingRight: 12,
-              color: locationFilter ? "#e2e8f0" : "#4a5568",
-              borderColor: locationFilter
-                ? "rgba(6,182,212,0.3)"
-                : "#1e2535",
-            }}
-            onFocus={(e) =>
-              (e.currentTarget.style.borderColor = "rgba(6,182,212,0.4)")
-            }
-            onBlur={(e) =>
-              (e.currentTarget.style.borderColor = locationFilter
-                ? "rgba(6,182,212,0.3)"
-                : "#1e2535")
-            }
-          />
-        </div>
+        {/* Min Followers */}
+        <input
+          type="number"
+          value={minFollowers}
+          onChange={(e) => {
+            setMinFollowers(e.target.value);
+            handleFilterChange();
+          }}
+          placeholder="Min Followers"
+          style={{
+            ...filterInputStyle,
+            width: 130,
+            borderColor: minFollowers ? "rgba(6,182,212,0.3)" : "#1e2535",
+          } as React.CSSProperties}
+        />
 
-        {/* Trust Score */}
-        <div style={{ position: "relative" }}>
-          <select
-            value={trustFilter}
-            onChange={(e) =>
-              handleFilterChange(setTrustFilter, e.target.value)
-            }
-            style={{
-              ...selectStyle,
-              color: trustFilter ? "#e2e8f0" : "#4a5568",
-              borderColor: trustFilter ? "rgba(6,182,212,0.3)" : "#1e2535",
-            }}
-          >
-            <option value="">Trust Score</option>
-            {TRUST_SCORES.map((t) => (
-              <option key={t.label} value={t.label}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-          <span
-            style={{
-              position: "absolute",
-              right: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontSize: 10,
-              color: "#4a5568",
-              pointerEvents: "none",
-            }}
-          >
-            ▼
-          </span>
-        </div>
+        {/* Min Engagement */}
+        <input
+          type="number"
+          value={minEngagement}
+          onChange={(e) => {
+            setMinEngagement(e.target.value);
+            handleFilterChange();
+          }}
+          placeholder="Min Eng %"
+          step="0.1"
+          style={{
+            ...filterInputStyle,
+            borderColor: minEngagement ? "rgba(6,182,212,0.3)" : "#1e2535",
+          } as React.CSSProperties}
+        />
+
+        {/* Min Trust */}
+        <input
+          type="number"
+          value={minTrust}
+          onChange={(e) => {
+            setMinTrust(e.target.value);
+            handleFilterChange();
+          }}
+          placeholder="Min Trust"
+          style={{
+            ...filterInputStyle,
+            borderColor: minTrust ? "rgba(6,182,212,0.3)" : "#1e2535",
+          } as React.CSSProperties}
+        />
       </div>
 
-      {/* ── Stats Banner ── */}
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          marginBottom: 20,
-          flexWrap: "wrap" as const,
-          alignItems: "center",
-        }}
-      >
-        {[
-          { label: "PROFILES", value: "350M+" },
-          { label: "NICHES", value: "142" },
-          { label: "COUNTRIES", value: "190+" },
-        ].map(({ label, value }) => (
-          <div
-            key={label}
-            style={{
-              background: "#0a0d14",
-              border: "1px solid #1e2535",
-              borderRadius: 8,
-              padding: "8px 16px",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <span
-              style={{
-                fontSize: 16,
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 800,
-                color: "#06b6d4",
-              }}
-            >
-              {value}
-            </span>
-            <span
-              style={{
-                fontSize: 9,
-                fontFamily: "'DM Mono', monospace",
-                color: "#4a5568",
-                letterSpacing: 2,
-              }}
-            >
-              {label}
-            </span>
-          </div>
-        ))}
-
-        <div
-          style={{
-            marginLeft: "auto",
-            fontSize: 12,
-            fontFamily: "'DM Mono', monospace",
-            color: "#4a5568",
-          }}
-        >
-          {filtered.length} result{filtered.length !== 1 ? "s" : ""} found
+      {/* ── Results Count ── */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <div style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+          {isLoading ? (
+            <span style={{ color: "#2d3748" }}>Searching...</span>
+          ) : (
+            <>
+              <span style={{ color: "#06b6d4", fontWeight: 700, fontSize: 14, fontFamily: "'Syne', sans-serif" }}>{total}</span>
+              {" "}creator{total !== 1 ? "s" : ""} found
+            </>
+          )}
         </div>
+        {totalPages > 1 && !isLoading && (
+          <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#2d3748" }}>
+            Page {currentPage} of {totalPages}
+          </div>
+        )}
       </div>
 
       {/* ── Creator Grid ── */}
-      {paginated.length === 0 ? (
+      {!isLoading && creators.length === 0 ? (
         <div
           style={{
             background: "#0a0d14",
@@ -1127,138 +743,120 @@ export default function DiscoverPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: 32, marginBottom: 12 }}>🔍</div>
-          <div
-            style={{
-              fontSize: 15,
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 700,
-              color: "#e2e8f0",
-              marginBottom: 8,
-            }}
-          >
+          <div style={{ fontSize: 32, marginBottom: 12 }}>{"\u{1f50d}"}</div>
+          <div style={{ fontSize: 15, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 8 }}>
             No creators found
           </div>
-          <div
-            style={{
-              fontSize: 12,
-              fontFamily: "'DM Mono', monospace",
-              color: "#4a5568",
-              marginBottom: 16,
-            }}
-          >
-            Try adjusting your search or filters
+          <div style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#4a5568", marginBottom: 16, lineHeight: 1.6 }}>
+            No creators found matching your filters.<br />
+            Try adjusting your search criteria.
           </div>
-          <button
-            onClick={clearAllFilters}
-            style={{
-              padding: "8px 20px",
-              borderRadius: 8,
-              border: "1px solid #1e2535",
-              background: "transparent",
-              color: "#06b6d4",
-              fontSize: 11,
-              fontFamily: "'DM Mono', monospace",
-              cursor: "pointer",
-              letterSpacing: 0.5,
-            }}
-          >
-            CLEAR ALL FILTERS
-          </button>
+          {hasActiveFilters && (
+            <button
+              onClick={clearAllFilters}
+              style={{
+                padding: "8px 20px",
+                borderRadius: 8,
+                border: "1px solid #1e2535",
+                background: "transparent",
+                color: "#06b6d4",
+                fontSize: 11,
+                fontFamily: "'DM Mono', monospace",
+                cursor: "pointer",
+                letterSpacing: 0.5,
+              }}
+            >
+              CLEAR ALL FILTERS
+            </button>
+          )}
         </div>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 16,
-            marginBottom: 28,
-          }}
-        >
-          {paginated.map((creator) => (
-            <CreatorCard
-              key={creator.id}
-              creator={creator}
-              onAddToList={() => {}}
-              onViewProfile={() => {}}
-            />
-          ))}
-        </div>
-      )}
+        <>
+          {/* Loading overlay for subsequent searches */}
+          <div style={{ position: "relative", opacity: isLoading ? 0.5 : 1, transition: "opacity 0.2s" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 28 }}>
+              {creators.map((creator) => (
+                <CreatorCard key={creator.id} creator={creator} />
+              ))}
+            </div>
+          </div>
 
-      {/* ── Pagination ── */}
-      {totalPages > 1 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 8,
-            marginBottom: 40,
-          }}
-        >
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={safePage === 1}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "1px solid #1e2535",
-              background: "transparent",
-              color: safePage === 1 ? "#2d3748" : "#94a3b8",
-              fontSize: 12,
-              fontFamily: "'DM Mono', monospace",
-              cursor: safePage === 1 ? "not-allowed" : "pointer",
-              transition: "all 0.15s",
-            }}
-          >
-            ← PREV
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-            const isActive = page === safePage;
-            return (
+          {/* ── Pagination ── */}
+          {totalPages > 1 && (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 40 }}>
               <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage <= 1 || isLoading}
                 style={{
-                  width: 36,
-                  height: 36,
+                  padding: "8px 14px",
                   borderRadius: 8,
-                  border: isActive
-                    ? "1px solid rgba(6,182,212,0.4)"
-                    : "1px solid #1e2535",
-                  background: isActive ? "rgba(6,182,212,0.1)" : "transparent",
-                  color: isActive ? "#06b6d4" : "#94a3b8",
+                  border: "1px solid #1e2535",
+                  background: "transparent",
+                  color: currentPage <= 1 ? "#2d3748" : "#94a3b8",
                   fontSize: 12,
                   fontFamily: "'DM Mono', monospace",
-                  cursor: "pointer",
+                  cursor: currentPage <= 1 ? "not-allowed" : "pointer",
                   transition: "all 0.15s",
                 }}
               >
-                {page}
+                {"\u2190"} PREV
               </button>
-            );
-          })}
 
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={safePage === totalPages}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "1px solid #1e2535",
-              background: "transparent",
-              color: safePage === totalPages ? "#2d3748" : "#94a3b8",
-              fontSize: 12,
-              fontFamily: "'DM Mono', monospace",
-              cursor: safePage === totalPages ? "not-allowed" : "pointer",
-              transition: "all 0.15s",
-            }}
-          >
-            NEXT →
-          </button>
-        </div>
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let page: number;
+                if (totalPages <= 5) {
+                  page = i + 1;
+                } else if (currentPage <= 3) {
+                  page = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  page = totalPages - 4 + i;
+                } else {
+                  page = currentPage - 2 + i;
+                }
+                const isActive = page === currentPage;
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    disabled={isLoading}
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 8,
+                      border: isActive ? "1px solid rgba(6,182,212,0.4)" : "1px solid #1e2535",
+                      background: isActive ? "rgba(6,182,212,0.1)" : "transparent",
+                      color: isActive ? "#06b6d4" : "#94a3b8",
+                      fontSize: 12,
+                      fontFamily: "'DM Mono', monospace",
+                      cursor: "pointer",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage >= totalPages || isLoading}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  border: "1px solid #1e2535",
+                  background: "transparent",
+                  color: currentPage >= totalPages ? "#2d3748" : "#94a3b8",
+                  fontSize: 12,
+                  fontFamily: "'DM Mono', monospace",
+                  cursor: currentPage >= totalPages ? "not-allowed" : "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                NEXT {"\u2192"}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

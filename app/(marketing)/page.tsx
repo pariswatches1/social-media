@@ -5,7 +5,7 @@ import Link from "next/link";
 
 /* ── NAV DROPDOWN DATA ──────────────────────────────── */
 const PLATFORM_LINKS = [
-  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor\u2019s content" },
+  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor’s content" },
   { num: "02", title: "AI Generation", sub: "3 angle-tested variations per topic" },
   { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live" },
 ];
@@ -18,812 +18,662 @@ const SOLUTIONS_LINKS = [
   { num: "06", title: "Analytics", sub: "Track performance across all platforms" },
 ];
 
-/* ── PLATFORM CARDS DATA ──────────────────────────────── */
+/* ── PLATFORM CARDS DATA ─────────────────────────────────── */
 const PLATFORMS = [
   { name: "Instagram", color: "#E1306C", bg: "rgba(225,48,108,.08)", border: "rgba(225,48,108,.30)", a08: "rgba(225,48,108,.12)", a20: "rgba(225,48,108,.22)", delay: "d1", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="#E1306C" strokeWidth="1.6"/><circle cx="12" cy="12" r="4.5" stroke="#E1306C" strokeWidth="1.6"/><circle cx="17.5" cy="6.5" r="1.2" fill="#E1306C"/></svg> },
   { name: "LinkedIn", color: "#0A66C2", bg: "rgba(10,102,194,.08)", border: "rgba(10,102,194,.30)", a08: "rgba(10,102,194,.12)", a20: "rgba(10,102,194,.22)", delay: "d1", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="3.5" stroke="#0A66C2" strokeWidth="1.6"/><path d="M7 10v7M7 7.5v.5M11 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M11 10v7" stroke="#0A66C2" strokeWidth="1.6" strokeLinecap="round"/></svg> },
   { name: "X / Twitter", color: "#e7e9ea", bg: "rgba(231,233,234,.06)", border: "rgba(231,233,234,.28)", a08: "rgba(231,233,234,.09)", a20: "rgba(231,233,234,.16)", delay: "d2", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M4 4l6.5 7.5L4 20h2.5l5.2-6 4.8 6H20l-7-8.5L19.5 4H17l-4.8 5.5L7.5 4H4z" fill="#e7e9ea"/></svg> },
   { name: "TikTok", color: "#FF0050", bg: "rgba(255,0,80,.08)", border: "rgba(255,0,80,.30)", a08: "rgba(255,0,80,.12)", a20: "rgba(255,0,80,.22)", delay: "d2", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M9 12a4 4 0 1 0 4 4V4c.5 2 2.5 4 5 4" stroke="#FF0050" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-  { name: "Reddit", color: "#FF4500", bg: "rgba(255,69,0,.08)", border: "rgba(255,69,0,.30)", a08: "rgba(255,69,0,.12)", a20: "rgba(255,69,0,.22)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#FF4500" strokeWidth="1.6"/><path d="M16.5 10a2 2 0 0 1 2 2c0 .8-.5 1.5-1.2 1.8.1.3.1.6.1.9 0 2.2-2.4 4-5.4 4s-5.4-1.8-5.4-4c0-.3 0-.6.1-.9A2 2 0 1 1 10.2 10M9 13.5c0 .6.4 1 1 1M14 13.5c0 .6.4 1 1 1" stroke="#FF4500" strokeWidth="1.4" strokeLinecap="round"/></svg> },
-  { name: "Facebook", color: "#1877F2", bg: "rgba(24,119,242,.08)", border: "rgba(24,119,242,.30)", a08: "rgba(24,119,242,.12)", a20: "rgba(24,119,242,.22)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#1877F2" strokeWidth="1.6"/><path d="M13 21.5V14h2.5l.5-2.5H13v-1.5c0-.7.3-1 1-1h2V7s-.9-.2-2-.2c-2.3 0-3.5 1.4-3.5 3.5V11.5H8V14h2.5v7.5" stroke="#1877F2" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-  { name: "Snapchat", color: "#FFFC00", bg: "rgba(255,252,0,.06)", border: "rgba(255,252,0,.26)", a08: "rgba(255,252,0,.09)", a20: "rgba(255,252,0,.16)", delay: "d4", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 3c-2.8 0-5 2.2-5 5v2.5c-.5.5-1.5.5-2 1 0 .7.5 1 1 1.2-.3.6-.8 1.3-2 1.5.3.5 1.5.8 2.5.9.2.5.5 1 .5 1 .2.3.5.5.8.4 1.2 0 2 .5 4.2.5s3-.5 4.2-.5c.3.1.6-.1.8-.4 0 0 .3-.5.5-1 1-.1 2.2-.4 2.5-.9-1.2-.2-1.7-.9-2-1.5.5-.2 1-.5 1-1.2-.5-.5-1.5-.5-2-1V8c0-2.8-2.2-5-5-5z" stroke="#FFFC00" strokeWidth="1.6" strokeLinejoin="round"/></svg> },
+  { name: "Reddit", color: "#FF4500", bg: "rgba(255,69,0,.08)", border: "rgba(255,69,0,.30)", a08: "rgba(255,69,0,.12)", a20: "rgba(255,69,0,.22)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#FF4500" strokeWidth="1.6"/><circle cx="9" cy="12" r="1" fill="#FF4500"/><circle cx="15" cy="12" r="1" fill="#FF4500"/><path d="M9 15s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#FF4500" strokeWidth="1.4" strokeLinecap="round"/><circle cx="16.5" cy="7.5" r="1" fill="#FF4500"/><path d="M12 8.5c1.5-1.5 4.5-1 4.5 1" stroke="#FF4500" strokeWidth="1.4" strokeLinecap="round"/></svg> },
+  { name: "YouTube", color: "#FF0000", bg: "rgba(255,0,0,.08)", border: "rgba(255,0,0,.28)", a08: "rgba(255,0,0,.11)", a20: "rgba(255,0,0,.18)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="4" stroke="#FF0000" strokeWidth="1.6"/><path d="M10 9l5 3-5 3V9z" fill="#FF0000"/></svg> },
+  { name: "Pinterest", color: "#E60023", bg: "rgba(230,0,35,.08)", border: "rgba(230,0,35,.28)", a08: "rgba(230,0,35,.11)", a20: "rgba(230,0,35,.18)", delay: "d4", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#E60023" strokeWidth="1.6"/><path d="M12 7c-3 0-5 2-5 4.5 0 1.5.8 2.8 2 3.3-.1-.5-.2-1.3 0-1.8l1-4.2s-.3-.5-.3-1.3c0-1.2.7-2 1.7-2 .8 0 1.2.6 1.2 1.3 0 .8-.5 2-.8 3.1-.2.9.5 1.6 1.4 1.6 1.6 0 2.8-1.7 2.8-4.2C16 8.7 14.2 7 12 7z" fill="#E60023"/><path d="M11.5 15.5c-.5 2-1.2 3.9-2.5 5" stroke="#E60023" strokeWidth="1.4" strokeLinecap="round"/></svg> },
 ];
 
-/* ── HOW IT WORKS CARDS ──────────────────────────────── */
-const HOW_CARDS = [
-  { num: "01 \u2014 Analyze", title: "Competitor\nIntelligence", desc: "Paste any URL. Get a full breakdown: hook structure, emotional triggers, timing, CTA strength \u2014 plus a blueprint to replicate it." },
-  { num: "02 \u2014 Generate", title: "AI Content\nGeneration", desc: "Three variations per topic \u2014 authority, curiosity, relatability \u2014 each scored for virality before you see it." },
-  { num: "03 \u2014 Publish", title: "Smart\nScheduling", desc: "SIGNAL knows when each platform rewards engagement. Schedule manually or let the auto-publisher handle it." },
-];
-
-/* ── SERVICE PANELS ──────────────────────────────────── */
-const SERVICES = [
+/* ── PRICING TIERS ────────────────────────────────────────── */
+const TIERS = [
   {
-    num: "01", label: "Competitor intelligence",
-    desc: "Paste any competitor post, profile, or campaign URL. SIGNAL dissects what made it perform \u2014 hook structure, emotional trigger, timing signal, CTA architecture \u2014 and returns a precise blueprint for you to replicate and surpass it.",
-    cta1: "Explore", cta2: "Start analyzing",
-    headTop: "INTELLI", headBot: "GENCE.", headAccent: false,
-    tags: "Analyze \u00b7 Reverse-engineer \u00b7 Blueprint",
-    footCta: "Start analyzing \u2192",
+    name: "Starter",
+    price: { monthly: 29, annual: 23 },
+    tagline: "Perfect for solo creators & freelancers",
+    highlight: false,
+    features: [
+      "3 social accounts",
+      "50 AI-generated posts/mo",
+      "Basic analytics dashboard",
+      "Content calendar",
+      "Email support",
+    ],
   },
   {
-    num: "02", label: "AI content generation",
-    desc: "Not one post. Three. Every topic gets three variations \u2014 an authority angle, a curiosity angle, a relatability angle \u2014 each adapted for your target platform\u2019s character limits, tone norms, and engagement patterns. Each scored for virality before you see it.",
-    cta1: "Explore", cta2: "Start generating",
-    headTop: "CREAT", headBot: "ION.", headAccent: true,
-    tags: "Authority \u00b7 Curiosity \u00b7 Relatability",
-    footCta: "Start generating \u2192",
+    name: "Pro",
+    price: { monthly: 79, annual: 63 },
+    tagline: "For growing brands & agencies",
+    highlight: true,
+    features: [
+      "10 social accounts",
+      "Unlimited AI posts",
+      "Advanced analytics + exports",
+      "Virality scoring",
+      "Auto-publishing",
+      "Priority support",
+    ],
   },
   {
-    num: "03", label: "Auto-publishing",
-    desc: "Accompanying your content from draft to live \u2014 across 7 platforms simultaneously. SIGNAL knows the exact window each algorithm rewards. Schedule manually, or connect your accounts and let SIGNAL publish at peak engagement, automatically.",
-    cta1: "Explore", cta2: "View all platforms",
-    headTop: "EXECU", headBot: "TION.", headAccent: false,
-    tags: "Schedule \u00b7 Auto-publish \u00b7 Optimize",
-    footCta: "View all platforms \u2192",
+    name: "Business",
+    price: { monthly: 149, annual: 119 },
+    tagline: "For scaling teams & power users",
+    highlight: false,
+    features: [
+      "25 social accounts",
+      "Unlimited AI posts",
+      "Team collaboration (5 seats)",
+      "White-label reports",
+      "CRM + Outreach tools",
+      "Dedicated account manager",
+    ],
+  },
+  {
+    name: "Enterprise",
+    price: { monthly: null, annual: null },
+    tagline: "Custom solutions for large organisations",
+    highlight: false,
+    features: [
+      "Unlimited accounts & seats",
+      "Custom AI model fine-tuning",
+      "SSO / SAML login",
+      "SLA & uptime guarantee",
+      "Custom integrations",
+      "Dedicated success team",
+    ],
   },
 ];
 
-/* ── POSTURE COLS ──────────────────────────────────── */
-const POSTURE = [
-  { accent: "Data-driven", rest: "by design", body: "Every recommendation SIGNAL makes is backed by pattern recognition across millions of posts. Virality isn\u2019t random \u2014 it follows structures. We find them before you post." },
-  { accent: "AI-native", rest: "not AI-bolted-on", body: "Built from the ground up on Claude. Not a chatbot wrapper, not a template system. Genuine intelligence applied to every stage of your content workflow." },
-  { accent: "Platform-aware", rest: "not platform-agnostic", body: "Instagram, LinkedIn, X, TikTok, Reddit, Facebook, Snapchat. Each has its own language, cadence, and algorithm. SIGNAL speaks all seven fluently." },
-  { accent: "Ruthlessly", rest: "simple pricing", body: "Sprout Social charges $299/month. We start at $79.99. Not a stripped-down version \u2014 the same core intelligence, fraction of the spend, zero lock-in." },
+/* ── TESTIMONIALS ─────────────────────────────────────────── */
+const TESTIMONIALS = [
+  { quote: "SIGNAL tripled our engagement in 6 weeks. The virality scorer alone is worth every penny.", name: "Priya M.", role: "Head of Social, Luxe Brands", avatar: "P" },
+  { quote: "Finally an AI tool that sounds like us, not a robot. Our content feels authentic and still gets results.", name: "Jake R.", role: "Founder, GrowthLab", avatar: "J" },
+  { quote: "The competitor analysis feature revealed gaps we had no idea existed. Total game-changer.", name: "Sofia K.", role: "CMO, NovaTech", avatar: "S" },
+  { quote: "We went from posting twice a week to every day across 5 platforms. No extra headcount.", name: "Marcus T.", role: "VP Marketing, UrbanEdge", avatar: "M" },
 ];
 
-/* ── CASES ──────────────────────────────────────────── */
-const CASES = [
-  { wm: "Horizon", cat: "SaaS \u00b7 LinkedIn + Instagram", title: "Horizon", sub: "B2B SaaS team with no dedicated social manager. Used SIGNAL to systematically reverse-engineer competitors and generate content weekly across two platforms.", pill: "+340% engagement", rl: "in 60 days" },
-  { wm: "HAUS", cat: "Agency \u00b7 8 clients \u00b7 All platforms", title: "HAUS Agency", sub: "Social media agency managing 8 clients on Sprout Social. Migrated all 8 to SIGNAL Agency plan. Same capabilities, fraction of the cost, zero features lost.", pill: "$2,400 \u2192 $79/mo", rl: "per month" },
-  { wm: "MV", cat: "Founder \u00b7 X / Twitter + LinkedIn", title: "Marco Vitale", sub: "Solo founder with zero marketing background. Used SIGNAL to identify what content formats were working in his niche and generate daily variations automatically.", pill: "0 \u2192 10K followers", rl: "in 90 days" },
+/* ── FAQs ───────────────────────────────────────────────────────────── */
+const FAQS = [
+  { q: "Can I try SIGNAL for free?", a: "Yes — we offer a 14-day free trial on all plans. No credit card required." },
+  { q: "How does AI content generation work?", a: "SIGNAL’s AI studies your brand voice, past performance, and competitor gaps to generate on-brand content. Each topic gets 3 angle-tested variations." },
+  { q: "Which social platforms are supported?", a: "Instagram, LinkedIn, X/Twitter, TikTok, Reddit, YouTube, and Pinterest. More coming in 2025." },
+  { q: "Can I cancel my subscription anytime?", a: "Absolutely. Cancel with one click from your dashboard. No lock-ins, no penalties." },
+  { q: "Is my data secure?", a: "SIGNAL is SOC 2 Type II compliant and encrypts all data at rest and in transit. We never sell your data." },
 ];
 
-/* ── MARQUEE ITEMS ──────────────────────────────────── */
-const MQ_ROW_A = [
-  { text: "Competitor Intel", lit: true }, { text: "Virality Scoring", lit: false },
-  { text: "A/B/C Variations", lit: true }, { text: "Brand Voice Kit", lit: false },
-  { text: "Content Calendar", lit: true }, { text: "Auto-Publishing", lit: false },
-  { text: "7 Platforms", lit: true },
-];
-const MQ_ROW_B = [
-  { text: "$79.99 / month", lit: false }, { text: "vs Sprout $299", lit: true },
-  { text: "73% cheaper", lit: false }, { text: "AI-First", lit: true },
-  { text: "SIGNAL the algorithm", lit: false }, { text: "Instagram \u00b7 LinkedIn \u00b7 X", lit: true },
-  { text: "TikTok \u00b7 Reddit \u00b7 Facebook", lit: false },
-];
-
-/* ════════════════════════════════════════════════════════════
-   INLINE STYLE CONSTANTS
-   ════════════════════════════════════════════════════════════ */
-const secStyle: React.CSSProperties = {
-  position: "relative", zIndex: 3,
-  background: "var(--glass)",
-  backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)",
-  borderBottom: "1px solid var(--glassbr)",
+/* ── FOOTER LINKS ────────────────────────────────────────── */
+const FOOTER_LINKS = {
+  Product: ["Features", "Pricing", "Changelog", "Roadmap"],
+  Company: ["About", "Blog", "Careers", "Press"],
+  Legal:   ["Privacy", "Terms", "Cookies", "GDPR"],
+  Support: ["Docs", "Status", "Community", "Contact"],
 };
-const secInner: React.CSSProperties = {
-  maxWidth: "var(--wrap)", margin: "0 auto", padding: "88px var(--pad)",
-};
-const eyebrow: React.CSSProperties = {
-  display: "inline-flex", alignItems: "center", gap: 10,
-  fontSize: 13, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--ac)",
-  marginBottom: 22,
-};
-const eyebrowBar: React.CSSProperties = { width: 26, height: 1, background: "var(--ac)", flexShrink: 0 };
 
-/* ════════════════════════════════════════════════════════════
-   COMPONENT: STL (dual-text hover animation)
-   ════════════════════════════════════════════════════════════ */
-function STL({ text, style }: { text: string; style?: React.CSSProperties }) {
-  return (
-    <span className="stl" style={style}>
-      <span className="stli">
-        <span style={style}>{text}</span>
-        <span style={style}>{text}</span>
-      </span>
-    </span>
-  );
-}
+/* ─────────────────────────────────────────────────────────────────────────────── */
+/*  PAGE COMPONENT                                                        */
+/* ────────────────────────────────────────────────────────────────────────────── */
+export default function HomePage() {
+  const [annual, setAnnual] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [navOpen, setNavOpen] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
-/* ════════════════════════════════════════════════════════════
-   BOLT SVG
-   ════════════════════════════════════════════════════════════ */
-function BoltIcon({ size = 13, fill = "#060C3D" }: { size?: number; fill?: string }) {
-  return <svg viewBox="0 0 16 16" style={{ width: size }}><path d="M9.5 1L4 9h5L7.5 15L14 7h-5z" fill={fill} /></svg>;
-}
-
-/* ════════════════════════════════════════════════════════════
-   MAIN PAGE COMPONENT
-   ════════════════════════════════════════════════════════════ */
-export default function MarketingPage() {
-  const [openNav, setOpenNav] = useState<string | null>(null);
-
-  /* ── Custom cursor ── */
   useEffect(() => {
-    const dot = document.getElementById("cd");
-    const ring = document.getElementById("cr");
-    const spl = document.getElementById("spl");
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let rx = mx, ry = my;
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
-      if (dot) { dot.style.left = mx + "px"; dot.style.top = my + "px"; }
-      if (spl) spl.style.background = `radial-gradient(600px at ${mx}px ${my}px, rgba(0,237,212,.07), transparent 70%)`;
-    };
-    const animRing = () => {
-      rx += (mx - rx) * 0.10; ry += (my - ry) * 0.10;
-      if (ring) { ring.style.left = rx + "px"; ring.style.top = ry + "px"; }
-      requestAnimationFrame(animRing);
-    };
-    window.addEventListener("mousemove", onMove);
-    animRing();
-    return () => window.removeEventListener("mousemove", onMove);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  /* ── Cursor hover expansion ── */
-  useEffect(() => {
-    const add = () => document.body.classList.add("hov");
-    const rem = () => document.body.classList.remove("hov");
-    const els = document.querySelectorAll("a, button, .ioc, .casecard, .poscol, .platcard");
-    els.forEach(el => { el.addEventListener("mouseenter", add); el.addEventListener("mouseleave", rem); });
-    return () => els.forEach(el => { el.removeEventListener("mouseenter", add); el.removeEventListener("mouseleave", rem); });
-  }, []);
-
-  /* ── Nav scroll background ── */
-  useEffect(() => {
-    const nav = document.getElementById("signal-nav");
-    const check = () => nav?.classList.toggle("sc", window.scrollY > 40);
-    window.addEventListener("scroll", check, { passive: true });
-    check();
-    return () => window.removeEventListener("scroll", check);
-  }, []);
-
-  /* ── STL height fix ── */
-  useEffect(() => {
-    document.querySelectorAll(".stl").forEach((el) => {
-      const sp = el.querySelector("span") as HTMLElement;
-      if (!sp) return;
-      const lh = parseFloat(getComputedStyle(sp).lineHeight) || parseFloat(getComputedStyle(sp).fontSize) * 1.3;
-      (el as HTMLElement).style.height = Math.ceil(lh) + "px";
-      (el as HTMLElement).style.lineHeight = "1";
-    });
-  }, []);
-
-  /* ── Scroll reveal ── */
-  useEffect(() => {
-    const els = document.querySelectorAll(".rv, .rvl, .rvr");
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.06 });
-    els.forEach(el => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  /* ── Click ripple ── */
-  useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      const d = document.createElement("div");
-      d.style.cssText = `position:fixed;pointer-events:none;z-index:9997;left:${e.clientX}px;top:${e.clientY}px;width:6px;height:6px;border-radius:50%;border:1.5px solid rgba(0,237,212,.7);transform:translate(-50%,-50%);animation:ripple .75s ease-out forwards;`;
-      document.body.appendChild(d);
-      setTimeout(() => d.remove(), 800);
-    };
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
-  }, []);
-
-  /* ── Dropdown brand sidebar (reused) ── */
-  const ddBrand = (desc: string) => (
-    <div style={{ width: 290, flexShrink: 0, borderRight: "1px solid var(--glassbr)", padding: "36px 40px", display: "flex", flexDirection: "column" }}>
-      <p style={{ fontSize: 14, fontWeight: 400, color: "var(--mu)", lineHeight: 1.72, marginBottom: 22, maxWidth: 210 }}>{desc}</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>
-          <span>&#120143;</span><STL text="Twitter / X" style={{ fontSize: 13, fontWeight: 400, color: "inherit" }} />
-        </a>
-        <a href="mailto:hello@getsignal.ai" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>
-          <span>&#x2709;</span><STL text="hello@getsignal.ai" style={{ fontSize: 13, fontWeight: 400, color: "inherit" }} />
-        </a>
-      </div>
-      <div style={{ marginTop: "auto", paddingTop: 22 }}>
-        <div style={{ width: 44, height: 44, background: "var(--a06)", border: "1px solid var(--a12)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <svg viewBox="0 0 24 24" fill="none" style={{ width: 22 }}><path d="M14 2L6 13h7L11 22L19 11h-7z" fill="#00EDD4" opacity=".85" /></svg>
-        </div>
-      </div>
-    </div>
-  );
-
-  /* ── Dropdown links grid (reused) ── */
-  const ddLinksGrid = (links: typeof PLATFORM_LINKS) => (
-    <div style={{ flex: 1, padding: "28px 48px", display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 0 }}>
-      {links.map(l => (
-        <a key={l.num} href="#" style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "12px 18px", borderRadius: 10, width: "calc(100%/3)", transition: "background .2s" }}
-           onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.06)")}
-           onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".12em", color: "var(--ac)", opacity: .8, flexShrink: 0, marginTop: 3 }}>{l.num}</span>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 500, color: "#fff", marginBottom: 3 }}>{l.title}</div>
-            <div style={{ fontSize: 13, fontWeight: 400, color: "var(--mu)", lineHeight: 1.5 }}>{l.sub}</div>
-          </div>
-        </a>
-      ))}
-    </div>
-  );
 
   return (
     <>
-      {/* ══════ NAV ══════ */}
-      <nav id="signal-nav" style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
-        height: "var(--nh)", display: "flex", alignItems: "center", padding: "0 var(--pad)",
-        borderBottom: "1px solid transparent",
+      {/* ── CSS vars + global resets ── */}
+      <style>{`
+        :root {
+          --bg:   #050811;
+          --card: #090d1a;
+          --dim:  #4a5568;
+          --muted:#2d3748;
+          --glow: #06b6d4;
+          --grad: linear-gradient(135deg,#0891b2,#0e7490);
+          --hi:   #e2e8f0;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--hi); font-family: 'DM Sans', sans-serif; }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; font-family: inherit; }
+        /* animations */
+        @keyframes fadeUp   { from { opacity:0; transform:translateY(24px) } to { opacity:1; transform:none } }
+        @keyframes fadeIn   { from { opacity:0 } to { opacity:1 } }
+        @keyframes pulse    { 0%,100% { opacity:.6 } 50% { opacity:1 } }
+        @keyframes spin     { to { transform:rotate(360deg) } }
+        @keyframes shimmer  { from { background-position:-200% 0 } to { background-position:200% 0 } }
+        .anim-fadeUp  { animation: fadeUp .7s ease both }
+        .anim-fadeIn  { animation: fadeIn .5s ease both }
+        .d1 { animation-delay:.1s } .d2 { animation-delay:.2s }
+        .d3 { animation-delay:.3s } .d4 { animation-delay:.4s }
+        /* pill */
+        .pill { display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;
+                border:1px solid rgba(6,182,212,.35);background:rgba(6,182,212,.08);
+                font-size:11px;letter-spacing:1px;font-family:'DM Mono',monospace;color:#06b6d4; }
+        /* glass card */
+        .glass { background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px; }
+        /* cta button */
+        .cta-btn { padding:14px 32px;border-radius:10px;border:none;
+                   background:var(--grad);color:#fff;
+                   font-size:14px;font-family:'DM Mono',monospace;letter-spacing:1.2px;font-weight:600;
+                   box-shadow:0 4px 20px rgba(8,145,178,.35);
+                   transition:box-shadow .2s,transform .15s; }
+        .cta-btn:hover { box-shadow:0 8px 32px rgba(8,145,178,.55);transform:translateY(-1px); }
+        /* ghost button */
+        .ghost-btn { padding:13px 28px;border-radius:10px;border:1px solid rgba(255,255,255,.12);
+                     background:transparent;color:var(--hi);
+                     font-size:13px;font-family:'DM Mono',monospace;letter-spacing:1px;
+                     transition:border-color .2s,background .2s; }
+        .ghost-btn:hover { border-color:rgba(6,182,212,.5);background:rgba(6,182,212,.06); }
+        /* section heading */
+        .sec-head { font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;
+                    color:var(--hi);line-height:1.1;letter-spacing:-.5px; }
+        .sec-sub { font-size:16px;color:var(--dim);line-height:1.7;max-width:560px; }
+        /* input */
+        .hero-input { flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+                      border-radius:10px;padding:14px 20px;color:#fff;font-size:14px;
+                      font-family:'DM Sans',sans-serif;outline:none;
+                      transition:border-color .2s; }
+        .hero-input:focus { border-color:rgba(6,182,212,.5); }
+        .hero-input::placeholder { color:var(--dim); }
+      `}</style>
+
+      {/* ════ NAVBAR ════════════════════════════════════════════════════════════ */}
+      <nav style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        display: "flex", alignItems: "center", padding: "0 40px", height: 64,
+        background: scrolled ? "rgba(5,8,17,.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,.06)" : "none",
+        transition: "background .3s, border .3s, backdrop-filter .3s",
       }}>
-        <a href="#" style={{ display: "flex", alignItems: "center", gap: 9, fontFamily: "var(--fd)", fontSize: 15, fontWeight: 800, letterSpacing: ".15em", textTransform: "uppercase", flexShrink: 0, marginRight: 52, color: "#fff" }}>
-          <div style={{ width: 28, height: 28, background: "var(--ac)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <BoltIcon />
-          </div>
-          Signal
-        </a>
-        <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
-          {/* Platform dropdown */}
-          <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}
-               onMouseEnter={() => setOpenNav("platform")} onMouseLeave={() => setOpenNav(null)}>
-            <span style={{ fontSize: 15, fontWeight: 400, color: openNav === "platform" ? "#fff" : "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", gap: 5, transition: "color .2s", whiteSpace: "nowrap", cursor: "none" }}>
-              Platform <span style={{ fontSize: 8, opacity: openNav === "platform" ? 1 : .5, transition: "transform .3s, opacity .2s", transform: openNav === "platform" ? "rotate(180deg)" : "none" }}>&#9660;</span>
-            </span>
-            <div style={{
-              position: "fixed", top: "var(--nh)", left: 0, right: 0,
-              background: "rgba(4,12,52,.96)", backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)",
-              borderBottom: "1px solid var(--glassbr)",
-              display: "flex", alignItems: "stretch",
-              maxHeight: openNav === "platform" ? 300 : 0, overflow: "hidden", opacity: openNav === "platform" ? 1 : 0,
-              transition: "max-height .45s cubic-bezier(.16,1,.3,1), opacity .3s ease", zIndex: 490,
-            }}>
-              {ddBrand("AI content intelligence platform for social teams who want to know what wins before they post.")}
-              {ddLinksGrid(PLATFORM_LINKS)}
-            </div>
-          </div>
-          {/* How it works */}
-          <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}>
-            <a href="#intro" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap" }}>How it works</a>
-          </div>
-          {/* Solutions dropdown */}
-          <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}
-               onMouseEnter={() => setOpenNav("solutions")} onMouseLeave={() => setOpenNav(null)}>
-            <span style={{ fontSize: 15, fontWeight: 400, color: openNav === "solutions" ? "#fff" : "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", gap: 5, transition: "color .2s", whiteSpace: "nowrap", cursor: "none" }}>
-              Solutions <span style={{ fontSize: 8, opacity: openNav === "solutions" ? 1 : .5, transition: "transform .3s, opacity .2s", transform: openNav === "solutions" ? "rotate(180deg)" : "none" }}>&#9660;</span>
-            </span>
-            <div style={{
-              position: "fixed", top: "var(--nh)", left: 0, right: 0,
-              background: "rgba(4,12,52,.96)", backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)",
-              borderBottom: "1px solid var(--glassbr)",
-              display: "flex", alignItems: "stretch",
-              maxHeight: openNav === "solutions" ? 300 : 0, overflow: "hidden", opacity: openNav === "solutions" ? 1 : 0,
-              transition: "max-height .45s cubic-bezier(.16,1,.3,1), opacity .3s ease", zIndex: 490,
-            }}>
-              {ddBrand("Everything you need to build, schedule, and dominate your social presence across 7 platforms.")}
-              {ddLinksGrid(SOLUTIONS_LINKS)}
-            </div>
-          </div>
-          {/* Results */}
-          <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}>
-            <a href="#cases" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap" }}>Results</a>
-          </div>
-          {/* Free Tools */}
-          <div style={{ position: "relative", height: "var(--nh)", display: "flex", alignItems: "center" }}>
-            <Link href="/tools" style={{ fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,.65)", padding: "0 18px", height: "100%", display: "flex", alignItems: "center", transition: "color .2s", whiteSpace: "nowrap", textDecoration: "none" }}>Free Tools</Link>
-          </div>
+        {/* Logo */}
+        <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, letterSpacing: -.5, marginRight: 40 }}>
+          SIGNAL
+          <span style={{ color: "#06b6d4" }}>.</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginLeft: "auto", flexShrink: 0 }}>
-          <Link href="/sign-up" style={{
-            background: "#fff", borderRadius: 99, padding: "10px 24px",
-            fontSize: 13, fontWeight: 700, color: "#060C3D", letterSpacing: ".04em",
-            fontFamily: "var(--fd)", textDecoration: "none",
-            display: "inline-flex", alignItems: "center", gap: 6,
-            transition: "background .25s, transform .3s, box-shadow .3s",
-            border: "1px solid rgba(255,255,255,.9)",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = "var(--ac)"; e.currentTarget.style.transform = "scale(1.04)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(0,237,212,.3)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-            Get started <span style={{ fontSize: 12, transition: "transform .3s" }}>&rarr;</span>
+
+        {/* Nav links */}
+        <div style={{ display: "flex", alignItems: "center", gap: 4, flex: 1 }}>
+          {["Platform", "Solutions", "Pricing", "Blog"].map((item) => {
+            const hasDropdown = item === "Platform" || item === "Solutions";
+            const isOpen = navOpen === item;
+            const links = item === "Platform" ? PLATFORM_LINKS : SOLUTIONS_LINKS;
+            return (
+              <div key={item} style={{ position: "relative" }}
+                onMouseEnter={() => hasDropdown && setNavOpen(item)}
+                onMouseLeave={() => setNavOpen(null)}>
+                <button style={{
+                  padding: "8px 14px", borderRadius: 8, border: "none",
+                  background: isOpen ? "rgba(255,255,255,.06)" : "transparent",
+                  color: isOpen ? "#e2e8f0" : "#94a3b8",
+                  fontSize: 13, display: "flex", alignItems: "center", gap: 5,
+                  transition: "color .2s, background .2s",
+                }}>
+                  {item}
+                  {hasDropdown && (
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  )}
+                </button>
+
+                {/* Dropdown */}
+                {hasDropdown && isOpen && (
+                  <div style={{
+                    position: "absolute", top: "calc(100% + 8px)", left: 0,
+                    background: "#0a0e1c", border: "1px solid rgba(255,255,255,.08)",
+                    borderRadius: 12, padding: 8, minWidth: 260,
+                    boxShadow: "0 16px 48px rgba(0,0,0,.5)",
+                    animation: "fadeIn .15s ease",
+                  }}>
+                    {links.map((l) => (
+                      <a key={l.num} href="#" style={{
+                        display: "flex", gap: 12, padding: "10px 12px", borderRadius: 8,
+                        transition: "background .15s",
+                      }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,.04)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                        <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10, color: "#06b6d4", paddingTop: 2 }}>{l.num}</span>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 500, color: "#e2e8f0" }}>{l.title}</div>
+                          <div style={{ fontSize: 11, color: "#4a5568", marginTop: 2 }}>{l.sub}</div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Right CTAs */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Link href="/login" style={{ padding: "8px 16px", fontSize: 13, color: "#94a3b8", transition: "color .2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#94a3b8")}>
+            Log in
+          </Link>
+          <Link href="/register" className="cta-btn" style={{ padding: "9px 20px", fontSize: 12, letterSpacing: "1px" }}>
+            Start free trial
           </Link>
         </div>
       </nav>
 
-      {/* ══════ HERO ══════ */}
-      <section id="hero" style={{
-        position: "relative", height: "100vh", minHeight: 660,
-        display: "flex", flexDirection: "column", overflow: "hidden", zIndex: 3,
+      {/* ════ HERO ══════════════════════════════════════════════════════════════ */}
+      <section style={{
+        minHeight: "100vh", display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        padding: "120px 24px 80px", position: "relative", overflow: "hidden",
+        textAlign: "center",
       }}>
+        {/* Background glow */}
         <div style={{
-          position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-          background: "radial-gradient(ellipse 62% 72% at 50% 46%, rgba(4,12,52,.60) 0%, transparent 68%), linear-gradient(to bottom, rgba(4,12,52,.25) 0%, transparent 35%, transparent 65%, rgba(4,12,52,.40) 100%)",
+          position: "absolute", width: 600, height: 600, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(6,182,212,.12) 0%, transparent 70%)",
+          top: "10%", left: "50%", transform: "translateX(-50%)", pointerEvents: "none",
         }} />
-        <div style={{
-          position: "relative", zIndex: 2, flex: 1, display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center", textAlign: "center",
-          padding: "calc(var(--nh) + 32px) var(--pad) 28px",
+
+        <div className="pill anim-fadeIn" style={{ marginBottom: 28 }}>
+          ✨ AI-Powered Social Media Intelligence
+        </div>
+
+        <h1 className="anim-fadeUp" style={{
+          fontFamily: "'Syne',sans-serif", fontWeight: 900,
+          fontSize: "clamp(36px,7vw,80px)", lineHeight: 1.05,
+          letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 900,
         }}>
-          <div className="rv" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(4,12,52,.40)", backdropFilter: "blur(12px)",
-            border: "1px solid rgba(255,255,255,.22)", borderRadius: 99, padding: "6px 18px", marginBottom: 28,
-          }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--ac)", boxShadow: "0 0 10px var(--ac)", animation: "pulse 2s ease-in-out infinite" }} />
-            <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(255,255,255,.90)" }}>AI-powered &middot; 7 platforms &middot; $79.99/mo</span>
-          </div>
-          <h1 className="rv d1" style={{
-            fontFamily: "var(--fd)", fontSize: "clamp(48px, 7vw, 96px)", fontWeight: 800,
-            letterSpacing: "-.04em", lineHeight: .95, color: "#fff", maxWidth: 900,
-            textShadow: "0 4px 52px rgba(4,12,52,.55)",
-          }}>
-            Discover what&apos;s working for <span style={{ color: "var(--ac)" }}>influencers</span> now.
-          </h1>
-          <p className="rv d2" style={{
-            marginTop: 28, fontSize: 20, fontWeight: 400,
-            color: "rgba(255,255,255,.82)", maxWidth: 620, lineHeight: 1.68, textAlign: "center",
-          }}>
-            See what top influencers are doing before everyone else catches on.
+          Dominate every feed with
+          <span style={{
+            background: "linear-gradient(135deg,#06b6d4,#0ea5e9,#38bdf8)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}> AI-crafted content</span>
+        </h1>
+
+        <p className="anim-fadeUp d1" style={{
+          fontSize: "clamp(15px,2vw,19px)", color: "#64748b", lineHeight: 1.7,
+          maxWidth: 560, marginBottom: 40,
+        }}>
+          SIGNAL analyses competitors, generates on-brand posts, scores virality,
+          and auto-publishes across 7 platforms — so you show up everywhere, every day.
+        </p>
+
+        {/* CTA row */}
+        <div className="anim-fadeUp d2" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 16 }}>
+          <Link href="/register" className="cta-btn">
+            Start free — 14-day trial
+          </Link>
+          <button className="ghost-btn">
+            Watch 2-min demo ▶
+          </button>
+        </div>
+
+        <p className="anim-fadeUp d3" style={{ fontSize: 12, color: "#2d3748", letterSpacing: ".5px", fontFamily: "'DM Mono',monospace" }}>
+          No credit card required · Cancel any time
+        </p>
+
+        {/* Email capture */}
+        <div className="anim-fadeUp d4" style={{
+          display: "flex", gap: 10, marginTop: 36, width: "100%", maxWidth: 480, flexWrap: "wrap",
+        }}>
+          <input className="hero-input" placeholder="Enter your work email" type="email" />
+          <button className="cta-btn" style={{ whiteSpace: "nowrap", padding: "14px 24px" }}>
+            Get early access
+          </button>
+        </div>
+
+        {/* Social proof */}
+        <div className="anim-fadeUp d4" style={{
+          display: "flex", alignItems: "center", gap: 20, marginTop: 48, flexWrap: "wrap", justifyContent: "center",
+        }}>
+          {[
+            { val: "2,400+", label: "brands" },
+            { val: "47M+",   label: "posts scheduled" },
+            { val: "4.9★",   label: "avg rating" },
+          ].map(({ val, label }) => (
+            <div key={val} style={{ textAlign: "center" }}>
+              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#e2e8f0" }}>{val}</div>
+              <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 1 }}>{label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════ PLATFORM LOGOS ════════════════════════════════════════════════════ */}
+      <section style={{ padding: "24px 40px 48px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, marginBottom: 28 }}>
+          PUBLISH ACROSS ALL MAJOR PLATFORMS
+        </p>
+        <div style={{
+          display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
+        }}>
+          {PLATFORMS.map((p) => (
+            <div key={p.name} className={`glass anim-fadeUp ${p.delay}`} style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+              padding: "16px 20px", minWidth: 96, cursor: "default",
+              border: `1px solid ${p.border}`,
+              transition: "transform .2s, box-shadow .2s",
+            }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${p.a20}`;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.transform = "";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "";
+              }}
+            >
+              {p.icon}
+              <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: p.color, letterSpacing: 1 }}>{p.name}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════ FEATURES ══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
+          <div className="pill" style={{ marginBottom: 16 }}>PLATFORM FEATURES</div>
+          <h2 className="sec-head">Everything you need to dominate social</h2>
+          <p className="sec-sub" style={{ margin: "16px auto 0" }}>
+            From AI content generation to real-time analytics — SIGNAL covers the entire creator lifecycle.
           </p>
-          <div className="rv d3" style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/sign-up" style={{
-              display: "inline-flex", alignItems: "center", gap: 10,
-              background: "#fff", color: "#060C3D", fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700,
-              letterSpacing: ".04em", padding: "16px 40px", borderRadius: 99,
-              transition: "background .25s, transform .35s cubic-bezier(.16,1,.3,1), box-shadow .4s",
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
+          {[
+            {
+              icon: "🧠",
+              title: "AI Content Generation",
+              desc: "Generate 3 angle-tested post variations per topic. Trained on your brand voice and top-performing content.",
+              color: "#06b6d4",
+            },
+            {
+              icon: "🔍",
+              title: "Competitor Analysis",
+              desc: "Reverse-engineer any competitor’s top content. Find the gaps they’re missing and own them.",
+              color: "#8b5cf6",
+            },
+            {
+              icon: "📈",
+              title: "Virality Scoring",
+              desc: "Score every post before publishing with our proprietary algorithm trained on 47M+ posts.",
+              color: "#f59e0b",
+            },
+            {
+              icon: "⏰",
+              title: "Auto-Publishing",
+              desc: "Schedule and publish across all 7 platforms simultaneously. Set it and forget it.",
+              color: "#10b981",
+            },
+            {
+              icon: "🎨",
+              title: "Brand Voice Kit",
+              desc: "Define your tone, vocabulary, and style once. SIGNAL applies it consistently across every post.",
+              color: "#ec4899",
+            },
+            {
+              icon: "📊",
+              title: "Real-Time Analytics",
+              desc: "Track reach, engagement, and ROI across all platforms in one unified dashboard.",
+              color: "#f97316",
+            },
+          ].map(({ icon, title, desc, color }) => (
+            <div key={title} className="glass" style={{
+              padding: 24, border: `1px solid rgba(255,255,255,.06)`,
+              transition: "border-color .2s, transform .2s",
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = "var(--ac)"; e.currentTarget.style.transform = "translateY(-2px) scale(1.04)"; e.currentTarget.style.boxShadow = "0 8px 48px rgba(0,237,212,.48)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
-            >Start for free <span>&rarr;</span></Link>
-            <a href="#intro" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "rgba(4,12,52,.30)", backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,.26)", color: "#fff",
-              fontSize: 15, fontWeight: 500, padding: "16px 32px", borderRadius: 99,
-              transition: "background .25s, border-color .25s, transform .25s",
-            }}>See how it works</a>
-          </div>
-          <div className="rv d4" style={{
-            marginTop: 44, display: "flex", alignItems: "center",
-            background: "rgba(4,12,52,.36)", backdropFilter: "blur(18px)",
-            border: "1px solid rgba(255,255,255,.14)", borderRadius: 18, padding: "20px 36px",
-          }}>
-            {[
-              { val: "7", lbl: "Platforms" }, null, { val: "$79.99", lbl: "Per month" }, null,
-              { val: "3\u00d7", lbl: "Variations" }, null, { val: "73%", lbl: "vs Sprout" },
-            ].map((item, i) =>
-              item === null ? (
-                <div key={`sep-${i}`} style={{ width: 1, height: 42, background: "rgba(255,255,255,.16)", flexShrink: 0 }} />
-              ) : (
-                <div key={item.lbl} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "0 28px" }}>
-                  <span style={{ fontFamily: "var(--fd)", fontSize: 32, fontWeight: 800, color: "#fff", letterSpacing: "-.03em", lineHeight: 1 }}>{item.val}</span>
-                  <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,.55)", letterSpacing: ".1em", textTransform: "uppercase", marginTop: 4 }}>{item.lbl}</span>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-        {/* Bottom strip */}
-        <div style={{
-          position: "relative", zIndex: 2, flexShrink: 0,
-          borderTop: "1px solid rgba(255,255,255,.12)",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "18px var(--pad)", background: "rgba(4,12,52,.38)", backdropFilter: "blur(16px)",
-        }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <p style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,.55)", lineHeight: 1.5, maxWidth: 300 }}>AI content intelligence for social teams who play to win.</p>
-            <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-              <a href="#" className="stl-parent" style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,.38)", transition: "color .2s", fontSize: 13 }}>
-                <STL text="Twitter / X" style={{ fontSize: 13, fontWeight: 400, color: "inherit" }} />
-              </a>
-              <div style={{ width: 1, height: 12, background: "rgba(255,255,255,.16)" }} />
-              <a href="mailto:hello@getsignal.ai" className="stl-parent" style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,.38)", transition: "color .2s", fontSize: 13 }}>
-                <STL text="hello@getsignal.ai" style={{ fontSize: 13, fontWeight: 400, color: "inherit" }} />
-              </a>
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ textAlign: "right", fontSize: 11, fontWeight: 400, color: "rgba(255,255,255,.40)", lineHeight: 1.55 }}>
-              Est.&nbsp;2025
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════ PLATFORMS ══════ */}
-      <section style={secStyle} id="platforms">
-        <div style={{ ...secInner, paddingTop: 96, paddingBottom: 96, textAlign: "center" }}>
-          <div className="rv" style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ ...eyebrow, justifyContent: "center" }}><span style={eyebrowBar} />Platforms</div>
-            <h2 style={{ fontFamily: "var(--fd)", fontSize: "clamp(44px, 5.5vw, 80px)", fontWeight: 800, letterSpacing: "-.04em", lineHeight: 1.04, color: "#fff" }}>
-              Seven platforms.<br /><span style={{ color: "var(--mu)", fontWeight: 400 }}>One intelligence layer.</span>
-            </h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 14 }}>
-            {PLATFORMS.map(p => (
-              <div key={p.name} className={`platcard rv ${p.delay}`}
-                style={{
-                  "--pc": p.color, "--pc-bg": p.bg, "--pc-border": p.border, "--pc-a08": p.a08, "--pc-a20": p.a20,
-                  position: "relative", padding: "32px 16px 28px",
-                  border: `1px solid ${p.border}`, borderRadius: 18, background: p.bg,
-                  display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-                  transition: "background .35s, border-color .35s, transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s",
-                  overflow: "hidden", cursor: "none",
-                } as React.CSSProperties}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-8px)"; e.currentTarget.style.borderColor = p.color; e.currentTarget.style.boxShadow = `0 16px 48px ${p.a08}, 0 0 0 1px ${p.border}`; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.borderColor = p.border; e.currentTarget.style.boxShadow = ""; }}
-              >
-                <div style={{ width: 72, height: 72, borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "center", background: p.bg, border: `1px solid ${p.border}`, transition: "background .35s, box-shadow .35s", flexShrink: 0 }}>
-                  {p.icon}
-                </div>
-                <div style={{ fontFamily: "var(--fd)", fontSize: 15, fontWeight: 700, color: "#fff", letterSpacing: ".02em", textAlign: "center", lineHeight: 1.3 }}>{p.name}</div>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: p.color, opacity: 0, transition: "opacity .35s" }} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════ MARQUEE ══════ */}
-      <div style={{
-        position: "relative", zIndex: 3,
-        borderTop: "1px solid var(--glassbr)", borderBottom: "1px solid var(--glassbr)",
-        padding: "13px 0", overflow: "hidden",
-        background: "rgba(4,12,52,.70)", backdropFilter: "blur(20px)",
-      }}>
-        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "mqa 28s linear infinite" }}>
-          {[...MQ_ROW_A, ...MQ_ROW_A].map((m, i) => (
-            <div key={`a-${i}`} style={{ display: "inline-flex", alignItems: "center", gap: 14, padding: "0 28px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: m.lit ? "rgba(255,255,255,.52)" : "rgba(255,255,255,.18)" }}>
-              {m.text}<span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ac)", opacity: .7, flexShrink: 0 }} />
-            </div>
-          ))}
-        </div>
-        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "mqb 38s linear infinite", marginTop: 7 }}>
-          {[...MQ_ROW_B, ...MQ_ROW_B].map((m, i) => (
-            <div key={`b-${i}`} style={{ display: "inline-flex", alignItems: "center", gap: 14, padding: "0 28px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: m.lit ? "rgba(255,255,255,.52)" : "rgba(255,255,255,.18)" }}>
-              {m.text}<span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ac)", opacity: .7, flexShrink: 0 }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ══════ HOW IT WORKS ══════ */}
-      <section style={secStyle} id="intro">
-        <div style={secInner}>
-          <div className="rv" style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ ...eyebrow, justifyContent: "center" }}><span style={eyebrowBar} />How it works</div>
-            <h2 style={{ fontFamily: "var(--fd)", fontSize: "clamp(34px, 4vw, 62px)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.06, color: "#fff", marginBottom: 18 }}>
-              A content intelligence tool<br />built for teams who play to win.
-            </h2>
-            <p style={{ fontSize: 19, fontWeight: 400, color: "var(--mu)", maxWidth: 680, lineHeight: 1.78, margin: "0 auto" }}>
-              Most tools help you post. SIGNAL helps you win &mdash; by reverse-engineering what makes content go viral, generating three angle-tested variations, and publishing at the exact moment each platform rewards.
-            </p>
-          </div>
-          <div className="rv d2" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, border: "1px solid var(--glassbr)", borderRadius: 16, overflow: "hidden", marginTop: 48 }}>
-            {HOW_CARDS.map((c, i) => (
-              <div key={c.num} className="ioc" style={{
-                padding: "32px 28px 36px", background: "rgba(4,12,52,.45)",
-                borderRight: i < 2 ? "1px solid var(--glassbr)" : "none",
-                transition: "background .35s",
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = `${color}40`;
+                el.style.transform = "translateY(-2px)";
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,237,212,.06)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.45)")}
-              >
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 18 }}>{c.num}</div>
-                <div style={{ fontFamily: "var(--fd)", fontSize: 22, fontWeight: 700, color: "#fff", letterSpacing: "-.02em", marginBottom: 12, lineHeight: 1.2, whiteSpace: "pre-line" }}>{c.title}</div>
-                <p style={{ fontSize: 16, fontWeight: 400, color: "var(--mu)", lineHeight: 1.65, marginBottom: 24 }}>{c.desc}</p>
-                <div className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 14, fontWeight: 600, color: "var(--ac)" }}>
-                  <STL text="Explore" style={{ fontSize: 14, color: "var(--ac)", fontWeight: 600 }} /><span>&rarr;</span>
-                </div>
-              </div>
-            ))}
-          </div>
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = "rgba(255,255,255,.06)";
+                el.style.transform = "";
+              }}
+            >
+              <div style={{ fontSize: 28, marginBottom: 14 }}>{icon}</div>
+              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, marginBottom: 10, color: "#e2e8f0" }}>{title}</div>
+              <div style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.7 }}>{desc}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ══════ SERVICE PANELS ══════ */}
-      {SERVICES.map(s => (
-        <div key={s.num} style={{
-          position: "relative", zIndex: 3,
-          background: "var(--glass2)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-          borderTop: "1px solid var(--glassbr)", overflow: "hidden",
-        }}>
-          <div style={{ maxWidth: "var(--wrap)", margin: "0 auto", padding: "72px var(--pad) 56px", textAlign: "center" }}>
-            <span className="rv" style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".22em", color: "var(--dim)", marginBottom: 22, display: "block" }}>{s.num}</span>
-            <div className="rv d1" style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".24em", textTransform: "uppercase", color: "var(--ac)", marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 22, height: 1, background: "var(--ac)", flexShrink: 0 }} />{s.label}
-            </div>
-            <p className="rv d2" style={{ fontSize: 18, fontWeight: 400, color: "var(--mu)", lineHeight: 1.80, maxWidth: 600, margin: "0 auto 40px" }}>{s.desc}</p>
-            <div className="rv d3" style={{ display: "flex", alignItems: "center", gap: 18, justifyContent: "center" }}>
-              <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15, fontWeight: 500, color: "var(--mu)", transition: "color .2s" }}>
-                <STL text={s.cta1} style={{ fontSize: 15, fontWeight: 500, color: "inherit" }} /><span style={{ fontSize: 14, transition: "transform .3s" }}>&rarr;</span>
-              </a>
-              <a href="#" className="stl-parent" style={{ color: "#fff", padding: "12px 26px", border: "1px solid var(--glassbr)", borderRadius: 99, transition: "border-color .25s, background .25s" }}
-                 onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--a30)"; e.currentTarget.style.background = "rgba(0,237,212,.08)"; }}
-                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--glassbr)"; e.currentTarget.style.background = ""; }}>
-                <STL text={s.cta2} style={{ fontSize: 15, fontWeight: 500, color: "inherit" }} />
-              </a>
-            </div>
-          </div>
-          <div className="rv" style={{ padding: "36px var(--pad) 0" }}>
-            <div style={{ fontFamily: "var(--fd)", fontSize: "clamp(80px, 15vw, 210px)", fontWeight: 800, letterSpacing: "-.045em", lineHeight: .88, color: "#fff", userSelect: "none", textAlign: "center" }}>
-              <span style={{ WebkitTextStroke: "1.5px rgba(255,255,255,.16)", color: "transparent" }}>{s.headTop}</span>&mdash;<br />
-              {s.headAccent ? <span style={{ color: "var(--ac)" }}>{s.headBot}</span> : s.headBot}
-            </div>
-          </div>
+      {/* ════ PRICING ═══════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="pill" style={{ marginBottom: 16 }}>PRICING</div>
+          <h2 className="sec-head">Simple, transparent pricing</h2>
+          <p className="sec-sub" style={{ margin: "16px auto 24px" }}>
+            Start free for 14 days. No credit card required.
+          </p>
+
+          {/* Billing toggle */}
           <div style={{
-            borderTop: "1px solid var(--glassbr)",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "20px var(--pad)", marginTop: 36,
+            display: "inline-flex", alignItems: "center", gap: 12,
+            background: "#090d1a", border: "1px solid rgba(255,255,255,.08)",
+            borderRadius: 999, padding: "6px 8px",
           }}>
-            <span style={{ fontSize: 13, letterSpacing: ".15em", textTransform: "uppercase", color: "var(--dim)", fontWeight: 500 }}>{s.tags}</span>
-            <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15, fontWeight: 500, color: "var(--mu)", transition: "color .2s" }}>
-              <STL text={s.footCta} style={{ fontSize: 15, fontWeight: 500, color: "inherit" }} />
-            </a>
+            <button onClick={() => setAnnual(false)} style={{
+              padding: "7px 18px", borderRadius: 999, border: "none",
+              background: !annual ? "rgba(6,182,212,.15)" : "transparent",
+              color: !annual ? "#06b6d4" : "#4a5568",
+              fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: 1,
+              transition: "all .2s",
+            }}>Monthly</button>
+            <button onClick={() => setAnnual(true)} style={{
+              padding: "7px 18px", borderRadius: 999, border: "none",
+              background: annual ? "rgba(6,182,212,.15)" : "transparent",
+              color: annual ? "#06b6d4" : "#4a5568",
+              fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: 1,
+              transition: "all .2s",
+            }}>Annual <span style={{ fontSize: 10, color: "#10b981" }}>-20%</span></button>
           </div>
         </div>
-      ))}
 
-      {/* ══════ POSTURE ══════ */}
-      <section style={secStyle} id="posture">
-        <div style={secInner}>
-          <div className="rv" style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ ...eyebrow, justifyContent: "center" }}><span style={eyebrowBar} />Posture</div>
-            <h2 style={{ fontFamily: "var(--fd)", fontSize: "clamp(32px, 4vw, 60px)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.08, color: "#fff" }}>
-              Signal, not noise.<br /><span style={{ color: "var(--mu)", fontWeight: 400 }}>Intelligence that compounds.</span>
-            </h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1 }}>
-            {POSTURE.map((p, i) => (
-              <div key={p.accent} className={`poscol rv d${i + 1}`} style={{
-                padding: "36px 30px", background: "rgba(4,12,52,.40)",
-                border: "1px solid var(--glassbr)", transition: "background .3s",
-                borderRadius: i === 0 ? "16px 0 0 16px" : i === 3 ? "0 16px 16px 0" : undefined,
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,237,212,.06)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.40)")}
-              >
-                <div style={{ fontFamily: "var(--fd)", fontSize: 19, fontWeight: 700, color: "#fff", letterSpacing: "-.015em", lineHeight: 1.3, marginBottom: 14 }}>
-                  <span style={{ color: "var(--ac)" }}>{p.accent}</span><br />{p.rest}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gap: 20,
+          alignItems: "start",
+        }}>
+          {TIERS.map((tier) => (
+            <div key={tier.name} style={{
+              background: tier.highlight ? "rgba(6,182,212,.06)" : "var(--card)",
+              border: `1px solid ${tier.highlight ? "rgba(6,182,212,.4)" : "rgba(255,255,255,.06)"}`,
+              borderRadius: 16, padding: 28,
+              position: "relative",
+              boxShadow: tier.highlight ? "0 0 40px rgba(6,182,212,.12)" : "none",
+            }}>
+              {tier.highlight && (
+                <div style={{
+                  position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)",
+                  background: "var(--grad)", color: "#fff",
+                  fontSize: 10, fontFamily: "'DM Mono',monospace", letterSpacing: 1.5,
+                  padding: "3px 14px", borderRadius: 999,
+                }}>MOST POPULAR</div>
+              )}
+
+              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>{tier.name}</div>
+              <div style={{ fontSize: 12, color: "#4a5568", marginBottom: 20, fontFamily: "'DM Mono',monospace" }}>{tier.tagline}</div>
+
+              {tier.price.monthly !== null ? (
+                <div style={{ marginBottom: 24 }}>
+                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 900, fontSize: 42 }}>
+                    ${annual ? tier.price.annual : tier.price.monthly}
+                  </span>
+                  <span style={{ fontSize: 13, color: "#4a5568", marginLeft: 4 }}>/mo</span>
                 </div>
-                <p style={{ fontSize: 15, fontWeight: 400, color: "var(--mu)", lineHeight: 1.72 }}>{p.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              ) : (
+                <div style={{ fontSize: 28, fontFamily: "'Syne',sans-serif", fontWeight: 800, marginBottom: 24 }}>Custom</div>
+              )}
 
-      {/* ══════ CASES ══════ */}
-      <section style={secStyle} id="cases">
-        <div style={secInner}>
-          <div className="rv" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 36 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ac)", display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 26, height: 1, background: "var(--ac)", flexShrink: 0 }} />Business cases
+              <Link href="/register" className="cta-btn" style={{
+                display: "block", textAlign: "center", width: "100%",
+                padding: "11px 0", fontSize: 12, letterSpacing: 1, marginBottom: 24,
+                background: tier.highlight ? "var(--grad)" : "transparent",
+                border: tier.highlight ? "none" : "1px solid rgba(255,255,255,.12)",
+                color: tier.highlight ? "#fff" : "#94a3b8",
+                borderRadius: 10,
+              }}>
+                {tier.price.monthly !== null ? "Start free trial" : "Contact sales"}
+              </Link>
+
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+                {tier.features.map((f) => (
+                  <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#94a3b8" }}>
+                    <span style={{ color: "#06b6d4", flexShrink: 0, marginTop: 1 }}>✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15, fontWeight: 400, color: "var(--mu)", transition: "color .2s" }}>
-              <STL text="View all results" style={{ fontSize: 15, color: "inherit" }} /><span>&rarr;</span>
-            </a>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, border: "1px solid var(--glassbr)", borderRadius: 16, overflow: "hidden" }}>
-            {CASES.map((c, i) => (
-              <div key={c.title} className={`casecard rv d${i + 1}`} style={{ background: "rgba(4,12,52,.45)", transition: "background .4s", display: "flex", flexDirection: "column" }}
-                   onMouseEnter={e => (e.currentTarget.style.background = "rgba(4,12,52,.65)")}
-                   onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.45)")}>
-                <div style={{ width: "100%", aspectRatio: "16/10", background: "rgba(4,12,52,.60)", position: "relative", overflow: "hidden" }}>
-                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(4,12,52,.8) 0%, rgba(0,8,30,.6) 100%)" }} />
-                    <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,237,212,.07) 40px, rgba(0,237,212,.07) 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,237,212,.07) 40px, rgba(0,237,212,.07) 41px)" }} />
-                    <div style={{ position: "relative", zIndex: 2, fontFamily: "var(--fd)", fontSize: "clamp(32px, 5vw, 60px)", fontWeight: 800, letterSpacing: "-.04em", color: "rgba(255,255,255,.07)", textAlign: "center", padding: 16 }}>{c.wm}</div>
-                  </div>
-                </div>
-                <div style={{ padding: "24px 24px 28px", borderTop: "1px solid var(--glassbr)", flex: 1, display: "flex", flexDirection: "column" }}>
-                  <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--ac)", marginBottom: 10 }}>{c.cat}</div>
-                  <div style={{ fontFamily: "var(--fd)", fontSize: 20, fontWeight: 700, color: "#fff", letterSpacing: "-.02em", lineHeight: 1.2, marginBottom: 8 }}>{c.title}</div>
-                  <p style={{ fontSize: 13, fontWeight: 400, color: "var(--mu)", lineHeight: 1.65, flex: 1, marginBottom: 16 }}>{c.sub}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                    <span style={{ background: "rgba(0,237,212,.10)", border: "1px solid rgba(0,237,212,.22)", color: "var(--ac)", fontSize: 11, fontWeight: 600, padding: "4px 12px", borderRadius: 99 }}>{c.pill}</span>
-                    <span style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)" }}>{c.rl}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* ══════ PRICING ══════ */}
-      <section style={secStyle} id="pricing">
-        <div style={{ ...secInner, paddingTop: 96, paddingBottom: 96 }}>
-          <div className="rv" style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ ...eyebrow, justifyContent: "center" }}><span style={eyebrowBar} />Pricing</div>
-            <h2 style={{ fontFamily: "var(--fd)", fontSize: "clamp(32px, 4vw, 60px)", fontWeight: 700, letterSpacing: "-.03em", lineHeight: 1.08, color: "#fff", marginBottom: 12 }}>
-              Simple, transparent pricing.
-            </h2>
-            <p style={{ fontSize: 17, fontWeight: 400, color: "var(--mu)", maxWidth: 500, margin: "0 auto", lineHeight: 1.7 }}>
-              Start free. Upgrade when you need more power. Cancel anytime.
+      {/* ════ TESTIMONIALS ══════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="pill" style={{ marginBottom: 16 }}>TESTIMONIALS</div>
+          <h2 className="sec-head">Loved by 2,400+ brands</h2>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20 }}>
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="glass" style={{ padding: 24 }}>
+              <div style={{ fontSize: 20, color: "#f59e0b", marginBottom: 12 }}>★★★★★</div>
+              <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.7, marginBottom: 20, fontStyle: "italic" }}>
+                “{t.quote}”
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: "linear-gradient(135deg,#0891b2,#0e7490)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff",
+                }}>{t.avatar}</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{t.name}</div>
+                  <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace" }}>{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════ FAQ ═══════════════════════════════════════════════════════════════ */}
+      <section style={{ padding: "80px 40px", maxWidth: 720, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="pill" style={{ marginBottom: 16 }}>FAQ</div>
+          <h2 className="sec-head">Common questions</h2>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {FAQS.map((faq, i) => {
+            const isOpen = openFaq === i;
+            return (
+              <div key={i} style={{
+                background: "var(--card)", border: `1px solid ${isOpen ? "rgba(6,182,212,.3)" : "rgba(255,255,255,.06)"}`,
+                borderRadius: 12, overflow: "hidden", transition: "border-color .2s",
+              }}>
+                <button onClick={() => setOpenFaq(isOpen ? null : i)} style={{
+                  width: "100%", padding: "18px 20px",
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  border: "none", background: "transparent",
+                  textAlign: "left", color: "#e2e8f0", fontSize: 14,
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: 500,
+                }}>
+                  {faq.q}
+                  <span style={{
+                    fontSize: 20, color: "#06b6d4", transform: isOpen ? "rotate(45deg)" : "none",
+                    transition: "transform .2s", flexShrink: 0, marginLeft: 12,
+                  }}>+</span>
+                </button>
+                {isOpen && (
+                  <div style={{ padding: "0 20px 18px", fontSize: 13, color: "#64748b", lineHeight: 1.8 }}>
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ════ CTA BANNER ════════════════════════════════════════════════════════ */}
+      <section style={{
+        padding: "80px 40px", textAlign: "center",
+        background: "linear-gradient(135deg, rgba(8,145,178,.12), rgba(14,116,144,.08))",
+        borderTop: "1px solid rgba(6,182,212,.12)",
+        borderBottom: "1px solid rgba(6,182,212,.12)",
+      }}>
+        <div className="pill" style={{ marginBottom: 20 }}>GET STARTED TODAY</div>
+        <h2 className="sec-head" style={{ marginBottom: 16 }}>Ready to dominate your feeds?</h2>
+        <p className="sec-sub" style={{ margin: "0 auto 32px" }}>
+          Join 2,400+ brands already using SIGNAL to outpace their competition every single day.
+        </p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <Link href="/register" className="cta-btn">Start free — 14 days</Link>
+          <button className="ghost-btn">Book a demo</button>
+        </div>
+      </section>
+
+      {/* ════ FOOTER ════════════════════════════════════════════════════════════ */}
+      <footer style={{ padding: "60px 40px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{
+          display: "grid", gridTemplateColumns: "2fr repeat(4,1fr)", gap: 40, marginBottom: 48,
+        }}>
+          {/* Brand column */}
+          <div>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, marginBottom: 12 }}>
+              SIGNAL<span style={{ color: "#06b6d4" }}>.</span>
+            </div>
+            <p style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.7, maxWidth: 220 }}>
+              The AI-powered social media platform for brands that want to move faster than the algorithm.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1, border: "1px solid var(--glassbr)", borderRadius: 16, overflow: "hidden" }}>
-            {/* FREE */}
-            <div className="rv d1" style={{ background: "rgba(4,12,52,.45)", padding: "40px 32px 36px", transition: "background .35s", display: "flex", flexDirection: "column" }}
-                 onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,237,212,.04)")}
-                 onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.45)")}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 20 }}>Free</div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8 }}>
-                <span style={{ fontFamily: "var(--fd)", fontSize: 52, fontWeight: 800, color: "#fff", letterSpacing: "-.03em", lineHeight: 1 }}>$0</span>
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 400, color: "var(--dim)", marginBottom: 28 }}>forever</div>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
-                {["3 analyses / month", "1 platform per generation", "1 content variation", "Basic virality scoring", "Content library (10 saves)"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 400, color: "var(--mu)" }}>
-                    <span style={{ color: "var(--ac)", fontSize: 14, flexShrink: 0 }}>✓</span>{f}
-                  </div>
-                ))}
-              </div>
-              <Link href="/sign-up" style={{
-                display: "block", textAlign: "center", padding: "14px 24px", borderRadius: 99,
-                border: "1px solid var(--glassbr)", color: "var(--mu)",
-                fontFamily: "var(--fd)", fontSize: 14, fontWeight: 700, letterSpacing: ".04em",
-                transition: "border-color .25s, background .25s, color .25s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--a30)"; e.currentTarget.style.background = "rgba(0,237,212,.08)"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--glassbr)"; e.currentTarget.style.background = ""; e.currentTarget.style.color = "var(--mu)"; }}>
-                Get started free
-              </Link>
-            </div>
-            {/* PRO — $79.99 */}
-            <div className="rv d2" style={{ background: "rgba(4,12,52,.55)", padding: "40px 32px 36px", transition: "background .35s", display: "flex", flexDirection: "column", position: "relative", borderLeft: "1px solid var(--glassbr)", borderRight: "1px solid var(--glassbr)" }}
-                 onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,237,212,.06)")}
-                 onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.55)")}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "var(--ac)" }} />
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--ac)" }}>Pro</span>
-                <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: ".1em", textTransform: "uppercase", background: "var(--a12)", border: "1px solid var(--a30)", color: "var(--ac)", padding: "3px 10px", borderRadius: 99 }}>Most popular</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8 }}>
-                <span style={{ fontFamily: "var(--fd)", fontSize: 52, fontWeight: 800, color: "#fff", letterSpacing: "-.03em", lineHeight: 1 }}>$79</span>
-                <span style={{ fontSize: 14, fontWeight: 400, color: "var(--dim)" }}>.99/mo</span>
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 400, color: "var(--dim)", marginBottom: 28 }}>billed monthly</div>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
-                {["Unlimited analyses", "All 7 platforms", "3 A/B/C variations", "Advanced virality scoring", "Image prompt generation", "Brand voice profiles", "Content calendar", "Unlimited library saves", "SIGNAL Inbox", "Auto-publishing"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 400, color: "var(--mu)" }}>
-                    <span style={{ color: "var(--ac)", fontSize: 14, flexShrink: 0 }}>✓</span>{f}
-                  </div>
-                ))}
-              </div>
-              <Link href="/sign-up" style={{
-                display: "block", textAlign: "center", padding: "14px 24px", borderRadius: 99,
-                background: "#fff", color: "#060C3D",
-                fontFamily: "var(--fd)", fontSize: 14, fontWeight: 700, letterSpacing: ".04em",
-                transition: "background .25s, transform .3s, box-shadow .4s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "var(--ac)"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,237,212,.35)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-                Upgrade to Pro
-              </Link>
-            </div>
-            {/* AGENCY — $149 */}
-            <div className="rv d3" style={{ background: "rgba(4,12,52,.45)", padding: "40px 32px 36px", transition: "background .35s", display: "flex", flexDirection: "column" }}
-                 onMouseEnter={e => (e.currentTarget.style.background = "rgba(0,237,212,.04)")}
-                 onMouseLeave={e => (e.currentTarget.style.background = "rgba(4,12,52,.45)")}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 20 }}>Agency</div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 8 }}>
-                <span style={{ fontFamily: "var(--fd)", fontSize: 52, fontWeight: 800, color: "#fff", letterSpacing: "-.03em", lineHeight: 1 }}>$149</span>
-                <span style={{ fontSize: 14, fontWeight: 400, color: "var(--dim)" }}>/mo</span>
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 400, color: "var(--dim)", marginBottom: 28 }}>billed monthly</div>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
-                {["Everything in Pro", "5 team seats", "Unlimited brand profiles", "Priority AI processing", "Post approval workflows", "Export to CSV / PDF", "Dedicated support"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 400, color: "var(--mu)" }}>
-                    <span style={{ color: "var(--ac)", fontSize: 14, flexShrink: 0 }}>✓</span>{f}
-                  </div>
-                ))}
-              </div>
-              <Link href="/sign-up" style={{
-                display: "block", textAlign: "center", padding: "14px 24px", borderRadius: 99,
-                border: "1px solid var(--glassbr)", color: "var(--mu)",
-                fontFamily: "var(--fd)", fontSize: 14, fontWeight: 700, letterSpacing: ".04em",
-                transition: "border-color .25s, background .25s, color .25s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--a30)"; e.currentTarget.style.background = "rgba(0,237,212,.08)"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--glassbr)"; e.currentTarget.style.background = ""; e.currentTarget.style.color = "var(--mu)"; }}>
-                Contact sales
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ══════ CTA ══════ */}
-      <section id="cta" style={{
-        position: "relative", zIndex: 3, background: "rgba(4,12,52,.50)",
-        backdropFilter: "blur(28px)", borderTop: "1px solid var(--glassbr)",
-      }}>
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent 0%, var(--ac) 50%, transparent 100%)", opacity: .4 }} />
-        <div style={{ position: "relative", zIndex: 2, maxWidth: "var(--wrap)", margin: "0 auto", padding: "96px var(--pad)", textAlign: "center" }}>
-          <h2 className="rv" style={{ fontFamily: "var(--fd)", fontSize: "clamp(36px, 5.5vw, 80px)", fontWeight: 700, letterSpacing: "-.035em", lineHeight: 1.06, color: "#fff", marginBottom: 44 }}>
-            <span style={{ display: "block" }}>Ready to stop guessing</span>
-            <span style={{ display: "block", color: "var(--mu)", fontWeight: 400 }}>and start winning</span>
-            <span style={{ display: "block", color: "var(--ac)" }}>on social?</span>
-          </h2>
-          <div className="rv d2" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Link href="/sign-up" className="stl-parent" style={{
-              display: "inline-flex", alignItems: "center", gap: 12,
-              background: "#fff", borderRadius: 99, padding: "16px 44px", overflow: "hidden",
-              transition: "background .3s, transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = "var(--ac)"; e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 0 64px rgba(0,237,212,.35)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-              <STL text="Start for free" style={{ fontSize: 15, fontWeight: 700, color: "#060C3D", letterSpacing: ".03em", fontFamily: "var(--fd)" }} />
-              <span style={{ fontSize: 14, color: "#060C3D", transition: "transform .4s cubic-bezier(.16,1,.3,1)" }}>&rarr;</span>
-            </Link>
-          </div>
-          <div className="rv d3" style={{ marginTop: 16, textAlign: "center" }}>
-            <a href="#" style={{ fontSize: 13, fontWeight: 500, color: "var(--mu)", transition: "color .2s" }}>Explore all plans &mdash; from $79.99/month</a>
-          </div>
-          <p className="rv d4" style={{ marginTop: 24, fontSize: 12, fontWeight: 400, color: "var(--dim)" }}>No credit card &middot; Cancel anytime &middot; 2 minute setup</p>
-        </div>
-      </section>
-
-      {/* ══════ FOOTER ══════ */}
-      <footer style={{
-        position: "relative", zIndex: 3, background: "rgba(4,12,52,.80)",
-        backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)",
-        borderTop: "1px solid var(--glassbr)", padding: "64px var(--pad) 40px",
-      }}>
-        <div className="rv" style={{ paddingBottom: 48, marginBottom: 48, borderBottom: "1px solid var(--glassbr)", textAlign: "center" }}>
-          <div style={{ fontFamily: "var(--fd)", fontSize: "clamp(36px, 5.5vw, 80px)", fontWeight: 700, letterSpacing: "-.04em", lineHeight: 1.02, color: "#fff" }}>
-            AI content intelligence<br />
-            <span style={{ WebkitTextStroke: "1px rgba(255,255,255,.16)", color: "transparent" }}>for teams who</span>{" "}
-            <span style={{ color: "var(--ac)" }}>win.</span>
-          </div>
-        </div>
-        <div className="rv d1" style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 80, marginBottom: 48 }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 9, fontFamily: "var(--fd)", fontSize: 13, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 18, color: "#fff" }}>
-              <div style={{ width: 22, height: 22, background: "var(--ac)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <BoltIcon size={10} />
+          {/* Link columns */}
+          {Object.entries(FOOTER_LINKS).map(([col, links]) => (
+            <div key={col}>
+              <div style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, marginBottom: 16 }}>
+                {col.toUpperCase()}
               </div>
-              Signal
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {links.map((t) => (
+                  <a key={t} href="#" style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>{t}</a>
+                ))}
+              </div>
             </div>
-            <p style={{ fontSize: 13, fontWeight: 400, color: "var(--mu)", lineHeight: 1.7, maxWidth: 250, marginBottom: 32 }}>AI-powered content intelligence platform for social teams who want to know what wins &mdash; before they post.</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--mu)", transition: "color .2s" }}>
-                <span style={{ fontSize: 12, opacity: .6 }}>&#120143;</span><STL text="Twitter / X" style={{ fontSize: 13, color: "inherit" }} />
-              </a>
-              <a href="#" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--mu)", transition: "color .2s" }}>
-                <span style={{ fontSize: 12, opacity: .6 }}>in</span><STL text="LinkedIn" style={{ fontSize: 13, color: "inherit" }} />
-              </a>
-              <a href="mailto:hello@getsignal.ai" className="stl-parent" style={{ display: "inline-flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--mu)", transition: "color .2s" }}>
-                <span style={{ fontSize: 12, opacity: .6 }}>&#x2709;</span><STL text="hello@getsignal.ai" style={{ fontSize: 13, color: "inherit" }} />
-              </a>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 40 }}>
-            <div>
-              <h5 style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 22 }}>Platform</h5>
-              {["Competitor Analysis", "AI Generation", "Virality Scoring", "Brand Voice Kit", "Content Calendar", "Auto-Publishing"].map(t => (
-                <a key={t} href="#" style={{ display: "block", fontSize: 13, fontWeight: 400, color: "var(--mu)", marginBottom: 12, transition: "color .2s" }}>{t}</a>
-              ))}
-            </div>
-            <div>
-              <h5 style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 22 }}>Compare</h5>
-              {["vs Sprout Social", "vs Hootsuite", "vs Buffer", "vs Later", "Pricing"].map(t => (
-                <a key={t} href={t === "vs Sprout Social" ? "/compare/signal-vs-sprout-social" : "#"} style={{ display: "block", fontSize: 13, fontWeight: 400, color: "var(--mu)", marginBottom: 12, transition: "color .2s" }}>{t}</a>
-              ))}
-            </div>
-            <div>
-              <h5 style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: "var(--dim)", marginBottom: 22 }}>Company</h5>
-              {["About", "Blog", "Careers", "Contact", "Privacy"].map(t => (
-                <a key={t} href="#" style={{ display: "block", fontSize: 13, fontWeight: 400, color: "var(--mu)", marginBottom: 12, transition: "color .2s" }}>{t}</a>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
-        <div style={{ borderTop: "1px solid var(--glassbr)", paddingTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <p style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)" }}>&copy; 2025 SIGNAL. Built to beat Sprout Social. <em style={{ color: "var(--ac)", fontStyle: "normal", fontWeight: 600 }}>&#9889;</em></p>
-          <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-            {["Legal mentions", "Privacy policy"].map(t => (
+
+        <div style={{
+          borderTop: "1px solid rgba(255,255,255,.06)",
+          paddingTop: 24, display: "flex", justifyContent: "space-between",
+          alignItems: "center", flexWrap: "wrap", gap: 12,
+        }}>
+          <span style={{ fontSize: 12, color: "#2d3748", fontFamily: "'DM Mono',monospace" }}>
+            © 2026 SIGNAL. All rights reserved.
+          </span>
+          <div style={{ display: "flex", gap: 20 }}>
+            {["Privacy", "Terms", "Cookies"].map((t) => (
               <a key={t} href="#" style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>{t}</a>
             ))}
           </div>

@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=facebook_denied", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_facebook")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=facebook_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.facebook;
     const tokenRes = await fetch(
       `${config.tokenUrl}?${new URLSearchParams({
@@ -48,8 +54,8 @@ export async function GET(request: NextRequest) {
       accountId = profile.id || "";
       accountName = profile.name || "";
       accountAvatar = profile.picture?.data?.url || "";
-    } catch {
-      // best-effort
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Facebook OAuth] profile fetch failed:", err);
     }
 
     // Get the page token for posting — Facebook requires page access tokens
@@ -64,8 +70,8 @@ export async function GET(request: NextRequest) {
         pageAccessToken = pagesData.data[0].access_token;
         pageId = pagesData.data[0].id;
       }
-    } catch {
-      // Use user token if pages lookup fails
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Facebook OAuth] pages lookup failed:", err);
     }
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -98,7 +104,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.redirect(new URL("/settings/accounts?connected=facebook", request.url));
+    const response = NextResponse.redirect(new URL("/settings/accounts?connected=facebook", request.url));
+    response.cookies.delete("oauth_state_facebook");
+    return response;
   } catch (error) {
     console.error("[Facebook OAuth callback]", error);
     return NextResponse.redirect(new URL("/settings/accounts?error=facebook_error", request.url));

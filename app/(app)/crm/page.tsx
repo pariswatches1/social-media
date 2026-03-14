@@ -1,330 +1,431 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useUser } from "@clerk/nextjs";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-type Platform = "Instagram" | "TikTok" | "YouTube" | "Twitter" | "LinkedIn" | "Pinterest";
-type Status = "PROSPECT" | "CONTACTED" | "NEGOTIATING" | "ACTIVE" | "COMPLETED" | "DECLINED";
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Creator {
   id: string;
-  name: string;
   handle: string;
-  platform: Platform;
-  followers: string;
-  followersRaw: number;
-  engagement: string;
-  engagementRaw: number;
-  trustScore: number;
-  status: Status;
-  tags: string[];
-  lists: string[];
-  avatarColor: string;
-  avatarInitials: string;
+  displayName: string;
+  avatarUrl: string | null;
+  platform: string;
+  followerCount: number;
+  engagementRate: number | null;
+  niche: string | null;
+  email: string | null;
+  trustScore: number | null;
+  location: string | null;
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
+interface ListMember {
+  id: string;
+  addedAt: string;
+  creator: Creator;
+}
 
-const MOCK_CREATORS: Creator[] = [
-  {
-    id: "1",
-    name: "Aria Chen",
-    handle: "@ariachen",
-    platform: "Instagram",
-    followers: "2.4M",
-    followersRaw: 2400000,
-    engagement: "4.8%",
-    engagementRaw: 4.8,
-    trustScore: 92,
-    status: "ACTIVE",
-    tags: ["fashion", "lifestyle"],
-    lists: ["hot-prospects", "instagram-picks"],
-    avatarColor: "#7c3aed",
-    avatarInitials: "AC",
-  },
-  {
-    id: "2",
-    name: "Marcus Webb",
-    handle: "@marcuswebb",
-    platform: "TikTok",
-    followers: "8.1M",
-    followersRaw: 8100000,
-    engagement: "6.2%",
-    engagementRaw: 6.2,
-    trustScore: 87,
-    status: "NEGOTIATING",
-    tags: ["comedy", "viral"],
-    lists: ["hot-prospects", "tiktok-squad"],
-    avatarColor: "#0891b2",
-    avatarInitials: "MW",
-  },
-  {
-    id: "3",
-    name: "Sofia Ramirez",
-    handle: "@sofiafit",
-    platform: "Instagram",
-    followers: "1.1M",
-    followersRaw: 1100000,
-    engagement: "7.3%",
-    engagementRaw: 7.3,
-    trustScore: 95,
-    status: "ACTIVE",
-    tags: ["fitness", "wellness"],
-    lists: ["vip-partners", "instagram-picks"],
-    avatarColor: "#d97706",
-    avatarInitials: "SR",
-  },
-  {
-    id: "4",
-    name: "Kai Tanaka",
-    handle: "@kaitanaka",
-    platform: "YouTube",
-    followers: "3.7M",
-    followersRaw: 3700000,
-    engagement: "3.1%",
-    engagementRaw: 3.1,
-    trustScore: 89,
-    status: "ACTIVE",
-    tags: ["tech", "reviews"],
-    lists: ["vip-partners"],
-    avatarColor: "#dc2626",
-    avatarInitials: "KT",
-  },
-  {
-    id: "5",
-    name: "Priya Nair",
-    handle: "@priyanair",
-    platform: "TikTok",
-    followers: "5.2M",
-    followersRaw: 5200000,
-    engagement: "8.9%",
-    engagementRaw: 8.9,
-    trustScore: 91,
-    status: "CONTACTED",
-    tags: ["beauty", "skincare"],
-    lists: ["hot-prospects", "tiktok-squad"],
-    avatarColor: "#db2777",
-    avatarInitials: "PN",
-  },
-  {
-    id: "6",
-    name: "Jake Morrison",
-    handle: "@jakemor",
-    platform: "YouTube",
-    followers: "920K",
-    followersRaw: 920000,
-    engagement: "5.5%",
-    engagementRaw: 5.5,
-    trustScore: 78,
-    status: "PROSPECT",
-    tags: ["gaming", "esports"],
-    lists: [],
-    avatarColor: "#16a34a",
-    avatarInitials: "JM",
-  },
-  {
-    id: "7",
-    name: "Luna Becker",
-    handle: "@lunabecker",
-    platform: "Instagram",
-    followers: "680K",
-    followersRaw: 680000,
-    engagement: "9.1%",
-    engagementRaw: 9.1,
-    trustScore: 97,
-    status: "ACTIVE",
-    tags: ["art", "design"],
-    lists: ["vip-partners", "instagram-picks"],
-    avatarColor: "#9333ea",
-    avatarInitials: "LB",
-  },
-  {
-    id: "8",
-    name: "Omar Hassan",
-    handle: "@omarh_",
-    platform: "Twitter",
-    followers: "440K",
-    followersRaw: 440000,
-    engagement: "2.7%",
-    engagementRaw: 2.7,
-    trustScore: 72,
-    status: "DECLINED",
-    tags: ["crypto", "finance"],
-    lists: [],
-    avatarColor: "#0891b2",
-    avatarInitials: "OH",
-  },
-  {
-    id: "9",
-    name: "Zoe Kim",
-    handle: "@zoekim",
-    platform: "TikTok",
-    followers: "11.4M",
-    followersRaw: 11400000,
-    engagement: "5.4%",
-    engagementRaw: 5.4,
-    trustScore: 84,
-    status: "NEGOTIATING",
-    tags: ["dance", "entertainment"],
-    lists: ["tiktok-squad"],
-    avatarColor: "#f59e0b",
-    avatarInitials: "ZK",
-  },
-  {
-    id: "10",
-    name: "Ryan Okafor",
-    handle: "@ryanokafor",
-    platform: "LinkedIn",
-    followers: "320K",
-    followersRaw: 320000,
-    engagement: "4.2%",
-    engagementRaw: 4.2,
-    trustScore: 88,
-    status: "CONTACTED",
-    tags: ["b2b", "leadership"],
-    lists: ["hot-prospects"],
-    avatarColor: "#0e7490",
-    avatarInitials: "RO",
-  },
-  {
-    id: "11",
-    name: "Camille Dubois",
-    handle: "@camilledubois",
-    platform: "Instagram",
-    followers: "1.9M",
-    followersRaw: 1900000,
-    engagement: "6.8%",
-    engagementRaw: 6.8,
-    trustScore: 93,
-    status: "ACTIVE",
-    tags: ["travel", "luxury"],
-    lists: ["vip-partners", "instagram-picks"],
-    avatarColor: "#be185d",
-    avatarInitials: "CD",
-  },
-  {
-    id: "12",
-    name: "Tyler Frost",
-    handle: "@tylerfrost",
-    platform: "YouTube",
-    followers: "2.1M",
-    followersRaw: 2100000,
-    engagement: "3.8%",
-    engagementRaw: 3.8,
-    trustScore: 80,
-    status: "COMPLETED",
-    tags: ["food", "cooking"],
-    lists: [],
-    avatarColor: "#ea580c",
-    avatarInitials: "TF",
-  },
-  {
-    id: "13",
-    name: "Nadia Volkov",
-    handle: "@nadiavolkov",
-    platform: "TikTok",
-    followers: "6.8M",
-    followersRaw: 6800000,
-    engagement: "7.6%",
-    engagementRaw: 7.6,
-    trustScore: 90,
-    status: "ACTIVE",
-    tags: ["fashion", "trends"],
-    lists: ["vip-partners", "tiktok-squad"],
-    avatarColor: "#7c3aed",
-    avatarInitials: "NV",
-  },
-  {
-    id: "14",
-    name: "Elias Bergmann",
-    handle: "@eliasb",
-    platform: "Pinterest",
-    followers: "880K",
-    followersRaw: 880000,
-    engagement: "10.2%",
-    engagementRaw: 10.2,
-    trustScore: 85,
-    status: "PROSPECT",
-    tags: ["home", "interior"],
-    lists: ["hot-prospects"],
-    avatarColor: "#b91c1c",
-    avatarInitials: "EB",
-  },
-  {
-    id: "15",
-    name: "Isla Thompson",
-    handle: "@islathompson",
-    platform: "Instagram",
-    followers: "750K",
-    followersRaw: 750000,
-    engagement: "8.4%",
-    engagementRaw: 8.4,
-    trustScore: 96,
-    status: "NEGOTIATING",
-    tags: ["parenting", "lifestyle"],
-    lists: ["instagram-picks"],
-    avatarColor: "#059669",
-    avatarInitials: "IT",
-  },
-  {
-    id: "16",
-    name: "Dev Patel",
-    handle: "@devpateltech",
-    platform: "YouTube",
-    followers: "1.3M",
-    followersRaw: 1300000,
-    engagement: "4.1%",
-    engagementRaw: 4.1,
-    trustScore: 82,
-    status: "CONTACTED",
-    tags: ["tech", "coding"],
-    lists: ["hot-prospects"],
-    avatarColor: "#2563eb",
-    avatarInitials: "DP",
-  },
-];
+interface CRMList {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  members: ListMember[];
+  _count: { members: number };
+}
 
-// ─── Config ───────────────────────────────────────────────────────────────────
+interface ListForm {
+  name: string;
+  description: string;
+  color: string;
+}
 
-const STATUS_COLORS: Record<Status | string, string> = {
-  PROSPECT: "#94a3b8",
-  CONTACTED: "#f59e0b",
-  NEGOTIATING: "#8b5cf6",
-  ACTIVE: "#10b981",
-  COMPLETED: "#06b6d4",
-  DECLINED: "#ef4444",
-  VIP: "#f59e0b",
-};
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-const PLATFORM_ICONS: Record<Platform, string> = {
-  Instagram: "📸",
-  TikTok: "🎬",
-  YouTube: "▶️",
-  Twitter: "🐦",
-  LinkedIn: "💼",
-  Pinterest: "📌",
-};
-
-const PLATFORM_COLORS: Record<Platform, string> = {
+const PLATFORM_COLORS: Record<string, string> = {
   Instagram: "#e1306c",
   TikTok: "#69c9d0",
   YouTube: "#ff0000",
   Twitter: "#1da1f2",
   LinkedIn: "#0077b5",
   Pinterest: "#e60023",
+  Facebook: "#1877f2",
+  Snapchat: "#fffc00",
 };
 
-const LISTS = [
-  { id: "hot-prospects", label: "🔥 Hot Prospects", count: 12, dot: "#ef4444" },
-  { id: "vip-partners", label: "⭐ VIP Partners", count: 8, dot: "#f59e0b" },
-  { id: "instagram-picks", label: "📸 Instagram Picks", count: 15, dot: "#8b5cf6" },
-  { id: "tiktok-squad", label: "🎬 TikTok Squad", count: 12, dot: "#06b6d4" },
+const PLATFORM_ICONS: Record<string, string> = {
+  Instagram: "\u{1f4f8}",
+  TikTok: "\u{1f3ac}",
+  YouTube: "\u25b6\ufe0f",
+  Twitter: "\u{1f426}",
+  LinkedIn: "\u{1f4bc}",
+  Pinterest: "\u{1f4cc}",
+  Facebook: "\u{1f310}",
+  Snapchat: "\u{1f47b}",
+};
+
+const LIST_COLOR_OPTIONS = [
+  "#06b6d4", "#ef4444", "#f59e0b", "#10b981", "#8b5cf6", "#ec4899", "#3b82f6", "#f97316",
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
+const EMPTY_LIST_FORM: ListForm = {
+  name: "",
+  description: "",
+  color: "#06b6d4",
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  background: "#060810",
+  border: "1px solid #1e2535",
+  borderRadius: 8,
+  padding: "10px 14px",
+  color: "#e2e8f0",
+  fontSize: 13,
+  fontFamily: "'DM Sans', sans-serif",
+  outline: "none",
+  boxSizing: "border-box",
+};
+
+const labelStyle: React.CSSProperties = {
+  fontSize: 10,
+  color: "#4a5568",
+  display: "block",
+  marginBottom: 6,
+  fontFamily: "'DM Mono', monospace",
+  letterSpacing: 1.2,
+};
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatFollowers(count: number): string {
+  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
+  return String(count);
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function getAvatarColor(name: string): string {
+  const colors = ["#7c3aed", "#0891b2", "#ef4444", "#f59e0b", "#10b981", "#ec4899", "#3b82f6", "#f97316"];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getAllCreators(lists: CRMList[]): Creator[] {
+  const seen = new Set<string>();
+  const result: Creator[] = [];
+  for (const list of lists) {
+    for (const member of list.members) {
+      if (!seen.has(member.creator.id)) {
+        seen.add(member.creator.id);
+        result.push(member.creator);
+      }
+    }
+  }
+  return result;
+}
+
+function getCreatorsForList(lists: CRMList[], listId: string): Creator[] {
+  const list = lists.find((l) => l.id === listId);
+  if (!list) return [];
+  return list.members.map((m) => m.creator);
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function TrustBar({ score }: { score: number | null }) {
+  if (score === null || score === undefined) {
+    return (
+      <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#2d3748" }}>—</span>
+    );
+  }
+  const color = score >= 90 ? "#10b981" : score >= 75 ? "#f59e0b" : "#ef4444";
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      <div style={{ width: 60, height: 4, background: "#1e2535", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ width: `${score}%`, height: "100%", background: color, borderRadius: 2 }} />
+      </div>
+      <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color, minWidth: 24 }}>{score}</span>
+    </div>
+  );
+}
+
+function PlatformBadge({ platform }: { platform: string }) {
+  const color = PLATFORM_COLORS[platform] || "#94a3b8";
+  const icon = PLATFORM_ICONS[platform] || "\u{1f310}";
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        fontSize: 10,
+        fontFamily: "'DM Mono', monospace",
+        color,
+        background: `${color}15`,
+        border: `1px solid ${color}30`,
+        padding: "2px 7px",
+        borderRadius: 4,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {icon} {platform}
+    </span>
+  );
+}
+
+// ─── List Modal ───────────────────────────────────────────────────────────────
+
+function ListModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  initialData,
+  isSubmitting,
+  title,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (form: ListForm) => void;
+  initialData: ListForm | null;
+  isSubmitting: boolean;
+  title: string;
+}) {
+  const [form, setForm] = useState<ListForm>(initialData || EMPTY_LIST_FORM);
+
+  useEffect(() => {
+    if (isOpen) setForm(initialData || EMPTY_LIST_FORM);
+  }, [isOpen, initialData]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(4px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: 440,
+          background: "#0a0d14",
+          border: "1px solid #1e2535",
+          borderRadius: 16,
+          padding: 28,
+        }}
+      >
+        <h2 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0", marginBottom: 20, margin: "0 0 20px" }}>
+          {title}
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Name */}
+          <div>
+            <label style={labelStyle}>LIST NAME *</label>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="e.g. Hot Prospects"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label style={labelStyle}>DESCRIPTION</label>
+            <textarea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="Optional description..."
+              rows={3}
+              style={{ ...inputStyle, resize: "vertical" }}
+            />
+          </div>
+
+          {/* Color */}
+          <div>
+            <label style={labelStyle}>COLOR</label>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {LIST_COLOR_OPTIONS.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setForm({ ...form, color: c })}
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    background: c,
+                    border: form.color === c ? "2px solid #e2e8f0" : "2px solid transparent",
+                    cursor: "pointer",
+                    padding: 0,
+                    transition: "border-color 0.15s",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 24 }}>
+          <button
+            onClick={onClose}
+            disabled={isSubmitting}
+            style={{
+              padding: "10px 20px",
+              borderRadius: 8,
+              border: "1px solid #1e2535",
+              background: "transparent",
+              color: "#94a3b8",
+              fontSize: 13,
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => onSubmit(form)}
+            disabled={isSubmitting || !form.name.trim()}
+            style={{
+              padding: "10px 24px",
+              borderRadius: 8,
+              border: "none",
+              background: !form.name.trim() ? "#1e2535" : "linear-gradient(135deg, #0891b2, #0e7490)",
+              color: !form.name.trim() ? "#4a5568" : "#fff",
+              fontSize: 13,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 700,
+              cursor: form.name.trim() ? "pointer" : "default",
+              opacity: isSubmitting ? 0.6 : 1,
+            }}
+          >
+            {isSubmitting ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Delete Modal ─────────────────────────────────────────────────────────────
+
+function DeleteListModal({
+  listName,
+  onConfirm,
+  onCancel,
+  isDeleting,
+}: {
+  listName: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  isDeleting: boolean;
+}) {
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(4px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: 400,
+          background: "#0a0d14",
+          border: "1px solid #1e2535",
+          borderRadius: 16,
+          padding: 28,
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: 36, marginBottom: 12 }}>{"\u26a0\ufe0f"}</div>
+        <h2 style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 8 }}>
+          Delete List
+        </h2>
+        <p style={{ fontSize: 13, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", marginBottom: 24, lineHeight: 1.5 }}>
+          Are you sure you want to delete <strong style={{ color: "#e2e8f0" }}>{listName}</strong>? This will remove all creators from this list. This action cannot be undone.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+          <button
+            onClick={onCancel}
+            disabled={isDeleting}
+            style={{
+              padding: "10px 20px",
+              borderRadius: 8,
+              border: "1px solid #1e2535",
+              background: "transparent",
+              color: "#94a3b8",
+              fontSize: 13,
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isDeleting}
+            style={{
+              padding: "10px 24px",
+              borderRadius: 8,
+              border: "none",
+              background: "#ef4444",
+              color: "#fff",
+              fontSize: 13,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 700,
+              cursor: "pointer",
+              opacity: isDeleting ? 0.6 : 1,
+            }}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function CRMPage() {
+  const { user } = useUser();
+
+  // Data
+  const [lists, setLists] = useState<CRMList[]>([]);
+  const [totalCreators, setTotalCreators] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // UI State
   const [activeList, setActiveList] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"list" | "card">("list");
@@ -332,29 +433,122 @@ export default function CRMPage() {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [hoveredList, setHoveredList] = useState<string | null>(null);
 
-  // ── Filtering ────────────────────────────────────────────────────────────
-  const filtered = useMemo(() => {
-    let result = MOCK_CREATORS;
+  // Modals
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingList, setEditingList] = useState<CRMList | null>(null);
+  const [deletingList, setDeletingList] = useState<CRMList | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-    if (activeList !== "all") {
-      result = result.filter((c) => c.lists.includes(activeList));
+  // ── Fetch ──────────────────────────────────────────────────────────────────
+
+  const fetchLists = useCallback(async () => {
+    try {
+      setError(null);
+      const res = await fetch("/api/crm/lists");
+      if (!res.ok) throw new Error(`Failed to load CRM data (${res.status})`);
+      const data = await res.json();
+      setLists(data.lists || []);
+      setTotalCreators(data.totalCreators || 0);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to load CRM data";
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
+  }, []);
 
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.handle.toLowerCase().includes(q) ||
-          c.platform.toLowerCase().includes(q) ||
-          c.tags.some((t) => t.toLowerCase().includes(q))
-      );
+  useEffect(() => {
+    fetchLists();
+  }, [fetchLists]);
+
+  // ── CRUD Handlers ──────────────────────────────────────────────────────────
+
+  async function handleCreateList(form: ListForm) {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/crm/lists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to create list");
+      }
+      setShowCreateModal(false);
+      await fetchLists();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to create list");
+    } finally {
+      setIsSubmitting(false);
     }
+  }
 
-    return result;
-  }, [activeList, search]);
+  async function handleEditList(form: ListForm) {
+    if (!editingList) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`/api/crm/lists/${editingList.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to update list");
+      }
+      setEditingList(null);
+      await fetchLists();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to update list");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
-  // ── Checkbox helpers ─────────────────────────────────────────────────────
+  async function handleDeleteList() {
+    if (!deletingList) return;
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/crm/lists/${deletingList.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to delete list");
+      }
+      if (activeList === deletingList.id) setActiveList("all");
+      setDeletingList(null);
+      await fetchLists();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to delete list");
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  // ── Derived Data ───────────────────────────────────────────────────────────
+
+  const allCreators = getAllCreators(lists);
+
+  const displayedCreators = activeList === "all"
+    ? allCreators
+    : getCreatorsForList(lists, activeList);
+
+  const filtered = search.trim()
+    ? displayedCreators.filter((c) => {
+        const q = search.toLowerCase();
+        return (
+          (c.displayName || "").toLowerCase().includes(q) ||
+          (c.handle || "").toLowerCase().includes(q) ||
+          (c.platform || "").toLowerCase().includes(q) ||
+          (c.niche || "").toLowerCase().includes(q) ||
+          (c.location || "").toLowerCase().includes(q)
+        );
+      })
+    : displayedCreators;
+
+  // ── Checkbox helpers ───────────────────────────────────────────────────────
+
   const allChecked = filtered.length > 0 && filtered.every((c) => selectedIds.has(c.id));
   const someChecked = filtered.some((c) => selectedIds.has(c.id));
 
@@ -375,101 +569,69 @@ export default function CRMPage() {
 
   const selectedCount = selectedIds.size;
 
-  // ── Trust score bar ──────────────────────────────────────────────────────
-  function TrustBar({ score }: { score: number }) {
-    const color = score >= 90 ? "#10b981" : score >= 75 ? "#f59e0b" : "#ef4444";
+  // ── Loading State ──────────────────────────────────────────────────────────
+
+  if (isLoading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <div
-          style={{
-            width: 60,
-            height: 4,
-            background: "#1e2535",
-            borderRadius: 2,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              width: `${score}%`,
-              height: "100%",
-              background: color,
-              borderRadius: 2,
-            }}
-          />
+      <div style={{ display: "flex", height: "calc(100vh - 80px)", gap: 0, overflow: "hidden", margin: "-20px -24px" }}>
+        {/* Sidebar shimmer */}
+        <div style={{ width: 240, flexShrink: 0, background: "#0a0d14", borderRight: "1px solid #1e2535", padding: 20 }}>
+          <div className="shimmer" style={{ height: 38, borderRadius: 8, marginBottom: 20 }} />
+          <div style={{ borderTop: "1px solid #1e2535", margin: "0 0 16px" }} />
+          <div className="shimmer" style={{ height: 14, width: 80, borderRadius: 4, marginBottom: 12 }} />
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="shimmer" style={{ height: 36, borderRadius: 8, marginBottom: 6 }} />
+          ))}
         </div>
-        <span
-          style={{
-            fontSize: 10,
-            fontFamily: "'DM Mono', monospace",
-            color,
-            minWidth: 24,
-          }}
-        >
-          {score}
-        </span>
+        {/* Main area shimmer */}
+        <div style={{ flex: 1, background: "#060810", padding: 20 }}>
+          <div className="shimmer" style={{ height: 44, borderRadius: 8, marginBottom: 16 }} />
+          <div className="shimmer" style={{ height: 14, width: 120, borderRadius: 4, marginBottom: 12 }} />
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="shimmer" style={{ height: 52, borderRadius: 4, marginBottom: 2 }} />
+          ))}
+        </div>
       </div>
     );
   }
 
-  // ── Status badge ─────────────────────────────────────────────────────────
-  function StatusBadge({ status }: { status: string }) {
-    const color = STATUS_COLORS[status] || "#94a3b8";
+  // ── Error State ────────────────────────────────────────────────────────────
+
+  if (error) {
     return (
-      <span
-        style={{
-          fontSize: 9,
-          fontFamily: "'DM Mono', monospace",
-          color,
-          background: `${color}18`,
-          border: `1px solid ${color}40`,
-          padding: "2px 7px",
-          borderRadius: 20,
-          letterSpacing: 0.8,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {status}
-      </span>
+      <div style={{ textAlign: "center", paddingTop: 120 }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>{"\u26a0\ufe0f"}</div>
+        <h2 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 8 }}>
+          Unable to load CRM
+        </h2>
+        <p style={{ fontSize: 13, color: "#4a5568", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
+          {error}
+        </p>
+        <button
+          onClick={() => { setIsLoading(true); fetchLists(); }}
+          style={{
+            padding: "10px 24px",
+            borderRadius: 8,
+            background: "linear-gradient(135deg, #0891b2, #0e7490)",
+            color: "#fff",
+            border: "none",
+            fontSize: 13,
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          Retry
+        </button>
+      </div>
     );
   }
 
-  // ── Platform badge ───────────────────────────────────────────────────────
-  function PlatformBadge({ platform }: { platform: Platform }) {
-    const color = PLATFORM_COLORS[platform];
-    const icon = PLATFORM_ICONS[platform];
-    return (
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 4,
-          fontSize: 10,
-          fontFamily: "'DM Mono', monospace",
-          color,
-          background: `${color}15`,
-          border: `1px solid ${color}30`,
-          padding: "2px 7px",
-          borderRadius: 4,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {icon} {platform}
-      </span>
-    );
-  }
+  // ── Card View ──────────────────────────────────────────────────────────────
 
-  // ── Card view ────────────────────────────────────────────────────────────
   function CardView() {
     return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: 14,
-          padding: "16px 0",
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14, padding: "16px 0" }}>
         {filtered.map((creator) => (
           <div
             key={creator.id}
@@ -485,40 +647,38 @@ export default function CRMPage() {
           >
             {/* Avatar + Name */}
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: "50%",
-                  background: creator.avatarColor,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 13,
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700,
-                  color: "#fff",
-                  flexShrink: 0,
-                }}
-              >
-                {creator.avatarInitials}
-              </div>
-              <div style={{ minWidth: 0 }}>
+              {creator.avatarUrl ? (
+                <img
+                  src={creator.avatarUrl}
+                  alt={creator.displayName}
+                  style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                />
+              ) : (
                 <div
                   style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    background: getAvatarColor(creator.displayName || creator.handle),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     fontSize: 13,
                     fontFamily: "'Syne', sans-serif",
                     fontWeight: 700,
-                    color: "#e2e8f0",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
+                    color: "#fff",
+                    flexShrink: 0,
                   }}
                 >
-                  {creator.name}
+                  {getInitials(creator.displayName || creator.handle)}
+                </div>
+              )}
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {creator.displayName || creator.handle}
                 </div>
                 <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono', monospace" }}>
-                  {creator.handle}
+                  {creator.handle.startsWith("@") ? creator.handle : `@${creator.handle}`}
                 </div>
               </div>
             </div>
@@ -532,11 +692,20 @@ export default function CRMPage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
               <div>
                 <div style={{ fontSize: 9, color: "#4a5568", fontFamily: "'DM Mono', monospace", letterSpacing: 1, marginBottom: 2 }}>FOLLOWERS</div>
-                <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>{creator.followers}</div>
+                <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>{formatFollowers(creator.followerCount)}</div>
               </div>
               <div>
                 <div style={{ fontSize: 9, color: "#4a5568", fontFamily: "'DM Mono', monospace", letterSpacing: 1, marginBottom: 2 }}>ENG. RATE</div>
-                <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#06b6d4" }}>{creator.engagement}</div>
+                <div style={{
+                  fontSize: 14,
+                  fontFamily: "'Syne', sans-serif",
+                  fontWeight: 700,
+                  color: creator.engagementRate !== null
+                    ? creator.engagementRate >= 7 ? "#10b981" : creator.engagementRate >= 4 ? "#f59e0b" : "#94a3b8"
+                    : "#2d3748",
+                }}>
+                  {creator.engagementRate !== null ? `${creator.engagementRate}%` : "\u2014"}
+                </div>
               </div>
             </div>
 
@@ -546,26 +715,18 @@ export default function CRMPage() {
               <TrustBar score={creator.trustScore} />
             </div>
 
-            {/* Status + Tags */}
+            {/* Niche + Location */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 6 }}>
-              <StatusBadge status={creator.status} />
-              <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                {creator.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      fontSize: 9,
-                      fontFamily: "'DM Mono', monospace",
-                      color: "#4a5568",
-                      background: "#111827",
-                      padding: "2px 6px",
-                      borderRadius: 3,
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {creator.niche && (
+                <span style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", background: "#111827", padding: "2px 6px", borderRadius: 3 }}>
+                  {creator.niche}
+                </span>
+              )}
+              {creator.location && (
+                <span style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+                  {"\u{1f4cd}"} {creator.location}
+                </span>
+              )}
             </div>
           </div>
         ))}
@@ -573,18 +734,10 @@ export default function CRMPage() {
     );
   }
 
-  // ─── Render ───────────────────────────────────────────────────────────────
+  // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "calc(100vh - 80px)",
-        gap: 0,
-        overflow: "hidden",
-        margin: "-20px -24px",
-      }}
-    >
+    <div style={{ display: "flex", height: "calc(100vh - 80px)", gap: 0, overflow: "hidden", margin: "-20px -24px" }}>
       {/* ── Left Sidebar ────────────────────────────────────────────────── */}
       <div
         style={{
@@ -601,7 +754,7 @@ export default function CRMPage() {
         {/* All Creators */}
         <div style={{ padding: "0 12px", marginBottom: 20 }}>
           <button
-            onClick={() => setActiveList("all")}
+            onClick={() => { setActiveList("all"); setSelectedIds(new Set()); }}
             style={{
               width: "100%",
               display: "flex",
@@ -618,15 +771,8 @@ export default function CRMPage() {
             onMouseLeave={() => setHoveredList(null)}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 14 }}>👥</span>
-              <span
-                style={{
-                  fontSize: 13,
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontWeight: 500,
-                  color: activeList === "all" ? "#06b6d4" : "#e2e8f0",
-                }}
-              >
+              <span style={{ fontSize: 14 }}>{"\u{1f465}"}</span>
+              <span style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: activeList === "all" ? "#06b6d4" : "#e2e8f0" }}>
                 All Creators
               </span>
             </div>
@@ -640,7 +786,7 @@ export default function CRMPage() {
                 borderRadius: 10,
               }}
             >
-              47
+              {totalCreators}
             </span>
           </button>
         </div>
@@ -649,25 +795,12 @@ export default function CRMPage() {
         <div style={{ borderTop: "1px solid #1e2535", margin: "0 0 16px" }} />
 
         {/* My Lists header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 14px 10px",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 10,
-              fontFamily: "'DM Mono', monospace",
-              color: "#4a5568",
-              letterSpacing: 2,
-            }}
-          >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 14px 10px" }}>
+          <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2 }}>
             MY LISTS
           </span>
           <button
+            onClick={() => setShowCreateModal(true)}
             style={{
               width: 20,
               height: 20,
@@ -690,112 +823,119 @@ export default function CRMPage() {
         </div>
 
         {/* List items */}
-        <div style={{ padding: "0 12px", display: "flex", flexDirection: "column", gap: 2 }}>
-          {LISTS.map((list) => (
+        {lists.length === 0 ? (
+          <div style={{ padding: "12px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 10, color: "#2d3748", fontFamily: "'DM Mono', monospace", marginBottom: 8 }}>
+              No lists yet
+            </div>
             <button
-              key={list.id}
-              onClick={() => setActiveList(list.id)}
-              onMouseEnter={() => setHoveredList(list.id)}
-              onMouseLeave={() => setHoveredList(null)}
+              onClick={() => setShowCreateModal(true)}
               style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "9px 10px",
-                borderRadius: 8,
-                border: activeList === list.id ? "1px solid rgba(6,182,212,0.3)" : "1px solid transparent",
-                background:
-                  activeList === list.id
-                    ? "rgba(6,182,212,0.08)"
-                    : hoveredList === list.id
-                    ? "rgba(255,255,255,0.03)"
-                    : "transparent",
+                padding: "6px 14px",
+                borderRadius: 6,
+                border: "1px solid #1e2535",
+                background: "transparent",
+                color: "#06b6d4",
+                fontSize: 10,
+                fontFamily: "'DM Mono', monospace",
                 cursor: "pointer",
-                transition: "all 0.15s",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {/* Colored dot */}
-                <div
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: "50%",
-                    background: list.dot,
-                    flexShrink: 0,
+              + Create List
+            </button>
+          </div>
+        ) : (
+          <div style={{ padding: "0 12px", display: "flex", flexDirection: "column", gap: 2 }}>
+            {lists.map((list) => (
+              <div key={list.id} style={{ position: "relative" }}>
+                <button
+                  onClick={() => { setActiveList(list.id); setSelectedIds(new Set()); }}
+                  onMouseEnter={() => setHoveredList(list.id)}
+                  onMouseLeave={() => setHoveredList(null)}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    setEditingList(list);
                   }}
-                />
-                <span
                   style={{
-                    fontSize: 12,
-                    fontFamily: "'DM Sans', sans-serif",
-                    color: activeList === list.id ? "#e2e8f0" : "#94a3b8",
-                    textAlign: "left",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "9px 10px",
+                    borderRadius: 8,
+                    border: activeList === list.id ? "1px solid rgba(6,182,212,0.3)" : "1px solid transparent",
+                    background: activeList === list.id ? "rgba(6,182,212,0.08)" : hoveredList === list.id ? "rgba(255,255,255,0.03)" : "transparent",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
                   }}
                 >
-                  {list.label}
-                </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                    <div style={{ width: 7, height: 7, borderRadius: "50%", background: list.color, flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: activeList === list.id ? "#e2e8f0" : "#94a3b8", textAlign: "left", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {list.name}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+                    <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: activeList === list.id ? "#06b6d4" : "#4a5568", background: activeList === list.id ? "rgba(6,182,212,0.15)" : "#111827", padding: "1px 7px", borderRadius: 10 }}>
+                      {list._count.members}
+                    </span>
+                    {hoveredList === list.id && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditingList(list); }}
+                        style={{
+                          width: 18,
+                          height: 18,
+                          borderRadius: 3,
+                          border: "none",
+                          background: "rgba(255,255,255,0.05)",
+                          color: "#4a5568",
+                          fontSize: 10,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: 0,
+                        }}
+                        title="Edit list"
+                      >
+                        {"\u270f\ufe0f"}
+                      </button>
+                    )}
+                  </div>
+                </button>
               </div>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontFamily: "'DM Mono', monospace",
-                  color: activeList === list.id ? "#06b6d4" : "#4a5568",
-                  background: activeList === list.id ? "rgba(6,182,212,0.15)" : "#111827",
-                  padding: "1px 7px",
-                  borderRadius: 10,
-                  flexShrink: 0,
-                }}
-              >
-                {list.count}
-              </span>
-            </button>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Spacer */}
         <div style={{ flex: 1 }} />
 
-        {/* Bottom stats */}
-        <div
-          style={{
-            margin: "16px 12px 0",
-            padding: 12,
-            background: "#060810",
-            border: "1px solid #1e2535",
-            borderRadius: 8,
-          }}
-        >
-          <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 8 }}>
-            PIPELINE HEALTH
-          </div>
-          {[
-            { label: "Active", count: MOCK_CREATORS.filter((c) => c.status === "ACTIVE").length, color: "#10b981" },
-            { label: "Negotiating", count: MOCK_CREATORS.filter((c) => c.status === "NEGOTIATING").length, color: "#8b5cf6" },
-            { label: "Prospects", count: MOCK_CREATORS.filter((c) => c.status === "PROSPECT").length, color: "#94a3b8" },
-          ].map((s) => (
-            <div key={s.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: s.color }} />
-                <span style={{ fontSize: 10, fontFamily: "'DM Sans', sans-serif", color: "#4a5568" }}>{s.label}</span>
-              </div>
-              <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: s.color }}>{s.count}</span>
+        {/* Bottom stats - pipeline health from real data */}
+        {allCreators.length > 0 && (
+          <div style={{ margin: "16px 12px 0", padding: 12, background: "#060810", border: "1px solid #1e2535", borderRadius: 8 }}>
+            <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 8 }}>
+              CRM SUMMARY
             </div>
-          ))}
-        </div>
+            {[
+              { label: "Total Creators", count: totalCreators, color: "#06b6d4" },
+              { label: "Lists", count: lists.length, color: "#8b5cf6" },
+              { label: "Avg. Trust", count: allCreators.length > 0 ? Math.round(allCreators.reduce((sum, c) => sum + (c.trustScore || 0), 0) / allCreators.filter((c) => c.trustScore !== null).length) || 0 : 0, color: "#10b981" },
+            ].map((s) => (
+              <div key={s.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: s.color }} />
+                  <span style={{ fontSize: 10, fontFamily: "'DM Sans', sans-serif", color: "#4a5568" }}>{s.label}</span>
+                </div>
+                <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: s.color }}>{s.count}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── Right Panel ─────────────────────────────────────────────────── */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          background: "#060810",
-        }}
-      >
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "#060810" }}>
         {/* ── Top Bar ─────────────────────────────────────────────────── */}
         <div
           style={{
@@ -808,38 +948,18 @@ export default function CRMPage() {
             flexShrink: 0,
           }}
         >
-          {/* Page title */}
           <div style={{ marginRight: 4 }}>
-            <h1
-              style={{
-                fontSize: 18,
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 800,
-                color: "#e2e8f0",
-                margin: 0,
-                lineHeight: 1,
-              }}
-            >
+            <h1 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0", margin: 0, lineHeight: 1 }}>
               Creator CRM
             </h1>
           </div>
 
-          {/* Separator */}
           <div style={{ width: 1, height: 24, background: "#1e2535" }} />
 
           {/* Search */}
           <div style={{ position: "relative", flex: 1, maxWidth: 320 }}>
-            <span
-              style={{
-                position: "absolute",
-                left: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                fontSize: 13,
-                color: "#4a5568",
-              }}
-            >
-              🔍
+            <span style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#4a5568" }}>
+              {"\u{1f50d}"}
             </span>
             <input
               value={search}
@@ -860,19 +980,10 @@ export default function CRMPage() {
             />
           </div>
 
-          {/* Spacer */}
           <div style={{ flex: 1 }} />
 
           {/* View toggle */}
-          <div
-            style={{
-              display: "flex",
-              background: "#0a0d14",
-              border: "1px solid #1e2535",
-              borderRadius: 8,
-              overflow: "hidden",
-            }}
-          >
+          <div style={{ display: "flex", background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 8, overflow: "hidden" }}>
             <button
               onClick={() => setView("list")}
               style={{
@@ -887,7 +998,7 @@ export default function CRMPage() {
               }}
               title="List view"
             >
-              ☰
+              {"\u2630"}
             </button>
             <button
               onClick={() => setView("card")}
@@ -902,12 +1013,57 @@ export default function CRMPage() {
               }}
               title="Card view"
             >
-              ⊞
+              {"\u229e"}
             </button>
           </div>
 
+          {/* Active list actions */}
+          {activeList !== "all" && (
+            <>
+              <button
+                onClick={() => {
+                  const list = lists.find((l) => l.id === activeList);
+                  if (list) setEditingList(list);
+                }}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  border: "1px solid #1e2535",
+                  background: "transparent",
+                  color: "#94a3b8",
+                  fontSize: 11,
+                  fontFamily: "'DM Mono', monospace",
+                  cursor: "pointer",
+                  letterSpacing: 0.5,
+                }}
+              >
+                Edit List
+              </button>
+              <button
+                onClick={() => {
+                  const list = lists.find((l) => l.id === activeList);
+                  if (list) setDeletingList(list);
+                }}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(239,68,68,0.3)",
+                  background: "rgba(239,68,68,0.08)",
+                  color: "#ef4444",
+                  fontSize: 11,
+                  fontFamily: "'DM Mono', monospace",
+                  cursor: "pointer",
+                  letterSpacing: 0.5,
+                }}
+              >
+                Delete List
+              </button>
+            </>
+          )}
+
           {/* New List button */}
           <button
+            onClick={() => setShowCreateModal(true)}
             style={{
               padding: "8px 16px",
               borderRadius: 8,
@@ -938,46 +1094,10 @@ export default function CRMPage() {
               flexShrink: 0,
             }}
           >
-            <span
-              style={{
-                fontSize: 12,
-                fontFamily: "'DM Mono', monospace",
-                color: "#06b6d4",
-                fontWeight: 600,
-              }}
-            >
+            <span style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#06b6d4", fontWeight: 600 }}>
               {selectedCount} selected
             </span>
-
             <div style={{ width: 1, height: 16, background: "rgba(6,182,212,0.3)" }} />
-
-            {[
-              { label: "📋 Add to List", color: "#94a3b8" },
-              { label: "📨 Send Outreach", color: "#06b6d4" },
-              { label: "📤 Export", color: "#94a3b8" },
-              { label: "🗑 Remove", color: "#ef4444" },
-            ].map(({ label, color }) => (
-              <button
-                key={label}
-                style={{
-                  padding: "5px 12px",
-                  borderRadius: 6,
-                  border: `1px solid ${color}40`,
-                  background: `${color}10`,
-                  color,
-                  fontSize: 11,
-                  fontFamily: "'DM Mono', monospace",
-                  cursor: "pointer",
-                  letterSpacing: 0.3,
-                  transition: "all 0.15s",
-                }}
-              >
-                {label}
-              </button>
-            ))}
-
-            <div style={{ flex: 1 }} />
-
             <button
               onClick={() => setSelectedIds(new Set())}
               style={{
@@ -991,22 +1111,15 @@ export default function CRMPage() {
                 cursor: "pointer",
               }}
             >
-              ✕ Clear
+              {"\u2715"} Clear
             </button>
           </div>
         )}
 
         {/* ── Table / Card area ───────────────────────────────────────── */}
         <div style={{ flex: 1, overflowY: "auto", padding: view === "card" ? "0 20px" : 0 }}>
-          {/* Result count info */}
-          <div
-            style={{
-              padding: "10px 20px 6px",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
+          {/* Result count */}
+          <div style={{ padding: "10px 20px 6px", display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
               SHOWING {filtered.length} CREATOR{filtered.length !== 1 ? "S" : ""}
             </span>
@@ -1024,34 +1137,32 @@ export default function CRMPage() {
                   letterSpacing: 0.3,
                 }}
               >
-                · CLEAR FILTERS
+                {"\u00b7"} CLEAR FILTERS
               </button>
             )}
           </div>
 
+          {/* Empty state */}
+          {filtered.length === 0 && !search && (
+            <div style={{ textAlign: "center", padding: "60px 20px" }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>{"\u{1f465}"}</div>
+              <h3 style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 6 }}>
+                {activeList === "all" ? "No creators yet" : "This list is empty"}
+              </h3>
+              <p style={{ fontSize: 12, color: "#4a5568", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>
+                {activeList === "all" ? "Add creators to your CRM to manage relationships" : "Add creators to this list from the discover page"}
+              </p>
+            </div>
+          )}
+
           {/* Card view */}
-          {view === "card" && <CardView />}
+          {view === "card" && filtered.length > 0 && <CardView />}
 
           {/* List / Table view */}
-          {view === "list" && (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: 12,
-              }}
-            >
+          {view === "list" && filtered.length > 0 && (
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
-                <tr
-                  style={{
-                    background: "#0a0d14",
-                    borderBottom: "1px solid #1e2535",
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 2,
-                  }}
-                >
-                  {/* Checkbox */}
+                <tr style={{ background: "#0a0d14", borderBottom: "1px solid #1e2535", position: "sticky", top: 0, zIndex: 2 }}>
                   <th style={{ width: 40, padding: "10px 12px" }}>
                     <input
                       type="checkbox"
@@ -1062,14 +1173,13 @@ export default function CRMPage() {
                     />
                   </th>
                   {[
-                    { label: "CREATOR", width: "auto" },
-                    { label: "PLATFORM", width: 140 },
-                    { label: "FOLLOWERS", width: 110 },
-                    { label: "ENGAGEMENT", width: 120 },
+                    { label: "CREATOR", width: "auto" as const },
+                    { label: "PLATFORM", width: 130 },
+                    { label: "FOLLOWERS", width: 100 },
+                    { label: "ENGAGEMENT", width: 110 },
                     { label: "TRUST SCORE", width: 130 },
-                    { label: "STATUS", width: 120 },
-                    { label: "TAGS", width: 160 },
-                    { label: "", width: 48 },
+                    { label: "NICHE", width: 120 },
+                    { label: "LOCATION", width: 120 },
                   ].map(({ label, width }) => (
                     <th
                       key={label}
@@ -1090,20 +1200,10 @@ export default function CRMPage() {
                   ))}
                 </tr>
               </thead>
-
               <tbody>
-                {filtered.length === 0 && (
+                {filtered.length === 0 && search && (
                   <tr>
-                    <td
-                      colSpan={9}
-                      style={{
-                        textAlign: "center",
-                        padding: "48px 20px",
-                        color: "#2d3748",
-                        fontSize: 12,
-                        fontFamily: "'DM Mono', monospace",
-                      }}
-                    >
+                    <td colSpan={8} style={{ textAlign: "center", padding: "48px 20px", color: "#2d3748", fontSize: 12, fontFamily: "'DM Mono', monospace" }}>
                       No creators match your search
                     </td>
                   </tr>
@@ -1125,11 +1225,7 @@ export default function CRMPage() {
                       key={creator.id}
                       onMouseEnter={() => setHoveredRow(creator.id)}
                       onMouseLeave={() => setHoveredRow(null)}
-                      style={{
-                        background: rowBg,
-                        borderBottom: "1px solid #1e2535",
-                        transition: "background 0.1s",
-                      }}
+                      style={{ background: rowBg, borderBottom: "1px solid #1e2535", transition: "background 0.1s" }}
                     >
                       {/* Checkbox */}
                       <td style={{ padding: "10px 12px", width: 40 }}>
@@ -1144,45 +1240,38 @@ export default function CRMPage() {
                       {/* Creator */}
                       <td style={{ padding: "10px 12px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          {/* Avatar */}
-                          <div
-                            style={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              background: creator.avatarColor,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: 11,
-                              fontFamily: "'Syne', sans-serif",
-                              fontWeight: 700,
-                              color: "#fff",
-                              flexShrink: 0,
-                            }}
-                          >
-                            {creator.avatarInitials}
-                          </div>
-                          <div>
+                          {creator.avatarUrl ? (
+                            <img
+                              src={creator.avatarUrl}
+                              alt={creator.displayName}
+                              style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                            />
+                          ) : (
                             <div
                               style={{
-                                fontSize: 13,
-                                fontFamily: "'DM Sans', sans-serif",
-                                fontWeight: 600,
-                                color: "#e2e8f0",
-                                whiteSpace: "nowrap",
+                                width: 32,
+                                height: 32,
+                                borderRadius: "50%",
+                                background: getAvatarColor(creator.displayName || creator.handle),
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: 11,
+                                fontFamily: "'Syne', sans-serif",
+                                fontWeight: 700,
+                                color: "#fff",
+                                flexShrink: 0,
                               }}
                             >
-                              {creator.name}
+                              {getInitials(creator.displayName || creator.handle)}
                             </div>
-                            <div
-                              style={{
-                                fontSize: 10,
-                                fontFamily: "'DM Mono', monospace",
-                                color: "#4a5568",
-                              }}
-                            >
-                              {creator.handle}
+                          )}
+                          <div>
+                            <div style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: "#e2e8f0", whiteSpace: "nowrap" }}>
+                              {creator.displayName || creator.handle}
+                            </div>
+                            <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+                              {creator.handle.startsWith("@") ? creator.handle : `@${creator.handle}`}
                             </div>
                           </div>
                         </div>
@@ -1195,15 +1284,8 @@ export default function CRMPage() {
 
                       {/* Followers */}
                       <td style={{ padding: "10px 12px" }}>
-                        <span
-                          style={{
-                            fontSize: 13,
-                            fontFamily: "'Syne', sans-serif",
-                            fontWeight: 700,
-                            color: "#e2e8f0",
-                          }}
-                        >
-                          {creator.followers}
+                        <span style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>
+                          {formatFollowers(creator.followerCount)}
                         </span>
                       </td>
 
@@ -1213,15 +1295,12 @@ export default function CRMPage() {
                           style={{
                             fontSize: 12,
                             fontFamily: "'DM Mono', monospace",
-                            color:
-                              creator.engagementRaw >= 7
-                                ? "#10b981"
-                                : creator.engagementRaw >= 4
-                                ? "#f59e0b"
-                                : "#94a3b8",
+                            color: creator.engagementRate !== null
+                              ? (creator.engagementRate || 0) >= 7 ? "#10b981" : (creator.engagementRate || 0) >= 4 ? "#f59e0b" : "#94a3b8"
+                              : "#2d3748",
                           }}
                         >
-                          {creator.engagement}
+                          {creator.engagementRate !== null ? `${creator.engagementRate}%` : "\u2014"}
                         </span>
                       </td>
 
@@ -1230,56 +1309,26 @@ export default function CRMPage() {
                         <TrustBar score={creator.trustScore} />
                       </td>
 
-                      {/* Status */}
+                      {/* Niche */}
                       <td style={{ padding: "10px 12px" }}>
-                        <StatusBadge status={creator.status} />
+                        {creator.niche ? (
+                          <span style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", background: "#111827", border: "1px solid #1e2535", padding: "2px 6px", borderRadius: 3, whiteSpace: "nowrap" }}>
+                            {creator.niche}
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: 10, color: "#2d3748" }}>{"\u2014"}</span>
+                        )}
                       </td>
 
-                      {/* Tags */}
+                      {/* Location */}
                       <td style={{ padding: "10px 12px" }}>
-                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                          {creator.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              style={{
-                                fontSize: 9,
-                                fontFamily: "'DM Mono', monospace",
-                                color: "#4a5568",
-                                background: "#111827",
-                                border: "1px solid #1e2535",
-                                padding: "2px 6px",
-                                borderRadius: 3,
-                                whiteSpace: "nowrap",
-                              }}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-
-                      {/* Actions */}
-                      <td style={{ padding: "10px 12px" }}>
-                        <button
-                          style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: 6,
-                            border: "1px solid #1e2535",
-                            background: isHovered ? "#0a0d14" : "transparent",
-                            color: "#4a5568",
-                            fontSize: 16,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                            padding: 0,
-                            transition: "all 0.15s",
-                          }}
-                          title="More actions"
-                        >
-                          ···
-                        </button>
+                        {creator.location ? (
+                          <span style={{ fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: "#4a5568", whiteSpace: "nowrap" }}>
+                            {creator.location}
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: 10, color: "#2d3748" }}>{"\u2014"}</span>
+                        )}
                       </td>
                     </tr>
                   );
@@ -1289,7 +1338,7 @@ export default function CRMPage() {
           )}
         </div>
 
-        {/* ── Footer / Pagination strip ────────────────────────────────── */}
+        {/* ── Footer ──────────────────────────────────────────────────── */}
         <div
           style={{
             borderTop: "1px solid #1e2535",
@@ -1302,33 +1351,47 @@ export default function CRMPage() {
           }}
         >
           <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#2d3748" }}>
-            {filtered.length} of 47 creators
+            {filtered.length} of {totalCreators} creator{totalCreators !== 1 ? "s" : ""}
           </span>
-          <div style={{ display: "flex", gap: 6 }}>
-            {["←", "1", "2", "3", "→"].map((label, i) => (
-              <button
-                key={i}
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 6,
-                  border: "1px solid #1e2535",
-                  background: label === "1" ? "rgba(6,182,212,0.1)" : "transparent",
-                  color: label === "1" ? "#06b6d4" : "#4a5568",
-                  fontSize: 11,
-                  fontFamily: "'DM Mono', monospace",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          {activeList !== "all" && (
+            <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+              {lists.find((l) => l.id === activeList)?.name || ""}
+            </span>
+          )}
         </div>
       </div>
+
+      {/* ── Modals ─────────────────────────────────────────────────────── */}
+
+      {/* Create List Modal */}
+      <ListModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateList}
+        initialData={null}
+        isSubmitting={isSubmitting}
+        title="Create New List"
+      />
+
+      {/* Edit List Modal */}
+      <ListModal
+        isOpen={!!editingList}
+        onClose={() => setEditingList(null)}
+        onSubmit={handleEditList}
+        initialData={editingList ? { name: editingList.name, description: editingList.description, color: editingList.color } : null}
+        isSubmitting={isSubmitting}
+        title="Edit List"
+      />
+
+      {/* Delete List Modal */}
+      {deletingList && (
+        <DeleteListModal
+          listName={deletingList.name}
+          onConfirm={handleDeleteList}
+          onCancel={() => setDeletingList(null)}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 }

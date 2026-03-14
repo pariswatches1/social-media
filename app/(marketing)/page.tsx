@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
 /* ── NAV DROPDOWN DATA ──────────────────────────────── */
@@ -34,58 +34,69 @@ const PLATFORMS = [
 /* ── PRICING TIERS ────────────────────────────────────────── */
 const TIERS = [
   {
-    name: "Starter",
+    name: "Free",
+    price: { monthly: 0, annual: 0 },
+    tagline: "Get started — no credit card required",
+    highlight: false,
+    planKey: "FREE",
+    features: [
+      "3 analyses / month",
+      "1 platform per generation",
+      "1 content variation",
+      "Basic virality scoring",
+      "Content library (10 saves)",
+    ],
+  },
+  {
+    name: "Creator",
     price: { monthly: 29, annual: 23 },
     tagline: "Perfect for solo creators & freelancers",
     highlight: false,
+    planKey: "CREATOR",
     features: [
-      "3 social accounts",
-      "50 AI-generated posts/mo",
-      "Basic analytics dashboard",
+      "25 analyses / month",
+      "All 9 platforms",
+      "2 A/B variations",
+      "Virality scoring",
+      "Creator discovery (100 results)",
+      "Brand voice profiles",
       "Content calendar",
-      "Email support",
+      "Unlimited library saves",
     ],
   },
   {
     name: "Pro",
-    price: { monthly: 79, annual: 63 },
+    price: { monthly: 99, annual: 79 },
     tagline: "For growing brands & agencies",
     highlight: true,
+    planKey: "PRO",
     features: [
-      "10 social accounts",
-      "Unlimited AI posts",
-      "Advanced analytics + exports",
-      "Virality scoring",
-      "Auto-publishing",
-      "Priority support",
+      "Unlimited analyses",
+      "All 9 platforms",
+      "3 A/B/C variations",
+      "Advanced virality scoring",
+      "Creator discovery (unlimited)",
+      "CRM & outreach tools",
+      "Campaign management",
+      "SIGNAL Inbox",
     ],
   },
   {
-    name: "Business",
-    price: { monthly: 149, annual: 119 },
+    name: "Agency",
+    price: { monthly: 399, annual: 319 },
     tagline: "For scaling teams & power users",
     highlight: false,
+    planKey: "AGENCY",
     features: [
-      "25 social accounts",
-      "Unlimited AI posts",
-      "Team collaboration (5 seats)",
+      "Everything in Pro",
+      "10 team seats",
+      "Unlimited brand profiles",
+      "Priority AI processing",
+      "Post approval workflows",
       "White-label reports",
-      "CRM + Outreach tools",
+      "Bulk outreach automation",
       "Dedicated account manager",
-    ],
-  },
-  {
-    name: "Enterprise",
-    price: { monthly: null, annual: null },
-    tagline: "Custom solutions for large organisations",
-    highlight: false,
-    features: [
-      "Unlimited accounts & seats",
-      "Custom AI model fine-tuning",
-      "SSO / SAML login",
-      "SLA & uptime guarantee",
-      "Custom integrations",
-      "Dedicated success team",
+      "API access",
     ],
   },
 ];
@@ -143,12 +154,23 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [navOpen, setNavOpen] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const handleEmailSubmit = () => {
+    if (emailRef.current && emailRef.current.value.trim()) {
+      setEmailSubmitted(true);
+      emailRef.current.value = "";
+      setTimeout(() => setEmailSubmitted(false), 4000);
+    }
+  };
 
   return (
     <>
@@ -208,6 +230,21 @@ export default function HomePage() {
                       transition:border-color .2s; }
         .hero-input:focus { border-color:rgba(6,182,212,.5); }
         .hero-input::placeholder { color:var(--dim); }
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+          .desktop-nav { display: none !important; }
+          .mobile-menu-btn { display: flex !important; }
+          .footer-grid { grid-template-columns: 1fr 1fr !important; }
+          .pricing-grid { grid-template-columns: 1fr !important; }
+          .features-grid { grid-template-columns: 1fr !important; }
+          .testimonials-grid { grid-template-columns: 1fr !important; }
+          .stats-row { flex-direction: column !important; gap: 12px !important; }
+          .nav-right { display: none !important; }
+        }
+        @media (min-width: 769px) {
+          .mobile-menu-btn { display: none !important; }
+          .mobile-menu { display: none !important; }
+        }
       `}</style>
 
       {/* ════ NAVBAR ════════════════════════════════════════════════════════════ */}
@@ -225,8 +262,16 @@ export default function HomePage() {
           <span style={{ color: "#06b6d4" }}>.</span>
         </div>
 
+        {/* Mobile hamburger */}
+        <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{
+          background: "transparent", border: "none", color: "#e2e8f0", fontSize: 22,
+          marginLeft: "auto", padding: 8, alignItems: "center", justifyContent: "center",
+        }}>
+          {mobileMenuOpen ? "✕" : "☰"}
+        </button>
+
         {/* Nav links */}
-        <div style={{ display: "flex", alignItems: "center", gap: 4, flex: 1 }}>
+        <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: 4, flex: 1 }}>
           {["Platform", "Solutions", "Pricing", "Free Tools"].map((item) => {
             const hasDropdown = item === "Platform" || item === "Solutions";
             const isOpen = navOpen === item;
@@ -295,7 +340,7 @@ export default function HomePage() {
         </div>
 
         {/* Right CTAs */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="nav-right" style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <Link href="/sign-in" style={{ padding: "8px 16px", fontSize: 13, color: "#94a3b8", transition: "color .2s" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#94a3b8")}>
@@ -306,6 +351,55 @@ export default function HomePage() {
           </Link>
         </div>
       </nav>
+
+      {/* MOBILE MENU */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu" style={{
+          position: "fixed", top: 64, left: 0, right: 0, bottom: 0, zIndex: 99,
+          background: "rgba(5,8,17,.96)", backdropFilter: "blur(16px)",
+          padding: "24px 24px", overflowY: "auto",
+        }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {["Platform", "Solutions", "Pricing", "Free Tools"].map((item) => {
+              if (item === "Pricing") {
+                return (
+                  <a key={item} href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.querySelector("#pricing")?.scrollIntoView({ behavior: "smooth" }); }}
+                    style={{ padding: "12px 16px", fontSize: 15, color: "#e2e8f0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+                    {item}
+                  </a>
+                );
+              }
+              if (item === "Free Tools") {
+                return (
+                  <Link key={item} href="/tools" onClick={() => setMobileMenuOpen(false)}
+                    style={{ padding: "12px 16px", fontSize: 15, color: "#e2e8f0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+                    {item}
+                  </Link>
+                );
+              }
+              const links = item === "Platform" ? PLATFORM_LINKS : SOLUTIONS_LINKS;
+              return (
+                <div key={item}>
+                  <div style={{ padding: "12px 16px", fontSize: 15, color: "#e2e8f0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>{item}</div>
+                  <div style={{ paddingLeft: 16 }}>
+                    {links.map((l) => (
+                      <a key={l.num} href={l.href} onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{ display: "block", padding: "8px 16px", fontSize: 13, color: "#94a3b8" }}>
+                        {l.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 24, padding: "0 16px" }}>
+            <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)} style={{ padding: "12px", textAlign: "center", fontSize: 14, color: "#94a3b8", border: "1px solid rgba(255,255,255,.12)", borderRadius: 10 }}>Log in</Link>
+            <Link href="/sign-up" onClick={() => setMobileMenuOpen(false)} className="cta-btn" style={{ textAlign: "center" }}>Start free trial</Link>
+          </div>
+        </div>
+      )}
+
 
       {/* ════ HERO ══════════════════════════════════════════════════════════════ */}
       <section id="hero" style={{
@@ -350,8 +444,8 @@ export default function HomePage() {
           <Link href="/sign-up" className="cta-btn">
             Start free — 14-day trial
           </Link>
-          <button className="ghost-btn">
-            Watch 2-min demo ▶
+          <button className="ghost-btn" onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })}>
+            Explore features ↓
           </button>
         </div>
 
@@ -363,9 +457,9 @@ export default function HomePage() {
         <div className="anim-fadeUp d4" style={{
           display: "flex", gap: 10, marginTop: 36, width: "100%", maxWidth: 480, flexWrap: "wrap",
         }}>
-          <input className="hero-input" placeholder="Enter your work email" type="email" />
-          <button className="cta-btn" style={{ whiteSpace: "nowrap", padding: "14px 24px" }}>
-            Get early access
+          <input ref={emailRef} className="hero-input" placeholder="Enter your work email" type="email" onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()} />
+          <button className="cta-btn" onClick={handleEmailSubmit} style={{ whiteSpace: "nowrap", padding: "14px 24px" }}>
+            {emailSubmitted ? "Thank you!" : "Get early access"}
           </button>
         </div>
 
@@ -427,7 +521,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
+        <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
           {[
             {
               icon: "🧠",
@@ -547,16 +641,14 @@ export default function HomePage() {
               <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>{tier.name}</div>
               <div style={{ fontSize: 12, color: "#4a5568", marginBottom: 20, fontFamily: "'DM Mono',monospace" }}>{tier.tagline}</div>
 
-              {tier.price.monthly !== null ? (
-                <div style={{ marginBottom: 24 }}>
-                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 900, fontSize: 42 }}>
-                    ${annual ? tier.price.annual : tier.price.monthly}
-                  </span>
-                  <span style={{ fontSize: 13, color: "#4a5568", marginLeft: 4 }}>/mo</span>
-                </div>
-              ) : (
-                <div style={{ fontSize: 28, fontFamily: "'Syne',sans-serif", fontWeight: 800, marginBottom: 24 }}>Custom</div>
-              )}
+              <div style={{ marginBottom: 24 }}>
+                <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 900, fontSize: 42 }}>
+                  {tier.price.monthly === 0 ? "$0" : `$${annual ? tier.price.annual : tier.price.monthly}`}
+                </span>
+                <span style={{ fontSize: 13, color: "#4a5568", marginLeft: 4 }}>
+                  {tier.price.monthly === 0 ? "forever" : "/mo"}
+                </span>
+              </div>
 
               <Link href="/sign-up" className="cta-btn" style={{
                 display: "block", textAlign: "center", width: "100%",
@@ -566,7 +658,7 @@ export default function HomePage() {
                 color: tier.highlight ? "#fff" : "#94a3b8",
                 borderRadius: 10,
               }}>
-                {tier.price.monthly !== null ? "Start free trial" : "Contact sales"}
+                {tier.price.monthly === 0 ? "Get started free" : "Start free trial"}
               </Link>
 
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -589,7 +681,7 @@ export default function HomePage() {
           <h2 className="sec-head">Loved by 2,400+ brands</h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20 }}>
+        <div className="testimonials-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20 }}>
           {TESTIMONIALS.map((t) => (
             <div key={t.name} className="glass" style={{ padding: 24 }}>
               <div style={{ fontSize: 20, color: "#f59e0b", marginBottom: 12 }}>★★★★★</div>
@@ -666,13 +758,13 @@ export default function HomePage() {
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/sign-up" className="cta-btn">Start free — 14 days</Link>
-          <button className="ghost-btn">Book a demo</button>
+          <button className="ghost-btn" onClick={() => document.querySelector("#faq")?.scrollIntoView({ behavior: "smooth" })}>Learn more</button>
         </div>
       </section>
 
       {/* ════ FOOTER ════════════════════════════════════════════════════════════ */}
       <footer style={{ padding: "60px 40px 40px", maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{
+        <div className="footer-grid" style={{
           display: "grid", gridTemplateColumns: "2fr repeat(4,1fr)", gap: 40, marginBottom: 48,
         }}>
           {/* Brand column */}

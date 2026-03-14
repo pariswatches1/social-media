@@ -35,9 +35,11 @@ export async function POST(request: NextRequest) {
         const subscription = await getStripe().subscriptions.retrieve(subscriptionId);
         const priceId = subscription.items.data[0]?.price.id;
 
-        let plan: "PRO" | "AGENCY" = "PRO";
+        let plan: "CREATOR" | "PRO" | "AGENCY" = "PRO";
         if (priceId === process.env.STRIPE_AGENCY_PRICE_ID) {
           plan = "AGENCY";
+        } else if (priceId === process.env.STRIPE_CREATOR_PRICE_ID) {
+          plan = "CREATOR";
         }
 
         // Find user by Stripe customer ID and update plan

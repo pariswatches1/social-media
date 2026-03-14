@@ -69,7 +69,7 @@ const MOCK_CREATORS: Creator[] = [
     engagement: "7.3%",
     engagementRaw: 7.3,
     trustScore: 95,
-    status: "VIP",
+    status: "ACTIVE",
     tags: ["fitness", "wellness"],
     lists: ["vip-partners", "instagram-picks"],
     avatarColor: "#d97706",
@@ -1004,77 +1004,85 @@ export default function CRMPage() {
               padding: "10px 20px 6px",
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              borderBottom: "1px solid #1e2535",
+              gap: 6,
             }}
           >
-            <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
-              {filtered.length} creators
+            <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+              SHOWING {filtered.length} CREATOR{filtered.length !== 1 ? "S" : ""}
             </span>
-            {activeList !== "all" && (
-              <>
-                <span style={{ color: "#1e2535" }}>·</span>
-                <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#06b6d4" }}>
-                  {LISTS.find((l) => l.id === activeList)?.label}
-                </span>
-              </>
+            {(search || activeList !== "all") && (
+              <button
+                onClick={() => { setSearch(""); setActiveList("all"); }}
+                style={{
+                  fontSize: 10,
+                  fontFamily: "'DM Mono', monospace",
+                  color: "#06b6d4",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  letterSpacing: 0.3,
+                }}
+              >
+                · CLEAR FILTERS
+              </button>
             )}
           </div>
 
-          {/* Card or List view */}
-          {view === "card" ? (
-            <CardView />
-          ) : (
+          {/* Card view */}
+          {view === "card" && <CardView />}
+
+          {/* List / Table view */}
+          {view === "list" && (
             <table
               style={{
                 width: "100%",
                 borderCollapse: "collapse",
-                tableLayout: "fixed",
+                fontSize: 12,
               }}
             >
-              {/* Table head */}
               <thead>
                 <tr
                   style={{
-                    borderBottom: "1px solid #1e2535",
                     background: "#0a0d14",
+                    borderBottom: "1px solid #1e2535",
                     position: "sticky",
                     top: 0,
-                    zIndex: 10,
+                    zIndex: 2,
                   }}
                 >
                   {/* Checkbox */}
-                  <th style={{ width: 36, padding: "10px 8px 10px 20px" }}>
+                  <th style={{ width: 40, padding: "10px 12px" }}>
                     <input
                       type="checkbox"
                       checked={allChecked}
-                      ref={(el) => {
-                        if (el) el.indeterminate = someChecked && !allChecked;
-                      }}
+                      ref={(el) => { if (el) el.indeterminate = someChecked && !allChecked; }}
                       onChange={toggleAll}
-                      style={{ accentColor: "#06b6d4", cursor: "pointer" }}
+                      style={{ cursor: "pointer", accentColor: "#06b6d4", width: 13, height: 13 }}
                     />
                   </th>
                   {[
-                    { label: "CREATOR", width: "22%" },
-                    { label: "PLATFORM", width: "13%" },
-                    { label: "FOLLOWERS", width: "11%" },
-                    { label: "ENG. RATE", width: "10%" },
-                    { label: "TRUST", width: "12%" },
-                    { label: "STATUS", width: "12%" },
-                    { label: "TAGS", width: "20%" },
+                    { label: "CREATOR", width: "auto" },
+                    { label: "PLATFORM", width: 140 },
+                    { label: "FOLLOWERS", width: 110 },
+                    { label: "ENGAGEMENT", width: 120 },
+                    { label: "TRUST SCORE", width: 130 },
+                    { label: "STATUS", width: 120 },
+                    { label: "TAGS", width: 160 },
+                    { label: "", width: 48 },
                   ].map(({ label, width }) => (
                     <th
                       key={label}
                       style={{
-                        width,
-                        padding: "10px 8px",
                         textAlign: "left",
+                        padding: "10px 12px",
                         fontSize: 9,
                         fontFamily: "'DM Mono', monospace",
                         color: "#4a5568",
                         letterSpacing: 1.5,
-                        fontWeight: 400,
+                        fontWeight: 600,
+                        width: width !== "auto" ? width : undefined,
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {label}
@@ -1083,178 +1091,235 @@ export default function CRMPage() {
                 </tr>
               </thead>
 
-              {/* Table body */}
               <tbody>
-                {filtered.map((creator) => (
-                  <tr
-                    key={creator.id}
-                    onClick={() => toggleOne(creator.id)}
-                    onMouseEnter={() => setHoveredRow(creator.id)}
-                    onMouseLeave={() => setHoveredRow(null)}
-                    style={{
-                      borderBottom: "1px solid #1e2535",
-                      background: selectedIds.has(creator.id)
-                        ? "rgba(6,182,212,0.04)"
-                        : hoveredRow === creator.id
-                        ? "rgba(255,255,255,0.015)"
-                        : "transparent",
-                      cursor: "pointer",
-                      transition: "background 0.1s",
-                    }}
-                  >
-                    {/* Checkbox */}
-                    <td style={{ padding: "12px 8px 12px 20px" }}>
-                      <input
-                        type="checkbox"
-                        checked={selectedIds.has(creator.id)}
-                        onChange={() => toggleOne(creator.id)}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ accentColor: "#06b6d4", cursor: "pointer" }}
-                      />
+                {filtered.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      style={{
+                        textAlign: "center",
+                        padding: "48px 20px",
+                        color: "#2d3748",
+                        fontSize: 12,
+                        fontFamily: "'DM Mono', monospace",
+                      }}
+                    >
+                      No creators match your search
                     </td>
+                  </tr>
+                )}
 
-                    {/* Creator */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div
+                {filtered.map((creator, idx) => {
+                  const isSelected = selectedIds.has(creator.id);
+                  const isHovered = hoveredRow === creator.id;
+                  const rowBg = isSelected
+                    ? "rgba(6,182,212,0.05)"
+                    : isHovered
+                    ? "rgba(255,255,255,0.02)"
+                    : idx % 2 === 0
+                    ? "#060810"
+                    : "#0a0d14";
+
+                  return (
+                    <tr
+                      key={creator.id}
+                      onMouseEnter={() => setHoveredRow(creator.id)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                      style={{
+                        background: rowBg,
+                        borderBottom: "1px solid #1e2535",
+                        transition: "background 0.1s",
+                      }}
+                    >
+                      {/* Checkbox */}
+                      <td style={{ padding: "10px 12px", width: 40 }}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleOne(creator.id)}
+                          style={{ cursor: "pointer", accentColor: "#06b6d4", width: 13, height: 13 }}
+                        />
+                      </td>
+
+                      {/* Creator */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          {/* Avatar */}
+                          <div
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: "50%",
+                              background: creator.avatarColor,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 11,
+                              fontFamily: "'Syne', sans-serif",
+                              fontWeight: 700,
+                              color: "#fff",
+                              flexShrink: 0,
+                            }}
+                          >
+                            {creator.avatarInitials}
+                          </div>
+                          <div>
+                            <div
+                              style={{
+                                fontSize: 13,
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontWeight: 600,
+                                color: "#e2e8f0",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {creator.name}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: 10,
+                                fontFamily: "'DM Mono', monospace",
+                                color: "#4a5568",
+                              }}
+                            >
+                              {creator.handle}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Platform */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <PlatformBadge platform={creator.platform} />
+                      </td>
+
+                      {/* Followers */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <span
                           style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: "50%",
-                            background: creator.avatarColor,
+                            fontSize: 13,
+                            fontFamily: "'Syne', sans-serif",
+                            fontWeight: 700,
+                            color: "#e2e8f0",
+                          }}
+                        >
+                          {creator.followers}
+                        </span>
+                      </td>
+
+                      {/* Engagement */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <span
+                          style={{
+                            fontSize: 12,
+                            fontFamily: "'DM Mono', monospace",
+                            color:
+                              creator.engagementRaw >= 7
+                                ? "#10b981"
+                                : creator.engagementRaw >= 4
+                                ? "#f59e0b"
+                                : "#94a3b8",
+                          }}
+                        >
+                          {creator.engagement}
+                        </span>
+                      </td>
+
+                      {/* Trust Score */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <TrustBar score={creator.trustScore} />
+                      </td>
+
+                      {/* Status */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <StatusBadge status={creator.status} />
+                      </td>
+
+                      {/* Tags */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                          {creator.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              style={{
+                                fontSize: 9,
+                                fontFamily: "'DM Mono', monospace",
+                                color: "#4a5568",
+                                background: "#111827",
+                                border: "1px solid #1e2535",
+                                padding: "2px 6px",
+                                borderRadius: 3,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td style={{ padding: "10px 12px" }}>
+                        <button
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: 6,
+                            border: "1px solid #1e2535",
+                            background: isHovered ? "#0a0d14" : "transparent",
+                            color: "#4a5568",
+                            fontSize: 16,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: 10,
-                            fontFamily: "'Syne', sans-serif",
-                            fontWeight: 700,
-                            color: "#fff",
-                            flexShrink: 0,
+                            cursor: "pointer",
+                            padding: 0,
+                            transition: "all 0.15s",
                           }}
+                          title="More actions"
                         >
-                          {creator.avatarInitials}
-                        </div>
-                        <div style={{ minWidth: 0 }}>
-                          <div
-                            style={{
-                              fontSize: 12,
-                              fontFamily: "'Syne', sans-serif",
-                              fontWeight: 700,
-                              color: "#e2e8f0",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {creator.name}
-                          </div>
-                          <div style={{ fontSize: 10, color: "#4a5568", fontFamily: "'DM Mono', monospace" }}>
-                            {creator.handle}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Platform */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <PlatformBadge platform={creator.platform} />
-                    </td>
-
-                    {/* Followers */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <span
-                        style={{
-                          fontSize: 12,
-                          fontFamily: "'DM Mono', monospace",
-                          color: "#e2e8f0",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {creator.followers}
-                      </span>
-                    </td>
-
-                    {/* Engagement */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <span
-                        style={{
-                          fontSize: 12,
-                          fontFamily: "'DM Mono', monospace",
-                          color: "#06b6d4",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {creator.engagement}
-                      </span>
-                    </td>
-
-                    {/* Trust */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <TrustBar score={creator.trustScore} />
-                    </td>
-
-                    {/* Status */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <StatusBadge status={creator.status} />
-                    </td>
-
-                    {/* Tags */}
-                    <td style={{ padding: "12px 8px" }}>
-                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {creator.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            style={{
-                              fontSize: 9,
-                              fontFamily: "'DM Mono', monospace",
-                              color: "#4a5568",
-                              background: "#111827",
-                              padding: "2px 6px",
-                              borderRadius: 3,
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          ···
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
         </div>
 
-        {/* ── Footer ──────────────────────────────────────────────────── */}
+        {/* ── Footer / Pagination strip ────────────────────────────────── */}
         <div
           style={{
+            borderTop: "1px solid #1e2535",
+            padding: "10px 20px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "10px 20px",
-            borderTop: "1px solid #1e2535",
-            background: "#0a0d14",
+            background: "#060810",
             flexShrink: 0,
           }}
         >
-          <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
-            Showing {filtered.length} of {MOCK_CREATORS.length} creators
+          <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "#2d3748" }}>
+            {filtered.length} of 47 creators
           </span>
-
-          {/* Pagination placeholder */}
-          <div style={{ display: "flex", gap: 4 }}>
-            {["prev", "1", "2", "3", "next"].map((label) => (
+          <div style={{ display: "flex", gap: 6 }}>
+            {["←", "1", "2", "3", "→"].map((label, i) => (
               <button
-                key={label}
+                key={i}
                 style={{
-                  padding: "4px 10px",
-                  borderRadius: 4,
-                  border: label === "1" ? "1px solid rgba(6,182,212,0.4)" : "1px solid #1e2535",
+                  width: 28,
+                  height: 28,
+                  borderRadius: 6,
+                  border: "1px solid #1e2535",
                   background: label === "1" ? "rgba(6,182,212,0.1)" : "transparent",
                   color: label === "1" ? "#06b6d4" : "#4a5568",
                   fontSize: 11,
                   fontFamily: "'DM Mono', monospace",
                   cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
                   justifyContent: "center",
                 }}
               >

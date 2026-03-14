@@ -263,7 +263,10 @@ export default function HomePage() {
                 {/* Dropdown */}
                 {hasDropdown && isOpen && (
                   <div style={{
-                    position: "absolute", top: "calc(100% + 8px)", left: 0,
+                    position: "absolute", top: "100%", left: 0,
+                    paddingTop: 8,
+                  }}>
+                  <div style={{
                     background: "#0a0e1c", border: "1px solid rgba(255,255,255,.08)",
                     borderRadius: 12, padding: 8, minWidth: 260,
                     boxShadow: "0 16px 48px rgba(0,0,0,.5)",
@@ -283,6 +286,7 @@ export default function HomePage() {
                         </div>
                       </a>
                     ))}
+                  </div>
                   </div>
                 )}
               </div>

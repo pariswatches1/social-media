@@ -11,12 +11,7 @@ interface ToolLayoutProps {
   seoContent?: React.ReactNode;
 }
 
-const platformColors: Record<string, string> = {
-  instagram: "#E1306C",
-  youtube: "#FF0000",
-  general: "#0066FF",
-};
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function ToolLayout({ badge, title, subtitle, platform, children, seoContent }: ToolLayoutProps) {
   return (
     <div data-tool-page style={{ minHeight: "100vh", background: "linear-gradient(180deg, #00FFFF 0%, #0066FF 100%)", color: "#0a1e5e" }}>
@@ -63,7 +58,7 @@ export default function ToolLayout({ badge, title, subtitle, platform, children,
 
       {/* Footer */}
       <footer style={{ borderTop: "1px solid rgba(10,30,94,0.15)", padding: "24px 32px", textAlign: "center" }}>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(10,30,94,0.5)" }}>© 2026 SIGNAL. Free tools for creators and marketers.</p>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(10,30,94,0.5)" }}>© {new Date().getFullYear()} SIGNAL. Free tools for creators and marketers.</p>
       </footer>
     </div>
   );

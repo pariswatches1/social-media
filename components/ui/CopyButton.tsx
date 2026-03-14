@@ -5,10 +5,14 @@ import { useState } from "react";
 export default function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
-  const copy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* Clipboard write failed, don't show copied state */
+    }
   };
 
   return (

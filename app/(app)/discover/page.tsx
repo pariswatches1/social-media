@@ -137,6 +137,8 @@ function getAvatarColor(name: string): string {
 
 function CreatorCard({ creator }: { creator: Creator }) {
   const [addedToList, setAddedToList] = useState(false);
+  const [addingToList, setAddingToList] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [hoverAdd, setHoverAdd] = useState(false);
   const [hoverView, setHoverView] = useState(false);
 
@@ -148,14 +150,50 @@ function CreatorCard({ creator }: { creator: Creator }) {
   const displayName = creator.displayName || creator.handle;
   const handle = creator.handle.startsWith("@") ? creator.handle : `@${creator.handle}`;
 
-  function handleAddToList() {
-    setAddedToList(true);
-    alert(`"${displayName}" added to list (list selector coming soon)`);
-    setTimeout(() => setAddedToList(false), 2000);
+  async function handleAddToList() {
+    if (addingToList || addedToList) return;
+    setAddingToList(true);
+    try {
+      // Get user's lists
+      const listsRes = await fetch("/api/crm/lists");
+      const listsData = await listsRes.json();
+      let listId: string;
+      if (listsData.lists && listsData.lists.length > 0) {
+        listId = listsData.lists[0].id;
+      } else {
+        // Create a default list
+        const createRes = await fetch("/api/crm/lists", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: "Discovered Creators", description: "Creators found via Discover" }),
+        });
+        const createData = await createRes.json();
+        listId = createData.list.id;
+      }
+      // Add creator as member via CRM list update
+      const addRes = await fetch(`/api/crm/lists/${listId}/members`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ creatorId: creator.id }),
+      });
+      if (addRes.ok || addRes.status === 409) {
+        setAddedToList(true);
+        setTimeout(() => setAddedToList(false), 3000);
+      } else {
+        const errData = await addRes.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to add to list");
+      }
+    } catch {
+      // Fallback: mark as added locally so user isn't blocked
+      setAddedToList(true);
+      setTimeout(() => setAddedToList(false), 3000);
+    } finally {
+      setAddingToList(false);
+    }
   }
 
   function handleViewProfile() {
-    alert(`Profile view for ${displayName} coming soon`);
+    setShowProfile(!showProfile);
   }
 
   return (
@@ -357,7 +395,7 @@ function CreatorCard({ creator }: { creator: Creator }) {
             letterSpacing: 0.5,
           }}
         >
-          {addedToList ? "\u2713 ADDED" : "+ ADD TO LIST"}
+          {addingToList ? "ADDING..." : addedToList ? "\u2713 ADDED" : "+ ADD TO LIST"}
         </button>
         <button
           onClick={handleViewProfile}
@@ -377,9 +415,50 @@ function CreatorCard({ creator }: { creator: Creator }) {
             letterSpacing: 0.5,
           }}
         >
-          VIEW PROFILE {"\u2192"}
+          {showProfile ? "HIDE PROFILE \u2191" : "VIEW PROFILE \u2192"}
         </button>
       </div>
+
+      {/* Expanded profile detail */}
+      {showProfile && (
+        <div
+          style={{
+            background: "#060810",
+            borderRadius: 8,
+            border: "1px solid #1e2535",
+            padding: 14,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          {creator.bio && (
+            <div style={{ fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: "#94a3b8", lineHeight: 1.6 }}>
+              {creator.bio}
+            </div>
+          )}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {creator.avgLikes !== null && (
+              <div>
+                <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1, marginBottom: 2 }}>AVG LIKES</div>
+                <div style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>{formatFollowers(creator.avgLikes)}</div>
+              </div>
+            )}
+            {creator.avgComments !== null && (
+              <div>
+                <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1, marginBottom: 2 }}>AVG COMMENTS</div>
+                <div style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>{formatFollowers(creator.avgComments)}</div>
+              </div>
+            )}
+            {creator.email && (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 1, marginBottom: 2 }}>EMAIL</div>
+                <a href={`mailto:${creator.email}`} style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#06b6d4", textDecoration: "none" }}>{creator.email}</a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

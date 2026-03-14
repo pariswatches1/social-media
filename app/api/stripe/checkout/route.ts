@@ -11,12 +11,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { plan } = body as { plan: "PRO" | "AGENCY" };
+    const { plan } = body as { plan: "CREATOR" | "PRO" | "AGENCY" };
 
-    const priceId =
-      plan === "AGENCY"
-        ? process.env.STRIPE_AGENCY_PRICE_ID
-        : process.env.STRIPE_PRO_PRICE_ID;
+    const priceMap: Record<string, string | undefined> = {
+      CREATOR: process.env.STRIPE_CREATOR_PRICE_ID,
+      PRO: process.env.STRIPE_PRO_PRICE_ID,
+      AGENCY: process.env.STRIPE_AGENCY_PRICE_ID,
+    };
+    const priceId = priceMap[plan];
 
     if (!priceId) {
       return NextResponse.json(

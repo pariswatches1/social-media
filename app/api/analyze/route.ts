@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { callClaude } from "@/lib/anthropic";
 import { checkAndIncrementUsage } from "@/lib/usage";
-import prisma from "@/lib/prisma";
+import { ensureUser } from "@/lib/ensure-user";
 import {
   fetchInstagramData,
   type InstagramData,
@@ -110,12 +110,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Ensure user exists in DB
-    await prisma.user.upsert({
-      where: { clerkId },
-      update: {},
-      create: { clerkId, email: `${clerkId}@signal.user` },
-    });
+    // Ensure user exists in DB (fetches real email from Clerk)
+    await ensureUser(clerkId);
 
     // Check usage limits
     const usage = await checkAndIncrementUsage(clerkId);
@@ -194,33 +190,37 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Fallback: Claude-only (all platforms or when Instagram API fails) ──
+    // Sanitize handle to prevent prompt injection
+    const safeHandle = handle.replace(/[^a-zA-Z0-9_.@-]/g, "").slice(0, 100);
+    const safePlatform = platform.replace(/[^a-zA-Z]/g, "").slice(0, 30);
+
     const raw = await callClaude(
-      `You are a social media intelligence analyst. Respond ONLY with valid JSON, no markdown fences.`,
-      `Analyze the ${platform} account "${handle}" and generate a realistic content intelligence report.
+      `You are a social media intelligence analyst. Respond ONLY with valid JSON, no markdown fences. Mark all estimates clearly. Never invent exact follower counts — use ranges.`,
+      `Analyze the ${safePlatform} account "${safeHandle}". Because we cannot access this platform's API directly, provide your best assessment based on what you know about this creator. Clearly label all data as estimates.
 Return JSON with this exact shape:
 {
   "profile": {
-    "handle": "${handle}",
-    "platform": "${platform}",
+    "handle": "${safeHandle}",
+    "platform": "${safePlatform}",
     "niche": "...",
-    "followerEstimate": "...",
-    "avgEngagement": "...",
+    "followerEstimate": "estimated range, e.g. 10K-50K",
+    "avgEngagement": "estimated, e.g. ~3-5%",
     "contentStyle": "..."
   },
   "outliers": [
     {
-      "title": "post title / first line",
-      "hook": "the opening hook sentence",
-      "likes": 1234,
-      "comments": 123,
-      "shares": 45,
-      "engagementRate": "4.2%",
-      "whyItWorked": "2-3 sentence analysis",
+      "title": "likely high-performing content theme",
+      "hook": "suggested opening hook",
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "engagementRate": "estimated",
+      "whyItWorked": "2-3 sentence analysis of why this type of content performs well in this niche",
       "contentType": "carousel|reel|text|image",
       "keyTactic": "short phrase"
     }
   ],
-  "contentStrategy": "2-3 sentence summary of their overall strategy",
+  "contentStrategy": "2-3 sentence summary of recommended strategy for this niche and platform",
   "contentIdeas": [
     {
       "title": "idea title",
@@ -228,11 +228,11 @@ Return JSON with this exact shape:
       "hook": "opening hook suggestion",
       "predictedEngagement": "high|medium|viral",
       "postType": "carousel|reel|text|image",
-      "viralityScore": 85
+      "viralityScore": 75
     }
   ]
 }
-Generate 4 outliers and 5 content ideas. Make it realistic and specific to their likely niche.`
+Generate 4 content themes in outliers and 5 content ideas. Base everything on platform-specific best practices for this niche.`
     );
 
     const parsed = JSON.parse(raw.replace(/```json\n?|\n?```/g, "").trim());

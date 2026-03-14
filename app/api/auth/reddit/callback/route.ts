@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=reddit_denied", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_reddit")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=reddit_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.reddit;
     const basicAuth = Buffer.from(`${getClientId("reddit")}:${getClientSecret("reddit")}`).toString("base64");
 
@@ -57,8 +63,8 @@ export async function GET(request: NextRequest) {
       accountId = profile.id || "";
       accountName = profile.name || "";
       accountAvatar = profile.icon_img?.split("?")[0] || profile.snoovatar_img || "";
-    } catch {
-      // best-effort
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Reddit OAuth] profile fetch failed:", err);
     }
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -91,7 +97,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.redirect(new URL("/settings/accounts?connected=reddit", request.url));
+    const response = NextResponse.redirect(new URL("/settings/accounts?connected=reddit", request.url));
+    response.cookies.delete("oauth_state_reddit");
+    return response;
   } catch (error) {
     console.error("[Reddit OAuth callback]", error);
     return NextResponse.redirect(new URL("/settings/accounts?error=reddit_error", request.url));

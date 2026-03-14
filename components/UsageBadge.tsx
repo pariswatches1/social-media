@@ -8,7 +8,7 @@ interface Props {
 
 export default function UsageBadge({ used, limit, plan }: Props) {
   const isUnlimited = plan === "PRO" || plan === "AGENCY";
-  const pct = isUnlimited ? 0 : (used / limit) * 100;
+  const pct = isUnlimited || limit === 0 ? 0 : (used / limit) * 100;
   const isNearLimit = !isUnlimited && pct >= 66;
   const isAtLimit = !isUnlimited && used >= limit;
 

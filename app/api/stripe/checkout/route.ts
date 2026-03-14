@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { getStripe } from "@/lib/stripe";
 import prisma from "@/lib/prisma";
+import { ensureUser } from "@/lib/ensure-user";
+
+const VALID_PLANS = ["CREATOR", "PRO", "AGENCY"] as const;
+type PaidPlan = (typeof VALID_PLANS)[number];
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +15,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { plan } = body as { plan: "CREATOR" | "PRO" | "AGENCY" };
+    const { plan } = body as { plan: string };
+
+    // Validate plan at runtime
+    if (!VALID_PLANS.includes(plan as PaidPlan)) {
+      return NextResponse.json(
+        { error: "Invalid plan. Must be CREATOR, PRO, or AGENCY." },
+        { status: 400 }
+      );
+    }
 
     const priceMap: Record<string, string | undefined> = {
       CREATOR: process.env.STRIPE_CREATOR_PRICE_ID,
@@ -22,23 +34,19 @@ export async function POST(request: NextRequest) {
 
     if (!priceId) {
       return NextResponse.json(
-        { error: "Price ID not configured" },
+        { error: "Price ID not configured for this plan" },
         { status: 500 }
       );
     }
 
-    // Get or create Stripe customer
-    let user = await prisma.user.findUnique({ where: { clerkId } });
-    if (!user) {
-      user = await prisma.user.create({
-        data: { clerkId, email: `${clerkId}@signal.user` },
-      });
-    }
+    // ensureUser fetches real email from Clerk — no fake emails
+    const user = await ensureUser(clerkId);
 
     let customerId = user.stripeCustomerId;
 
     if (!customerId) {
       const customer = await getStripe().customers.create({
+        email: user.email || undefined,
         metadata: { clerkId },
       });
       customerId = customer.id;
@@ -59,7 +67,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error("[/api/stripe/checkout]", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[/api/stripe/checkout]", error);
+    }
     return NextResponse.json(
       { error: "Failed to create checkout session" },
       { status: 500 }

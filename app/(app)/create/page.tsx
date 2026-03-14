@@ -20,7 +20,7 @@ export default function CreatePage() {
       try {
         setPrefill(JSON.parse(stored));
       } catch {
-        // ignore
+        /* JSON parse failed, ignore prefill */
       }
       sessionStorage.removeItem("signal_create_prefill");
     }

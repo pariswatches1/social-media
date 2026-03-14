@@ -24,7 +24,7 @@ const plans = [
     period: "/month",
     features: [
       "25 analyses / month",
-      "All 7 platforms",
+      "All 9 platforms",
       "2 A/B variations",
       "Virality scoring",
       "Creator discovery (100 results)",
@@ -42,7 +42,7 @@ const plans = [
     period: "/month",
     features: [
       "Unlimited analyses",
-      "All 7 platforms",
+      "All 9 platforms",
       "3 A/B/C variations",
       "Advanced virality scoring",
       "Creator discovery (unlimited)",

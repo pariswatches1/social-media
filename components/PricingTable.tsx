@@ -19,18 +19,36 @@ const plans = [
     highlight: false,
   },
   {
+    name: "Creator",
+    price: "$29",
+    period: "/month",
+    features: [
+      "25 analyses / month",
+      "All 7 platforms",
+      "2 A/B variations",
+      "Virality scoring",
+      "Creator discovery (100 results)",
+      "Brand voice profiles",
+      "Content calendar",
+      "Unlimited library saves",
+    ],
+    cta: "Start Creating",
+    planKey: "CREATOR",
+    highlight: false,
+  },
+  {
     name: "Pro",
-    price: "$79.99",
+    price: "$99",
     period: "/month",
     features: [
       "Unlimited analyses",
       "All 7 platforms",
       "3 A/B/C variations",
       "Advanced virality scoring",
+      "Creator discovery (unlimited)",
+      "CRM & outreach tools",
+      "Campaign management",
       "Image prompt generation",
-      "Brand voice profiles",
-      "Content calendar",
-      "Unlimited library saves",
       "SIGNAL Inbox",
     ],
     cta: "Upgrade to Pro",
@@ -39,16 +57,18 @@ const plans = [
   },
   {
     name: "Agency",
-    price: "$149",
+    price: "$399",
     period: "/month",
     features: [
       "Everything in Pro",
-      "5 team seats",
+      "10 team seats",
       "Unlimited brand profiles",
       "Priority AI processing",
       "Post approval workflows",
-      "Export to CSV / PDF",
-      "Competitor tracking alerts",
+      "White-label reports",
+      "Bulk outreach automation",
+      "Dedicated account manager",
+      "API access",
     ],
     cta: "Go Agency",
     planKey: "AGENCY",
@@ -91,7 +111,7 @@ export default function PricingTable({ currentPlan = "FREE", onUpgrade, variant 
   };
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, maxWidth: 900, margin: "0 auto" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, maxWidth: 1100, margin: "0 auto" }}>
       {plans.map((plan) => (
         <div
           key={plan.name}

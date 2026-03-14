@@ -11,6 +11,13 @@ const isProtectedRoute = createRouteMatcher([
   "/inbox(.*)",
   "/brand(.*)",
   "/settings(.*)",
+  // New protected routes
+  "/discover(.*)",
+  "/crm(.*)",
+  "/outreach(.*)",
+  "/campaigns(.*)",
+  "/virality(.*)",
+  "/analytics(.*)",
 ]);
 
 const clerkConfigured =

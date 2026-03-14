@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 
-/* ── Sprout-inspired grouped sidebar navigation ── */
+/* ── Grouped sidebar navigation — expanded with new modules ── */
 const NAV_SECTIONS = [
   {
     label: "INTELLIGENCE",
@@ -13,6 +13,21 @@ const NAV_SECTIONS = [
       { href: "/dashboard", label: "DASHBOARD", icon: "📊" },
       { href: "/analyze", label: "ANALYZE", icon: "🔍" },
       { href: "/create", label: "CREATE", icon: "✍️" },
+      { href: "/virality", label: "VIRALITY", icon: "🔥" },
+    ],
+  },
+  {
+    label: "CREATORS",
+    items: [
+      { href: "/discover", label: "DISCOVER", icon: "🌐" },
+      { href: "/crm", label: "CRM", icon: "👥" },
+      { href: "/outreach", label: "OUTREACH", icon: "📨" },
+    ],
+  },
+  {
+    label: "CAMPAIGNS",
+    items: [
+      { href: "/campaigns", label: "CAMPAIGNS", icon: "🚀" },
     ],
   },
   {
@@ -23,15 +38,17 @@ const NAV_SECTIONS = [
     ],
   },
   {
+    label: "ANALYTICS",
+    items: [
+      { href: "/analytics", label: "ANALYTICS", icon: "📈" },
+    ],
+  },
+  {
     label: "SETTINGS",
     items: [
       { href: "/brand", label: "BRAND", icon: "🎨" },
       { href: "/settings/accounts", label: "ACCOUNTS", icon: "🔗" },
     ],
-  },
-  {
-    label: "ACTIVITY",
-    items: [{ href: "/inbox", label: "INBOX", icon: "📬" }],
   },
 ];
 
@@ -42,8 +59,14 @@ const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/analyze": "Competitor Intelligence",
   "/create": "Content Generation",
+  "/virality": "Virality Scorer",
+  "/discover": "Creator Discovery",
+  "/crm": "Creator CRM",
+  "/outreach": "Outreach",
+  "/campaigns": "Campaigns",
   "/schedule": "Publishing",
   "/library": "Content Library",
+  "/analytics": "Analytics",
   "/brand": "Brand Voice Kit",
   "/inbox": "SIGNAL Inbox",
   "/settings/accounts": "Connected Accounts",
@@ -96,7 +119,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
 
-        {/* Nav — grouped sections (Sprout pattern) */}
+        {/* Nav — grouped sections */}
         <nav style={{ flex: 1, padding: "8px 8px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
           {NAV_SECTIONS.map((section) => (
             <div key={section.label} style={{ marginBottom: 6 }}>
@@ -194,7 +217,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* ── Main content area ── */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        {/* ── Top Toolbar (Sprout pattern) ── */}
+        {/* ── Top Toolbar ── */}
         <header
           style={{
             height: 52,
@@ -222,9 +245,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </h2>
           </div>
 
-          {/* Global action buttons (Sprout's right-side toolbar) */}
+          {/* Global action buttons */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            {/* Compose / Create button — always accessible */}
+            {/* Compose / Create button */}
             <Link
               href="/create"
               style={{
@@ -246,6 +269,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             >
               <span style={{ fontSize: 14 }}>✍️</span>
               Compose
+            </Link>
+
+            {/* New Campaign button */}
+            <Link
+              href="/campaigns"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "7px 14px",
+                borderRadius: 8,
+                background: "transparent",
+                border: "1px solid #1e2535",
+                color: "#94a3b8",
+                fontSize: 11,
+                fontFamily: "'DM Mono', monospace",
+                letterSpacing: 0.5,
+                textDecoration: "none",
+                cursor: "pointer",
+                transition: "border-color 0.15s",
+              }}
+            >
+              <span style={{ fontSize: 13 }}>🚀</span>
+              Campaign
             </Link>
 
             {/* Schedule button */}
@@ -272,7 +319,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               Schedule
             </Link>
 
-            {/* Inbox / Notifications */}
+            {/* Inbox */}
             <Link
               href="/inbox"
               style={{

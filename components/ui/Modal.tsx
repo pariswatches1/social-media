@@ -33,6 +33,9 @@ export default function Modal({ isOpen, onClose, title, children, width = 520 }:
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
       style={{
         position: "fixed",
         inset: 0,
@@ -71,11 +74,12 @@ export default function Modal({ isOpen, onClose, title, children, width = 520 }:
             borderBottom: "1px solid #1e2535",
           }}
         >
-          <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>
+          <div id="modal-title" style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>
             {title}
           </div>
           <button
             onClick={onClose}
+            aria-label="Close"
             style={{
               background: "transparent",
               border: "none",

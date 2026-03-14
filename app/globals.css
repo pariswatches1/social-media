@@ -88,12 +88,12 @@ html.marketing-page body {
   background: transparent;
   color: var(--ink);
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
   font-weight: 400;
   line-height: 1.65;
 }
 html.marketing-page a,
-html.marketing-page button { cursor: none; }
+html.marketing-page button { cursor: pointer; }
 
 /* Tool pages: restore normal cursor */
 html.marketing-page [data-tool-page],

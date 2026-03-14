@@ -49,19 +49,27 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     fetch("/api/dashboard")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load dashboard (${r.status})`);
+        return r.json();
+      })
       .then((d) => {
         if (d.stats) setData(d);
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.error("Dashboard fetch error:", err);
+        setError(err.message || "Failed to load dashboard data");
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
   const plan = data?.stats.plan || "FREE";
   const analysesUsed = data?.stats.analysesUsed || 0;
-  const analysesLimit = plan === "FREE" ? 3 : 999;
+  const analysesLimit = plan === "FREE" ? 3 : plan === "CREATOR" ? 25 : 999;
 
   if (isLoading) {
     return (
@@ -79,6 +87,20 @@ export default function DashboardPage() {
           <div className="shimmer" style={{ height: 280, borderRadius: 12 }} />
           <div className="shimmer" style={{ height: 280, borderRadius: 12 }} />
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center", paddingTop: 80 }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>⚠️</div>
+        <h2 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 8 }}>Unable to load dashboard</h2>
+        <p style={{ fontSize: 13, color: "#4a5568", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>{error}</p>
+        <button onClick={() => window.location.reload()} style={{
+          padding: "10px 24px", borderRadius: 8, background: "linear-gradient(135deg, #0891b2, #0e7490)",
+          color: "#fff", border: "none", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: "pointer",
+        }}>Retry</button>
       </div>
     );
   }

@@ -80,9 +80,7 @@ export default function AnalyzePanel({ savedIdeas, setSavedIdeas, setCreatePrefi
 
     const plat = PLATFORMS.find((p) => p.id === platform);
     try {
-      setStep("Scraping profile data...");
-      await new Promise((r) => setTimeout(r, 800));
-      setStep("Analyzing top performing posts...");
+      setStep("Analyzing profile data...");
 
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -94,9 +92,6 @@ export default function AnalyzePanel({ savedIdeas, setSavedIdeas, setCreatePrefi
         const err = await res.json();
         throw new Error(err.error || "Analysis failed");
       }
-
-      setStep("Generating content ideas...");
-      await new Promise((r) => setTimeout(r, 400));
 
       const parsed = await res.json();
       setResults(parsed);

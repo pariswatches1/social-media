@@ -100,7 +100,7 @@ export default function SchedulePage() {
         setFormHashtags(prefill.hashtags || "");
         setShowCreateModal(true);
       } catch {
-        // ignore
+        /* JSON parse failed, ignore prefill */
       }
       sessionStorage.removeItem("signal_schedule_prefill");
     }
@@ -181,8 +181,8 @@ export default function SchedulePage() {
         setSelectedPost(null);
         fetchPosts();
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -198,8 +198,8 @@ export default function SchedulePage() {
         setSelectedPost(null);
         fetchPosts();
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     } finally {
       setDeleting(false);
     }
@@ -215,8 +215,8 @@ export default function SchedulePage() {
       fetchPosts();
       setShowCreateModal(false);
       setSelectedPost(null);
-    } catch {
-      // ignore
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Operation failed. Please try again.");
     }
   }
 

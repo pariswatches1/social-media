@@ -1179,8 +1179,8 @@ export default function DiscoverPage() {
             <CreatorCard
               key={creator.id}
               creator={creator}
-              onAddToList={(id) => console.log("Add to list:", id)}
-              onViewProfile={(id) => console.log("View profile:", id)}
+              onAddToList={() => {}}
+              onViewProfile={() => {}}
             />
           ))}
         </div>

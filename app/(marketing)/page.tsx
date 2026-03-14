@@ -10,12 +10,12 @@ const PLATFORM_LINKS = [
   { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live" },
 ];
 const SOLUTIONS_LINKS = [
-  { num: "01", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale" },
-  { num: "02", title: "Content Calendar", sub: "Visual month/week planner for all platforms" },
-  { num: "03", title: "Auto-Publishing", sub: "Connect 7 platforms, publish automatically" },
-  { num: "04", title: "SIGNAL Inbox", sub: "Your content activity hub" },
-  { num: "05", title: "Content Library", sub: "Save, search, export, import content" },
-  { num: "06", title: "Analytics", sub: "Track performance across all platforms" },
+  { num: "01", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#features" },
+  { num: "02", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#features" },
+  { num: "03", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#platforms" },
+  { num: "04", title: "SIGNAL Inbox", sub: "Your content activity hub", href: "#features" },
+  { num: "05", title: "Content Library", sub: "Save, search, export, import content", href: "#features" },
+  { num: "06", title: "Analytics", sub: "Track performance across all platforms", href: "#features" },
 ];
 
 /* ── PLATFORM CARDS DATA ─────────────────────────────────── */
@@ -27,6 +27,8 @@ const PLATFORMS = [
   { name: "Reddit", color: "#FF4500", bg: "rgba(255,69,0,.08)", border: "rgba(255,69,0,.30)", a08: "rgba(255,69,0,.12)", a20: "rgba(255,69,0,.22)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#FF4500" strokeWidth="1.6"/><circle cx="9" cy="12" r="1" fill="#FF4500"/><circle cx="15" cy="12" r="1" fill="#FF4500"/><path d="M9 15s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#FF4500" strokeWidth="1.4" strokeLinecap="round"/><circle cx="16.5" cy="7.5" r="1" fill="#FF4500"/><path d="M12 8.5c1.5-1.5 4.5-1 4.5 1" stroke="#FF4500" strokeWidth="1.4" strokeLinecap="round"/></svg> },
   { name: "YouTube", color: "#FF0000", bg: "rgba(255,0,0,.08)", border: "rgba(255,0,0,.28)", a08: "rgba(255,0,0,.11)", a20: "rgba(255,0,0,.18)", delay: "d3", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="4" stroke="#FF0000" strokeWidth="1.6"/><path d="M10 9l5 3-5 3V9z" fill="#FF0000"/></svg> },
   { name: "Pinterest", color: "#E60023", bg: "rgba(230,0,35,.08)", border: "rgba(230,0,35,.28)", a08: "rgba(230,0,35,.11)", a20: "rgba(230,0,35,.18)", delay: "d4", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#E60023" strokeWidth="1.6"/><path d="M12 7c-3 0-5 2-5 4.5 0 1.5.8 2.8 2 3.3-.1-.5-.2-1.3 0-1.8l1-4.2s-.3-.5-.3-1.3c0-1.2.7-2 1.7-2 .8 0 1.2.6 1.2 1.3 0 .8-.5 2-.8 3.1-.2.9.5 1.6 1.4 1.6 1.6 0 2.8-1.7 2.8-4.2C16 8.7 14.2 7 12 7z" fill="#E60023"/><path d="M11.5 15.5c-.5 2-1.2 3.9-2.5 5" stroke="#E60023" strokeWidth="1.4" strokeLinecap="round"/></svg> },
+  { name: "Facebook", color: "#1877F2", bg: "rgba(24,119,242,.08)", border: "rgba(24,119,242,.30)", a08: "rgba(24,119,242,.12)", a20: "rgba(24,119,242,.22)", delay: "d4", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#1877F2" strokeWidth="1.6"/><path d="M15.5 8H14c-1.1 0-2 .9-2 2v2h3l-.5 3H12v5h-3v-5H7v-3h2v-2c0-2.2 1.8-4 4-4h2.5v2z" fill="#1877F2"/></svg> },
+  { name: "Snapchat", color: "#FFFC00", bg: "rgba(255,252,0,.08)", border: "rgba(255,252,0,.28)", a08: "rgba(255,252,0,.11)", a20: "rgba(255,252,0,.22)", delay: "d5", icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 4c-2.5 0-4 1.8-4 4v2c-1 .2-2 .5-2 1s1.5.8 1.5.8c-.5 1.5-2 2.5-2 2.5.5.5 2 .5 3 .2 0 1 .5 2.5 3.5 2.5s3.5-1.5 3.5-2.5c1 .3 2.5.3 3-.2 0 0-1.5-1-2-2.5 0 0 1.5-.3 1.5-.8s-1-.8-2-1V8c0-2.2-1.5-4-4-4z" stroke="#FFFC00" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> },
 ];
 
 /* ── PRICING TIERS ────────────────────────────────────────── */
@@ -100,17 +102,37 @@ const TESTIMONIALS = [
 const FAQS = [
   { q: "Can I try SIGNAL for free?", a: "Yes — we offer a 14-day free trial on all plans. No credit card required." },
   { q: "How does AI content generation work?", a: "SIGNAL’s AI studies your brand voice, past performance, and competitor gaps to generate on-brand content. Each topic gets 3 angle-tested variations." },
-  { q: "Which social platforms are supported?", a: "Instagram, LinkedIn, X/Twitter, TikTok, Reddit, YouTube, and Pinterest. More coming in 2025." },
+  { q: "Which social platforms are supported?", a: "Instagram, LinkedIn, X/Twitter, TikTok, Reddit, YouTube, Pinterest, Facebook, and Snapchat." },
   { q: "Can I cancel my subscription anytime?", a: "Absolutely. Cancel with one click from your dashboard. No lock-ins, no penalties." },
   { q: "Is my data secure?", a: "SIGNAL is SOC 2 Type II compliant and encrypts all data at rest and in transit. We never sell your data." },
 ];
 
 /* ── FOOTER LINKS ────────────────────────────────────────── */
 const FOOTER_LINKS = {
-  Product: ["Features", "Pricing", "Changelog", "Roadmap"],
-  Company: ["About", "Blog", "Careers", "Press"],
-  Legal:   ["Privacy", "Terms", "Cookies", "GDPR"],
-  Support: ["Docs", "Status", "Community", "Contact"],
+  Product: [
+    { label: "Features", href: "#features" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Free Tools", href: "/tools" },
+    { label: "FAQ", href: "#faq" },
+  ],
+  Company: [
+    { label: "About", href: "#hero" },
+    { label: "Blog", href: "#hero" },
+    { label: "Careers", href: "#hero" },
+    { label: "Press", href: "#hero" },
+  ],
+  Legal: [
+    { label: "Privacy", href: "#hero" },
+    { label: "Terms", href: "#hero" },
+    { label: "Cookies", href: "#hero" },
+    { label: "GDPR", href: "#hero" },
+  ],
+  Support: [
+    { label: "Docs", href: "#faq" },
+    { label: "Status", href: "#hero" },
+    { label: "Community", href: "#hero" },
+    { label: "Contact", href: "#hero" },
+  ],
 };
 
 /* ─────────────────────────────────────────────────────────────────────────────── */
@@ -205,7 +227,7 @@ export default function HomePage() {
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: 4, flex: 1 }}>
-          {["Platform", "Solutions", "Pricing", "Blog"].map((item) => {
+          {["Platform", "Solutions", "Pricing", "Free Tools"].map((item) => {
             const hasDropdown = item === "Platform" || item === "Solutions";
             const isOpen = navOpen === item;
             const links = item === "Platform" ? PLATFORM_LINKS : SOLUTIONS_LINKS;
@@ -213,20 +235,30 @@ export default function HomePage() {
               <div key={item} style={{ position: "relative" }}
                 onMouseEnter={() => hasDropdown && setNavOpen(item)}
                 onMouseLeave={() => setNavOpen(null)}>
-                <button style={{
-                  padding: "8px 14px", borderRadius: 8, border: "none",
-                  background: isOpen ? "rgba(255,255,255,.06)" : "transparent",
-                  color: isOpen ? "#e2e8f0" : "#94a3b8",
-                  fontSize: 13, display: "flex", alignItems: "center", gap: 5,
-                  transition: "color .2s, background .2s",
-                }}>
-                  {item}
-                  {hasDropdown && (
+                {hasDropdown ? (
+                  <button style={{
+                    padding: "8px 14px", borderRadius: 8, border: "none",
+                    background: isOpen ? "rgba(255,255,255,.06)" : "transparent",
+                    color: isOpen ? "#e2e8f0" : "#94a3b8",
+                    fontSize: 13, display: "flex", alignItems: "center", gap: 5,
+                    transition: "color .2s, background .2s",
+                  }}>
+                    {item}
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
                       <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                     </svg>
-                  )}
-                </button>
+                  </button>
+                ) : (
+                  <Link href={item === "Pricing" ? "#pricing" : "/tools"} style={{
+                    padding: "8px 14px", borderRadius: 8, border: "none",
+                    background: "transparent",
+                    color: "#94a3b8",
+                    fontSize: 13, display: "flex", alignItems: "center", gap: 5,
+                    transition: "color .2s, background .2s", textDecoration: "none",
+                  }}>
+                    {item}
+                  </Link>
+                )}
 
                 {/* Dropdown */}
                 {hasDropdown && isOpen && (
@@ -238,7 +270,7 @@ export default function HomePage() {
                     animation: "fadeIn .15s ease",
                   }}>
                     {links.map((l) => (
-                      <a key={l.num} href="#" style={{
+                      <a key={l.num} href={l.href} style={{
                         display: "flex", gap: 12, padding: "10px 12px", borderRadius: 8,
                         transition: "background .15s",
                       }}
@@ -260,19 +292,19 @@ export default function HomePage() {
 
         {/* Right CTAs */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Link href="/login" style={{ padding: "8px 16px", fontSize: 13, color: "#94a3b8", transition: "color .2s" }}
+          <Link href="/sign-in" style={{ padding: "8px 16px", fontSize: 13, color: "#94a3b8", transition: "color .2s" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#94a3b8")}>
             Log in
           </Link>
-          <Link href="/register" className="cta-btn" style={{ padding: "9px 20px", fontSize: 12, letterSpacing: "1px" }}>
+          <Link href="/sign-up" className="cta-btn" style={{ padding: "9px 20px", fontSize: 12, letterSpacing: "1px" }}>
             Start free trial
           </Link>
         </div>
       </nav>
 
       {/* ════ HERO ══════════════════════════════════════════════════════════════ */}
-      <section style={{
+      <section id="hero" style={{
         minHeight: "100vh", display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         padding: "120px 24px 80px", position: "relative", overflow: "hidden",
@@ -306,12 +338,12 @@ export default function HomePage() {
           maxWidth: 560, marginBottom: 40,
         }}>
           SIGNAL analyses competitors, generates on-brand posts, scores virality,
-          and auto-publishes across 7 platforms — so you show up everywhere, every day.
+          and auto-publishes across 9 platforms — so you show up everywhere, every day.
         </p>
 
         {/* CTA row */}
         <div className="anim-fadeUp d2" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 16 }}>
-          <Link href="/register" className="cta-btn">
+          <Link href="/sign-up" className="cta-btn">
             Start free — 14-day trial
           </Link>
           <button className="ghost-btn">
@@ -351,7 +383,7 @@ export default function HomePage() {
       </section>
 
       {/* ════ PLATFORM LOGOS ════════════════════════════════════════════════════ */}
-      <section style={{ padding: "24px 40px 48px", textAlign: "center" }}>
+      <section id="platforms" style={{ padding: "24px 40px 48px", textAlign: "center" }}>
         <p style={{ fontSize: 11, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, marginBottom: 28 }}>
           PUBLISH ACROSS ALL MAJOR PLATFORMS
         </p>
@@ -414,7 +446,7 @@ export default function HomePage() {
             {
               icon: "⏰",
               title: "Auto-Publishing",
-              desc: "Schedule and publish across all 7 platforms simultaneously. Set it and forget it.",
+              desc: "Schedule and publish across all 9 platforms simultaneously. Set it and forget it.",
               color: "#10b981",
             },
             {
@@ -454,7 +486,7 @@ export default function HomePage() {
       </section>
 
       {/* ════ PRICING ═══════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+      <section id="pricing" style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div className="pill" style={{ marginBottom: 16 }}>PRICING</div>
           <h2 className="sec-head">Simple, transparent pricing</h2>
@@ -522,7 +554,7 @@ export default function HomePage() {
                 <div style={{ fontSize: 28, fontFamily: "'Syne',sans-serif", fontWeight: 800, marginBottom: 24 }}>Custom</div>
               )}
 
-              <Link href="/register" className="cta-btn" style={{
+              <Link href="/sign-up" className="cta-btn" style={{
                 display: "block", textAlign: "center", width: "100%",
                 padding: "11px 0", fontSize: 12, letterSpacing: 1, marginBottom: 24,
                 background: tier.highlight ? "var(--grad)" : "transparent",
@@ -578,7 +610,7 @@ export default function HomePage() {
       </section>
 
       {/* ════ FAQ ═══════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 40px", maxWidth: 720, margin: "0 auto" }}>
+      <section id="faq" style={{ padding: "80px 40px", maxWidth: 720, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div className="pill" style={{ marginBottom: 16 }}>FAQ</div>
           <h2 className="sec-head">Common questions</h2>
@@ -629,7 +661,7 @@ export default function HomePage() {
           Join 2,400+ brands already using SIGNAL to outpace their competition every single day.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/register" className="cta-btn">Start free — 14 days</Link>
+          <Link href="/sign-up" className="cta-btn">Start free — 14 days</Link>
           <button className="ghost-btn">Book a demo</button>
         </div>
       </section>
@@ -657,7 +689,7 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {links.map((t) => (
-                  <a key={t} href="#" style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>{t}</a>
+                  <a key={t.label} href={t.href} style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s", textDecoration: "none" }}>{t.label}</a>
                 ))}
               </div>
             </div>
@@ -673,8 +705,8 @@ export default function HomePage() {
             © 2026 SIGNAL. All rights reserved.
           </span>
           <div style={{ display: "flex", gap: 20 }}>
-            {["Privacy", "Terms", "Cookies"].map((t) => (
-              <a key={t} href="#" style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s" }}>{t}</a>
+            {[{ label: "Privacy", href: "#hero" }, { label: "Terms", href: "#hero" }, { label: "Cookies", href: "#hero" }].map((t) => (
+              <a key={t.label} href={t.href} style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s", textDecoration: "none" }}>{t.label}</a>
             ))}
           </div>
         </div>

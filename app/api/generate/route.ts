@@ -81,9 +81,17 @@ Make the copy genuinely great - specific, not generic. Each platform should have
     const clean = raw.replace(/```json\n?|\n?```/g, "").trim();
     const parsed = JSON.parse(clean);
 
+    // Increment generations counter
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { generationsUsed: { increment: 1 } },
+    });
+
     return NextResponse.json(parsed);
   } catch (error) {
-    console.error("[/api/generate]", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[/api/generate]", error);
+    }
     return NextResponse.json(
       { error: "Generation failed. Please try again." },
       { status: 500 }

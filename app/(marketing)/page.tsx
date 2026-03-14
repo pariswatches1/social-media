@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 /* ── NAV DROPDOWN DATA ──────────────────────────────── */
-const PLATFORM_LINKS = [
-  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor’s content" },
-  { num: "02", title: "AI Generation", sub: "3 angle-tested variations per topic" },
-  { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live" },
+const PLATFORM_LINKS: { num: string; title: string; sub: string; href: string }[] = [
+  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor’s content", href: "#features" },
+  { num: "02", title: "AI Generation", sub: "3 angle-tested variations per topic", href: "#features" },
+  { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live", href: "#features" },
 ];
-const SOLUTIONS_LINKS = [
+const SOLUTIONS_LINKS: { num: string; title: string; sub: string; href: string }[] = [
   { num: "01", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#features" },
   { num: "02", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#features" },
   { num: "03", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#platforms" },

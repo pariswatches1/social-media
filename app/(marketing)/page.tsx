@@ -249,7 +249,7 @@ export default function HomePage() {
                     </svg>
                   </button>
                 ) : (
-                  <Link href={item === "Pricing" ? "#pricing" : "/tools"} style={{
+                  <a href={item === "Pricing" ? "#pricing" : "/tools"} onClick={(e) => { if (item === "Pricing") { e.preventDefault(); const el = document.querySelector("#pricing"); if (el) el.scrollIntoView({ behavior: "smooth" }); } }} style={{
                     padding: "8px 14px", borderRadius: 8, border: "none",
                     background: "transparent",
                     color: "#94a3b8",
@@ -257,7 +257,7 @@ export default function HomePage() {
                     transition: "color .2s, background .2s", textDecoration: "none",
                   }}>
                     {item}
-                  </Link>
+                  </a>
                 )}
 
                 {/* Dropdown */}
@@ -273,9 +273,9 @@ export default function HomePage() {
                     animation: "fadeIn .15s ease",
                   }}>
                     {links.map((l) => (
-                      <a key={l.num} href={l.href} style={{
+                      <a key={l.num} href={l.href} onClick={(e) => { e.preventDefault(); setNavOpen(null); const el = document.querySelector(l.href); if (el) el.scrollIntoView({ behavior: "smooth" }); }} style={{
                         display: "flex", gap: 12, padding: "10px 12px", borderRadius: 8,
-                        transition: "background .15s",
+                        transition: "background .15s", textDecoration: "none",
                       }}
                         onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,.04)")}
                         onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
@@ -418,7 +418,7 @@ export default function HomePage() {
       </section>
 
       {/* ════ FEATURES ══════════════════════════════════════════════════════════ */}
-      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+      <section id="features" style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>PLATFORM FEATURES</div>
           <h2 className="sec-head">Everything you need to dominate social</h2>
@@ -693,7 +693,7 @@ export default function HomePage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {links.map((t) => (
-                  <a key={t.label} href={t.href} style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s", textDecoration: "none" }}>{t.label}</a>
+                  <a key={t.label} href={t.href} onClick={(e) => { if (t.href.startsWith("#")) { e.preventDefault(); const el = document.querySelector(t.href); if (el) el.scrollIntoView({ behavior: "smooth" }); } }} style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s", textDecoration: "none" }}>{t.label}</a>
                 ))}
               </div>
             </div>

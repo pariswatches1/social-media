@@ -24,6 +24,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=twitter_state", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_twitter")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=twitter_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.twitter;
     const credentials = Buffer.from(`${getClientId("twitter")}:${getClientSecret("twitter")}`).toString("base64");
 
@@ -61,8 +67,8 @@ export async function GET(request: NextRequest) {
         accountName = `@${profileData.data.username}`;
         accountAvatar = profileData.data.profile_image_url || "";
       }
-    } catch {
-      // best-effort
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Twitter OAuth] profile fetch failed:", err);
     }
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -97,6 +103,7 @@ export async function GET(request: NextRequest) {
 
     const response = NextResponse.redirect(new URL("/settings/accounts?connected=twitter", request.url));
     response.cookies.delete("twitter_code_verifier");
+    response.cookies.delete("oauth_state_twitter");
     return response;
   } catch (error) {
     console.error("[Twitter OAuth callback]", error);

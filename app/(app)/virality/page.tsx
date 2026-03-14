@@ -1,459 +1,684 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const PLATFORMS = ["Instagram", "TikTok", "YouTube", "X", "LinkedIn"];
-
-const PLATFORM_EMOJI: Record<string, string> = {
-  Instagram: "📸",
-  TikTok: "🎵",
-  YouTube: "▶️",
-  X: "𝕏",
-  LinkedIn: "💼",
-};
-
-const MOCK_HISTORY = [
-  {
-    date: "Mar 13, 2026",
-    preview: "Stop scrolling — this one hack changed how I...",
-    platform: "TikTok",
-    score: 91,
-  },
-  {
-    date: "Mar 12, 2026",
-    preview: "3 things nobody tells you about building an audience...",
-    platform: "Instagram",
-    score: 78,
-  },
-  {
-    date: "Mar 11, 2026",
-    preview: "I tested 10 hooks over 30 days. Here's what worked.",
-    platform: "YouTube",
-    score: 84,
-  },
-  {
-    date: "Mar 10, 2026",
-    preview: "Hot take: consistency matters less than you think.",
-    platform: "X",
-    score: 55,
-  },
-  {
-    date: "Mar 9, 2026",
-    preview: "The LinkedIn algorithm rewards early engagement. Here's how...",
-    platform: "LinkedIn",
-    score: 42,
-  },
-];
-
-const BREAKDOWN = [
-  { label: "Hook Strength", score: 85, color: "#06b6d4" },
-  { label: "Format Fit", score: 72, color: "#8b5cf6" },
-  { label: "Trend Alignment", score: 91, color: "#10b981" },
-  { label: "Optimal Timing", score: 65, color: "#f59e0b" },
-  { label: "Engagement Potential", score: 78, color: "#06b6d4" },
-];
-
-const SUGGESTIONS = [
-  { icon: "💬", tip: "Add a question in the first line to boost engagement by ~23%" },
-  { icon: "🎠", tip: "This format performs 2.4x better as a carousel on Instagram" },
-  { icon: "⏰", tip: "Posting between 6–8pm EST would increase reach by ~18%" },
-  { icon: "#️⃣", tip: "Add 3–5 niche hashtags for 40% more targeted reach" },
-];
-
-function getScoreColor(score: number) {
-  if (score > 80) return "#06b6d4";
-  if (score >= 60) return "#10b981";
-  if (score >= 30) return "#f59e0b";
-  return "#ef4444";
+interface ScoringResult {
+  overallScore: number;
+  hookScore: number;
+  formatScore: number;
+  trendScore: number;
+  timingScore: number;
+  engagementScore: number;
+  suggestions: string[];
+  analysis?: string;
 }
 
-function getScoreLabel(score: number) {
-  if (score > 80) return "Viral Ready";
-  if (score >= 60) return "High Potential";
-  if (score >= 30) return "Moderate";
-  return "Needs Work";
+interface HistoryEntry {
+  id: string;
+  inputContent: string;
+  platform: string;
+  overallScore: number;
+  hookScore: number;
+  formatScore: number;
+  trendScore: number;
+  timingScore: number;
+  engagementScore: number;
+  suggestions: string;
+  createdAt: string;
 }
 
-function ScoreCircle({ score }: { score: number }) {
-  const color = getScoreColor(score);
-  const label = getScoreLabel(score);
-  const radius = 70;
-  const circ = 2 * Math.PI * radius;
-  const dash = (score / 100) * circ;
+const PLATFORMS = [
+  "Instagram",
+  "TikTok",
+  "X / Twitter",
+  "LinkedIn",
+  "YouTube",
+  "Reddit",
+  "Facebook",
+  "Pinterest",
+  "Snapchat",
+];
 
+function ScoreBar({ label, score }: { label: string; score: number }) {
+  const color =
+    score >= 80
+      ? "#06b6d4"
+      : score >= 60
+        ? "#10b981"
+        : score >= 40
+          ? "#f59e0b"
+          : "#ef4444";
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-      <div style={{ position: "relative", width: 180, height: 180 }}>
-        <svg width="180" height="180" style={{ transform: "rotate(-90deg)", position: "absolute", top: 0, left: 0 }}>
-          <circle
-            cx="90" cy="90" r={radius}
-            fill="none"
-            stroke="#1e2535"
-            strokeWidth="10"
-          />
-          <circle
-            cx="90" cy="90" r={radius}
-            fill="none"
-            stroke={color}
-            strokeWidth="10"
-            strokeDasharray={`${dash} ${circ}`}
-            strokeLinecap="round"
-            style={{ transition: "stroke-dasharray 1s ease, stroke 0.3s" }}
-          />
-        </svg>
-        <div style={{
-          position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
-          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{
-            fontSize: 52, fontFamily: "'Syne', sans-serif", fontWeight: 800, color,
-            lineHeight: 1,
-          }}>{score}</span>
-          <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, marginTop: 2 }}>/100</span>
-        </div>
+    <div style={{ marginBottom: 14 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 5,
+        }}
+      >
+        <span
+          style={{
+            fontSize: 12,
+            color: "#94a3b8",
+            fontFamily: "'DM Sans', sans-serif",
+          }}
+        >
+          {label}
+        </span>
+        <span
+          style={{
+            fontSize: 12,
+            fontFamily: "'DM Mono', monospace",
+            color,
+            fontWeight: 700,
+          }}
+        >
+          {score}
+        </span>
       </div>
-      <div style={{
-        fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color,
-        letterSpacing: 1, textTransform: "uppercase",
-      }}>{label}</div>
+      <div
+        style={{
+          background: "#1e2535",
+          borderRadius: 6,
+          height: 6,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${score}%`,
+            height: "100%",
+            background: color,
+            borderRadius: 6,
+            boxShadow: `0 0 8px ${color}44`,
+            transition: "width 0.6s ease",
+          }}
+        />
+      </div>
     </div>
   );
 }
 
 export default function ViralityPage() {
-  const [tab, setTab] = useState<"text" | "url">("text");
-  const [inputValue, setInputValue] = useState("");
-  const [selectedPlatform, setSelectedPlatform] = useState("TikTok");
-  const [loading, setLoading] = useState(false);
-  const [scored, setScored] = useState(false);
-  const [score] = useState(84);
+  const [content, setContent] = useState("");
+  const [platform, setPlatform] = useState("Instagram");
+  const [isScoring, setIsScoring] = useState(false);
+  const [result, setResult] = useState<ScoringResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
 
-  function handleScore() {
-    setLoading(true);
-    setScored(false);
-    setTimeout(() => {
-      setLoading(false);
-      setScored(true);
-    }, 1500);
+  // Fetch scoring history
+  useEffect(() => {
+    fetch("/api/virality?limit=5")
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load history");
+        return r.json();
+      })
+      .then((d) => setHistory(d.history || []))
+      .catch(() => {})
+      .finally(() => setLoadingHistory(false));
+  }, [result]); // Refetch after new score
+
+  async function handleScore() {
+    if (!content.trim()) {
+      setError("Please enter content to score.");
+      return;
+    }
+
+    setIsScoring(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      const res = await fetch("/api/virality", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inputType: "text",
+          content: content.trim(),
+          platform,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Scoring failed (${res.status})`);
+      }
+
+      const data = await res.json();
+      setResult(data);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Scoring failed. Please try again."
+      );
+    } finally {
+      setIsScoring(false);
+    }
+  }
+
+  function getScoreColor(score: number) {
+    if (score >= 80) return "#06b6d4";
+    if (score >= 60) return "#10b981";
+    if (score >= 40) return "#f59e0b";
+    return "#ef4444";
+  }
+
+  function getScoreLabel(score: number) {
+    if (score >= 80) return "Viral Potential";
+    if (score >= 60) return "Strong";
+    if (score >= 40) return "Average";
+    return "Needs Work";
   }
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", color: "#e2e8f0", minHeight: "100vh" }}>
+    <div
+      style={{
+        fontFamily: "'DM Sans', sans-serif",
+        color: "#e2e8f0",
+        minHeight: "100vh",
+      }}
+    >
       {/* Page Header */}
       <div style={{ marginBottom: 28 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <span style={{ fontSize: 22 }}>🔥</span>
-          <h1 style={{
-            fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800,
-            color: "#e2e8f0", margin: 0,
-          }}>Virality Scorer</h1>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 4,
+          }}
+        >
+          <span style={{ fontSize: 22 }}>⚡</span>
+          <h1
+            style={{
+              fontSize: 22,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 800,
+              color: "#e2e8f0",
+              margin: 0,
+            }}
+          >
+            Virality Scorer
+          </h1>
         </div>
         <p style={{ fontSize: 13, color: "#94a3b8", margin: 0 }}>
-          Predict the viral potential of your content before you post.
+          AI-powered content scoring. Paste your draft and get actionable
+          feedback.
         </p>
       </div>
 
-      {/* Input Card */}
-      <div style={{
-        background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 24, marginBottom: 24,
-      }}>
-        {/* Tabs */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-          {(["text", "url"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              style={{
-                padding: "8px 20px",
-                borderRadius: 8,
-                border: tab === t ? "1px solid rgba(6,182,212,0.3)" : "1px solid #1e2535",
-                background: tab === t ? "rgba(6,182,212,0.1)" : "transparent",
-                color: tab === t ? "#06b6d4" : "#94a3b8",
-                fontSize: 13,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: tab === t ? 600 : 400,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              {t === "text" ? "📝 Score Text" : "🔗 Score URL"}
-            </button>
-          ))}
-        </div>
-
-        {/* Input field */}
-        {tab === "text" ? (
-          <textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Paste your caption, hook, or post copy here..."
-            rows={5}
-            style={{
-              width: "100%",
-              background: "#060810",
-              border: "1px solid #1e2535",
-              borderRadius: 8,
-              padding: "12px 14px",
-              color: "#e2e8f0",
-              fontSize: 13,
-              fontFamily: "'DM Sans', sans-serif",
-              resize: "vertical",
-              outline: "none",
-              boxSizing: "border-box",
-              lineHeight: 1.6,
-            }}
-          />
-        ) : (
-          <input
-            type="url"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Paste a social post URL..."
-            style={{
-              width: "100%",
-              background: "#060810",
-              border: "1px solid #1e2535",
-              borderRadius: 8,
-              padding: "12px 14px",
-              color: "#e2e8f0",
-              fontSize: 13,
-              fontFamily: "'DM Sans', sans-serif",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        )}
-
-        {/* Platform pills */}
-        <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
-          <span style={{
-            fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#4a5568",
-            letterSpacing: 2, alignSelf: "center", marginRight: 4,
-          }}>PLATFORM</span>
-          {PLATFORMS.map((p) => (
-            <button
-              key={p}
-              onClick={() => setSelectedPlatform(p)}
-              style={{
-                padding: "6px 14px",
-                borderRadius: 20,
-                border: selectedPlatform === p ? "1px solid rgba(6,182,212,0.4)" : "1px solid #1e2535",
-                background: selectedPlatform === p ? "rgba(6,182,212,0.12)" : "#060810",
-                color: selectedPlatform === p ? "#06b6d4" : "#94a3b8",
-                fontSize: 12,
-                fontFamily: "'DM Sans', sans-serif",
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              {PLATFORM_EMOJI[p]} {p}
-            </button>
-          ))}
-        </div>
-
-        {/* Score button */}
-        <button
-          onClick={handleScore}
-          disabled={loading}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 20,
+          marginBottom: 24,
+        }}
+      >
+        {/* Input Panel */}
+        <div
           style={{
-            marginTop: 20,
-            width: "100%",
-            padding: "14px",
-            background: loading ? "#0e7490" : "linear-gradient(135deg, #0891b2, #0e7490)",
-            border: "none",
-            borderRadius: 8,
-            color: "#fff",
-            fontSize: 15,
-            fontFamily: "'Syne', sans-serif",
-            fontWeight: 700,
-            cursor: loading ? "not-allowed" : "pointer",
-            letterSpacing: 0.5,
-            transition: "opacity 0.2s",
-            opacity: loading ? 0.7 : 1,
+            background: "#0a0d14",
+            border: "1px solid #1e2535",
+            borderRadius: 12,
+            padding: 24,
           }}
         >
-          {loading ? "Analyzing..." : "Score It 🔥"}
-        </button>
-      </div>
-
-      {/* Loading spinner */}
-      {loading && (
-        <div style={{
-          background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12,
-          padding: 40, marginBottom: 24, display: "flex", flexDirection: "column",
-          alignItems: "center", gap: 16,
-        }}>
-          <div style={{
-            width: 40, height: 40,
-            border: "3px solid #1e2535",
-            borderTop: "3px solid #06b6d4",
-            borderRadius: "50%",
-            animation: "spin 0.8s linear infinite",
-          }} />
-          <span style={{ color: "#94a3b8", fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
-            Running virality analysis...
-          </span>
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-        </div>
-      )}
-
-      {/* Results Section */}
-      {scored && !loading && (
-        <>
-          {/* Score + Breakdown row */}
-          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 20, marginBottom: 20 }}>
-            {/* Giant Score Circle */}
-            <div style={{
-              background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 32,
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <ScoreCircle score={score} />
-            </div>
-
-            {/* Breakdown Bars */}
-            <div style={{
-              background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 24,
-            }}>
-              <div style={{
-                fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                color: "#e2e8f0", letterSpacing: 0.5, marginBottom: 20,
-              }}>Score Breakdown</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {BREAKDOWN.map((b) => (
-                  <div key={b.label}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                      <span style={{ fontSize: 13, color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>{b.label}</span>
-                      <span style={{
-                        fontSize: 12, fontFamily: "'DM Mono', monospace", color: b.color, fontWeight: 600,
-                      }}>{b.score}<span style={{ color: "#4a5568" }}>/100</span></span>
-                    </div>
-                    <div style={{ background: "#1e2535", borderRadius: 6, height: 7, overflow: "hidden" }}>
-                      <div style={{
-                        width: `${b.score}%`, height: "100%",
-                        background: b.color,
-                        borderRadius: 6,
-                        transition: "width 0.8s ease",
-                        boxShadow: `0 0 8px ${b.color}55`,
-                      }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* AI Suggestions */}
-          <div style={{
-            background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12,
-            padding: 24, marginBottom: 24,
-          }}>
-            <div style={{
-              fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700,
-              color: "#e2e8f0", letterSpacing: 0.5, marginBottom: 16,
-              display: "flex", alignItems: "center", gap: 8,
-            }}>
-              <span>🤖</span> AI Suggestions
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              {SUGGESTIONS.map((s, i) => (
-                <div key={i} style={{
-                  background: "#060810",
-                  border: "1px solid #1e2535",
-                  borderRadius: 10,
-                  padding: "14px 16px",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 12,
-                }}>
-                  <span style={{ fontSize: 20, flexShrink: 0, marginTop: 1 }}>{s.icon}</span>
-                  <span style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.55, fontFamily: "'DM Sans', sans-serif" }}>
-                    {s.tip}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* History Section */}
-      <div style={{
-        background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12, padding: 24,
-      }}>
-        <div style={{
-          fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700,
-          color: "#e2e8f0", letterSpacing: 0.5, marginBottom: 16,
-          display: "flex", alignItems: "center", gap: 8,
-        }}>
-          <span>🕐</span> Recent Analyses
-        </div>
-
-        {/* Table Header */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "120px 1fr 110px 80px 120px",
-          gap: 12,
-          padding: "8px 14px",
-          borderBottom: "1px solid #1e2535",
-          marginBottom: 4,
-        }}>
-          {["DATE", "PREVIEW", "PLATFORM", "SCORE", "ACTION"].map((h) => (
-            <span key={h} style={{
-              fontSize: 9, fontFamily: "'DM Mono', monospace",
-              letterSpacing: 2, color: "#4a5568", fontWeight: 600,
-            }}>{h}</span>
-          ))}
-        </div>
-
-        {MOCK_HISTORY.map((row, i) => (
           <div
-            key={i}
             style={{
-              display: "grid",
-              gridTemplateColumns: "120px 1fr 110px 80px 120px",
-              gap: 12,
-              padding: "12px 14px",
-              background: i % 2 === 0 ? "#060810" : "#0a0d14",
-              borderRadius: 8,
-              alignItems: "center",
-              marginBottom: 2,
+              fontSize: 13,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 700,
+              color: "#e2e8f0",
+              marginBottom: 16,
             }}
           >
-            <span style={{ fontSize: 12, color: "#4a5568", fontFamily: "'DM Mono', monospace" }}>{row.date}</span>
-            <span style={{
-              fontSize: 13, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif",
-              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-            }}>{row.preview}</span>
-            <span style={{ fontSize: 12, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif" }}>
-              {PLATFORM_EMOJI[row.platform]} {row.platform}
-            </span>
-            <div style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
-              background: `${getScoreColor(row.score)}22`,
-              border: `1px solid ${getScoreColor(row.score)}44`,
-              borderRadius: 6,
-              padding: "3px 10px",
-            }}>
-              <span style={{
-                fontSize: 13, fontFamily: "'DM Mono', monospace",
-                fontWeight: 700, color: getScoreColor(row.score),
-              }}>{row.score}</span>
-            </div>
-            <button style={{
-              padding: "6px 12px",
-              borderRadius: 6,
-              border: "1px solid #1e2535",
-              background: "transparent",
-              color: "#94a3b8",
-              fontSize: 11,
-              fontFamily: "'DM Sans', sans-serif",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}>
-              🔄 Re-analyze
-            </button>
+            Your Content
           </div>
-        ))}
+
+          {/* Platform Select */}
+          <div style={{ marginBottom: 16 }}>
+            <label
+              style={{
+                fontSize: 10,
+                fontFamily: "'DM Mono', monospace",
+                letterSpacing: 2,
+                color: "#4a5568",
+                textTransform: "uppercase",
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              Platform
+            </label>
+            <select
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px 12px",
+                borderRadius: 8,
+                border: "1px solid #1e2535",
+                background: "#060810",
+                color: "#e2e8f0",
+                fontSize: 13,
+                fontFamily: "'DM Sans', sans-serif",
+                outline: "none",
+              }}
+            >
+              {PLATFORMS.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Content Textarea */}
+          <div style={{ marginBottom: 16 }}>
+            <label
+              style={{
+                fontSize: 10,
+                fontFamily: "'DM Mono', monospace",
+                letterSpacing: 2,
+                color: "#4a5568",
+                textTransform: "uppercase",
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              Content
+            </label>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Paste your post, caption, thread, or script here..."
+              rows={8}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                borderRadius: 8,
+                border: "1px solid #1e2535",
+                background: "#060810",
+                color: "#e2e8f0",
+                fontSize: 13,
+                fontFamily: "'DM Sans', sans-serif",
+                resize: "vertical",
+                outline: "none",
+                lineHeight: 1.6,
+              }}
+            />
+            <div
+              style={{
+                fontSize: 10,
+                fontFamily: "'DM Mono', monospace",
+                color: "#4a5568",
+                marginTop: 4,
+                textAlign: "right",
+              }}
+            >
+              {content.length} / 5000
+            </div>
+          </div>
+
+          {error && (
+            <div
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                background: "rgba(239,68,68,0.1)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                color: "#ef4444",
+                fontSize: 12,
+                marginBottom: 12,
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={handleScore}
+            disabled={isScoring || !content.trim()}
+            style={{
+              width: "100%",
+              padding: "10px 20px",
+              borderRadius: 8,
+              border: "none",
+              background:
+                isScoring || !content.trim()
+                  ? "#1e2535"
+                  : "linear-gradient(135deg, #06b6d4, #0891b2)",
+              color:
+                isScoring || !content.trim() ? "#4a5568" : "#fff",
+              fontSize: 14,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 700,
+              cursor:
+                isScoring || !content.trim()
+                  ? "not-allowed"
+                  : "pointer",
+              transition: "all 0.2s",
+            }}
+          >
+            {isScoring ? "Scoring with AI..." : "Score Content"}
+          </button>
+        </div>
+
+        {/* Results Panel */}
+        <div
+          style={{
+            background: "#0a0d14",
+            border: "1px solid #1e2535",
+            borderRadius: 12,
+            padding: 24,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 13,
+              fontFamily: "'Syne', sans-serif",
+              fontWeight: 700,
+              color: "#e2e8f0",
+              marginBottom: 16,
+            }}
+          >
+            Score Breakdown
+          </div>
+
+          {!result && !isScoring && (
+            <div
+              style={{
+                padding: "60px 0",
+                textAlign: "center",
+                color: "#4a5568",
+                fontSize: 13,
+              }}
+            >
+              Enter content and click "Score Content" to get your AI-powered
+              virality analysis.
+            </div>
+          )}
+
+          {isScoring && (
+            <div
+              style={{
+                padding: "60px 0",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  border: "3px solid #1e2535",
+                  borderTopColor: "#06b6d4",
+                  borderRadius: "50%",
+                  margin: "0 auto 16px",
+                  animation: "spin 1s linear infinite",
+                }}
+              />
+              <p style={{ color: "#94a3b8", fontSize: 13 }}>
+                Analyzing your content with AI...
+              </p>
+              <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+            </div>
+          )}
+
+          {result && (
+            <>
+              {/* Overall Score */}
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: 24,
+                  padding: "16px 0",
+                  border: `1px solid ${getScoreColor(result.overallScore)}33`,
+                  borderRadius: 12,
+                  background: `${getScoreColor(result.overallScore)}0a`,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 48,
+                    fontFamily: "'Syne', sans-serif",
+                    fontWeight: 800,
+                    color: getScoreColor(result.overallScore),
+                    lineHeight: 1,
+                    marginBottom: 4,
+                  }}
+                >
+                  {result.overallScore}
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "'DM Mono', monospace",
+                    color: getScoreColor(result.overallScore),
+                    letterSpacing: 2,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {getScoreLabel(result.overallScore)}
+                </div>
+              </div>
+
+              {/* Score Bars */}
+              <ScoreBar label="Hook Strength" score={result.hookScore} />
+              <ScoreBar label="Format Fit" score={result.formatScore} />
+              <ScoreBar
+                label="Trend Alignment"
+                score={result.trendScore}
+              />
+              <ScoreBar
+                label="Timing Score"
+                score={result.timingScore}
+              />
+              <ScoreBar
+                label="Engagement Potential"
+                score={result.engagementScore}
+              />
+
+              {/* Analysis */}
+              {result.analysis && (
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: "12px 14px",
+                    background: "#060810",
+                    borderRadius: 8,
+                    border: "1px solid #1e2535",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontFamily: "'DM Mono', monospace",
+                      letterSpacing: 2,
+                      color: "#4a5568",
+                      textTransform: "uppercase",
+                      marginBottom: 6,
+                    }}
+                  >
+                    AI Analysis
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: "#94a3b8",
+                      lineHeight: 1.6,
+                      margin: 0,
+                    }}
+                  >
+                    {result.analysis}
+                  </p>
+                </div>
+              )}
+
+              {/* Suggestions */}
+              {result.suggestions.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontFamily: "'DM Mono', monospace",
+                      letterSpacing: 2,
+                      color: "#4a5568",
+                      textTransform: "uppercase",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Suggestions
+                  </div>
+                  {result.suggestions.map((s, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "8px 12px",
+                        background: "#060810",
+                        borderRadius: 6,
+                        marginBottom: 6,
+                        fontSize: 12,
+                        color: "#e2e8f0",
+                        display: "flex",
+                        gap: 8,
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <span style={{ color: "#06b6d4", flexShrink: 0 }}>
+                        →
+                      </span>
+                      {s}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* History */}
+      <div
+        style={{
+          background: "#0a0d14",
+          border: "1px solid #1e2535",
+          borderRadius: 12,
+          padding: 24,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 13,
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 700,
+            color: "#e2e8f0",
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <span>📜</span> Scoring History
+        </div>
+
+        {loadingHistory && (
+          <div style={{ padding: "20px 0", textAlign: "center" }}>
+            <div
+              className="shimmer"
+              style={{ height: 60, borderRadius: 8, marginBottom: 8 }}
+            />
+            <div
+              className="shimmer"
+              style={{ height: 60, borderRadius: 8 }}
+            />
+          </div>
+        )}
+
+        {!loadingHistory && history.length === 0 && (
+          <div
+            style={{
+              padding: "20px 0",
+              textAlign: "center",
+              color: "#4a5568",
+              fontSize: 13,
+            }}
+          >
+            No scoring history yet. Score some content to build your history.
+          </div>
+        )}
+
+        {!loadingHistory &&
+          history.map((entry, i) => (
+            <div
+              key={entry.id}
+              style={{
+                padding: "12px 14px",
+                background: i % 2 === 0 ? "#060810" : "#0a0d14",
+                borderRadius: 8,
+                marginBottom: 4,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 16,
+              }}
+            >
+              <div style={{ flex: 1, overflow: "hidden" }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "#e2e8f0",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    marginBottom: 4,
+                  }}
+                >
+                  {entry.inputContent.slice(0, 100)}
+                  {entry.inputContent.length > 100 ? "..." : ""}
+                </div>
+                <div
+                  style={{
+                    fontSize: 10,
+                    fontFamily: "'DM Mono', monospace",
+                    color: "#4a5568",
+                    display: "flex",
+                    gap: 12,
+                  }}
+                >
+                  <span>{entry.platform}</span>
+                  <span>
+                    {new Date(entry.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: `${getScoreColor(entry.overallScore)}18`,
+                  border: `1px solid ${getScoreColor(entry.overallScore)}33`,
+                  borderRadius: 8,
+                  padding: "6px 12px",
+                  flexShrink: 0,
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "'Syne', sans-serif",
+                    fontWeight: 800,
+                    color: getScoreColor(entry.overallScore),
+                  }}
+                >
+                  {entry.overallScore}
+                </span>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );

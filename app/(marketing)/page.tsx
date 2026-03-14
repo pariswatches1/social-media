@@ -127,22 +127,22 @@ const FOOTER_LINKS = {
     { label: "FAQ", href: "#faq" },
   ],
   Company: [
-    { label: "About", href: "#hero" },
-    { label: "Blog", href: "#hero" },
-    { label: "Careers", href: "#hero" },
-    { label: "Press", href: "#hero" },
+    { label: "About", href: "#features" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Free Tools", href: "/tools" },
+    { label: "Compare", href: "/compare/signal-vs-sprout-social" },
   ],
   Legal: [
-    { label: "Privacy", href: "#hero" },
-    { label: "Terms", href: "#hero" },
-    { label: "Cookies", href: "#hero" },
-    { label: "GDPR", href: "#hero" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+    { label: "Cookies", href: "/privacy#cookies" },
+    { label: "GDPR", href: "/privacy#gdpr" },
   ],
   Support: [
-    { label: "Docs", href: "#faq" },
-    { label: "Status", href: "#hero" },
-    { label: "Community", href: "#hero" },
-    { label: "Contact", href: "#hero" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Contact", href: "mailto:support@influencccer.com" },
+    { label: "Sign Up", href: "/sign-up" },
+    { label: "Sign In", href: "/sign-in" },
   ],
 };
 
@@ -801,7 +801,7 @@ export default function HomePage() {
             © 2026 SIGNAL. All rights reserved.
           </span>
           <div style={{ display: "flex", gap: 20 }}>
-            {[{ label: "Privacy", href: "#hero" }, { label: "Terms", href: "#hero" }, { label: "Cookies", href: "#hero" }].map((t) => (
+            {[{ label: "Privacy", href: "/privacy" }, { label: "Terms", href: "/terms" }, { label: "Cookies", href: "/privacy#cookies" }].map((t) => (
               <a key={t.label} href={t.href} style={{ fontSize: 12, fontWeight: 400, color: "var(--dim)", transition: "color .2s", textDecoration: "none" }}>{t.label}</a>
             ))}
           </div>

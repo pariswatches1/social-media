@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=instagram_denied", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_instagram")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=instagram_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.instagram;
     // Exchange code for token
     const tokenRes = await fetch(config.tokenUrl, {
@@ -68,8 +74,8 @@ export async function GET(request: NextRequest) {
           accountAvatar = profile.profile_picture_url || "";
         }
       }
-    } catch {
-      // Profile fetch is best-effort
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Instagram OAuth] profile fetch failed:", err);
     }
 
     const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -100,7 +106,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.redirect(new URL("/settings/accounts?connected=instagram", request.url));
+    const response = NextResponse.redirect(new URL("/settings/accounts?connected=instagram", request.url));
+    response.cookies.delete("oauth_state_instagram");
+    return response;
   } catch (error) {
     console.error("[Instagram OAuth callback]", error);
     return NextResponse.redirect(new URL("/settings/accounts?error=instagram_error", request.url));

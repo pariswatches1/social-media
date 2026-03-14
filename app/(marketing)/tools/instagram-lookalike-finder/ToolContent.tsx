@@ -59,7 +59,7 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "rgba(255,255,255,0.2)",
+                  background: "rgba(10,30,94,0.1)",
                   border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
@@ -73,7 +73,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "rgba(255,255,255,0.3)",
+                    color: "rgba(10,30,94,0.2)",
                     lineHeight: 1,
                     minWidth: 36,
                   }}
@@ -87,7 +87,7 @@ export default function ToolContent() {
                         fontFamily: "'Syne', sans-serif",
                         fontSize: 15,
                         fontWeight: 700,
-                        color: "#ffffff",
+                        color: "#0a1e5e",
                       }}
                     >
                       @{acc.handle.replace(/^@/, "")}
@@ -96,7 +96,7 @@ export default function ToolContent() {
                       style={{
                         fontSize: 11,
                         fontFamily: "'DM Mono', monospace",
-                        color: "#06b6d4",
+                        color: "#0a1e5e",
                         letterSpacing: 1,
                       }}
                     >
@@ -122,7 +122,7 @@ export default function ToolContent() {
                 marginTop: 8,
                 background: "rgba(251,191,36,0.06)",
                 border: "1px solid rgba(251,191,36,0.15)",
-                color: "#fbbf24",
+                color: "#92400e",
                 fontSize: 12,
                 padding: 12,
                 borderRadius: 8,

@@ -48,8 +48,8 @@ export default function ToolContent() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "#22c55e";
-    if (score >= 50) return "#f59e0b";
+    if (score >= 80) return "#166534";
+    if (score >= 50) return "#b45309";
     return "#ef4444";
   };
 
@@ -72,11 +72,11 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Health Score */}
-            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 32, textAlign: "center", marginBottom: 16 }}>
+            <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 32, textAlign: "center", marginBottom: 16 }}>
               <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Account Health Score</div>
               <div style={{ position: "relative", width: 140, height: 140, margin: "0 auto 12px" }}>
                 <svg viewBox="0 0 140 140" style={{ transform: "rotate(-90deg)" }}>
-                  <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="10" />
+                  <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(10,30,94,0.15)" strokeWidth="10" />
                   <circle cx="70" cy="70" r="60" fill="none" stroke={getScoreColor(result.healthScore)} strokeWidth="10" strokeDasharray={`${(result.healthScore / 100) * 377} 377`} strokeLinecap="round" />
                 </svg>
                 <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
@@ -90,7 +90,7 @@ export default function ToolContent() {
             {result.metrics && (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 16 }}>
                 {result.metrics.map((metric: any) => (
-                  <div key={metric.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
+                  <div key={metric.label} style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
                     <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{metric.label}</div>
                     <div style={{ fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{metric.value}</div>
                   </div>
@@ -102,11 +102,11 @@ export default function ToolContent() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
               {/* Strengths */}
               {result.strengths && (
-                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
-                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#22c55e", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Strengths</div>
+                <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
+                  <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#166534", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Strengths</div>
                   {result.strengths.map((item: string, i: number) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
-                      <span style={{ color: "#22c55e", fontSize: 14, lineHeight: "20px" }}>+</span>
+                      <span style={{ color: "#166534", fontSize: 14, lineHeight: "20px" }}>+</span>
                       <span style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "#1a1a2e", lineHeight: "20px" }}>{item}</span>
                     </div>
                   ))}
@@ -115,7 +115,7 @@ export default function ToolContent() {
 
               {/* Weaknesses */}
               {result.weaknesses && (
-                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
+                <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
                   <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#ef4444", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Weaknesses</div>
                   {result.weaknesses.map((item: string, i: number) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
@@ -129,11 +129,11 @@ export default function ToolContent() {
 
             {/* AI Recommendations */}
             {result.recommendations && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#06b6d4", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>AI Recommendations</div>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
+                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#0a1e5e", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>AI Recommendations</div>
                 {result.recommendations.map((rec: string, i: number) => (
                   <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12, padding: 12, borderRadius: 8, background: "rgba(6,182,212,0.04)", border: "1px solid rgba(6,182,212,0.1)" }}>
-                    <span style={{ fontSize: 12, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#06b6d4", minWidth: 20 }}>{i + 1}.</span>
+                    <span style={{ fontSize: 12, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#0a1e5e", minWidth: 20 }}>{i + 1}.</span>
                     <span style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "#1a1a2e", lineHeight: "20px" }}>{rec}</span>
                   </div>
                 ))}

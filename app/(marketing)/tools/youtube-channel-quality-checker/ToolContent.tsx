@@ -32,8 +32,8 @@ export default function ToolContent() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "#22c55e";
-    if (score >= 60) return "#f59e0b";
+    if (score >= 80) return "#166534";
+    if (score >= 60) return "#b45309";
     if (score >= 40) return "#f97316";
     return "#ef4444";
   };
@@ -64,7 +64,7 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Quality Score Hero */}
-            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
+            <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
               <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Quality Score</div>
               <div style={{ fontSize: 56, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: getScoreColor(result.qualityScore) }}>
                 {result.qualityScore}<span style={{ fontSize: 24, color: "rgba(10,30,94,0.5)" }}>/100</span>
@@ -82,7 +82,7 @@ export default function ToolContent() {
                 { label: "Upload Frequency", value: result.uploadFrequency },
                 { label: "Growth", value: result.growthTrajectory?.split(" ")[0] || "—" },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
+                <div key={stat.label} style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
                   <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
                   <div style={{ fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{stat.value}</div>
                 </div>
@@ -91,7 +91,7 @@ export default function ToolContent() {
 
             {/* Content Quality */}
             {result.contentQualityAssessment && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
                 <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Content Quality</div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.contentQualityAssessment}</p>
               </div>
@@ -99,7 +99,7 @@ export default function ToolContent() {
 
             {/* Engagement Level */}
             {result.audienceEngagementLevel && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
                 <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Audience Engagement</div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e", margin: 0, lineHeight: 1.6 }}>{result.audienceEngagementLevel}</p>
               </div>
@@ -107,11 +107,11 @@ export default function ToolContent() {
 
             {/* Improvements */}
             {result.improvements && result.improvements.length > 0 && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
                 <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Recommendations</div>
                 {result.improvements.map((item: string, i: number) => (
                   <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#FF0000" }}>{i + 1}.</span>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#0a1e5e" }}>{i + 1}.</span>
                     <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#1a1a2e" }}>{item}</span>
                   </div>
                 ))}
@@ -119,7 +119,7 @@ export default function ToolContent() {
             )}
 
             {/* YouTube API Note */}
-            <div style={{ background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.15)", color: "#06b6d4", fontSize: 12, padding: 12, borderRadius: 8, fontFamily: "'DM Sans', sans-serif" }}>
+            <div style={{ background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.15)", color: "#0a1e5e", fontSize: 12, padding: 12, borderRadius: 8, fontFamily: "'DM Sans', sans-serif" }}>
               YouTube API integration coming soon for real-time data. Current results are AI-powered estimates based on publicly available knowledge.
             </div>
           </div>

@@ -55,8 +55,8 @@ export default function ToolContent() {
   };
 
   const getRatingColor = (rate: number) => {
-    if (rate >= 5) return "#22c55e";
-    if (rate >= 2) return "#f59e0b";
+    if (rate >= 5) return "#166534";
+    if (rate >= 2) return "#b45309";
     return "#ef4444";
   };
 
@@ -86,7 +86,7 @@ export default function ToolContent() {
         {result?.success && (
           <div>
             {/* Engagement Rate Hero */}
-            <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
+            <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 28, textAlign: "center", marginBottom: 16 }}>
               <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Engagement Rate</div>
               <div style={{ fontSize: 48, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: getRatingColor(result.engagementRate) }}>
                 {result.engagementRate?.toFixed(2)}%
@@ -104,7 +104,7 @@ export default function ToolContent() {
                 { label: "Likes Ratio", value: `${result.likesRatio?.toFixed(2)}%` },
                 { label: "Comments Ratio", value: `${result.commentsRatio?.toFixed(2)}%` },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
+                <div key={stat.label} style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 18 }}>
                   <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{stat.label}</div>
                   <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{stat.value}</div>
                 </div>
@@ -113,16 +113,16 @@ export default function ToolContent() {
 
             {/* Media Type Distribution */}
             {result.mediaDistribution && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20, marginBottom: 16 }}>
                 <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Media Type Distribution</div>
                 {result.mediaDistribution.map((item: any) => (
                   <div key={item.type} style={{ marginBottom: 12 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
                       <span style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "#1a1a2e" }}>{item.type}</span>
-                      <span style={{ fontSize: 13, fontFamily: "'DM Mono', monospace", color: "#06b6d4" }}>{item.percentage?.toFixed(1)}%</span>
+                      <span style={{ fontSize: 13, fontFamily: "'DM Mono', monospace", color: "#0a1e5e" }}>{item.percentage?.toFixed(1)}%</span>
                     </div>
-                    <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.3)" }}>
-                      <div style={{ height: 6, borderRadius: 3, background: "linear-gradient(90deg, #06b6d4, #0891b2)", width: `${item.percentage}%`, transition: "width 0.5s ease" }} />
+                    <div style={{ height: 6, borderRadius: 3, background: "rgba(10,30,94,0.08)" }}>
+                      <div style={{ height: 6, borderRadius: 3, background: "linear-gradient(90deg, #1e40af, #1d4ed8)", width: `${item.percentage}%`, transition: "width 0.5s ease" }} />
                     </div>
                   </div>
                 ))}
@@ -131,12 +131,12 @@ export default function ToolContent() {
 
             {/* Top Posts */}
             {result.topPosts && result.topPosts.length > 0 && (
-              <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
+              <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 20 }}>
                 <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Top 3 Posts</div>
                 {result.topPosts.slice(0, 3).map((post: any, i: number) => (
                   <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.3)" : "none" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 16, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#06b6d4", width: 24 }}>#{i + 1}</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, fontFamily: "'Syne', sans-serif", color: "#0a1e5e", width: 24 }}>#{i + 1}</span>
                       <div>
                         <div style={{ fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "#1a1a2e" }}>{post.type}</div>
                         <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)" }}>{post.date}</div>
@@ -144,7 +144,7 @@ export default function ToolContent() {
                     </div>
                     <div style={{ textAlign: "right" }}>
                       <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{post.engagement?.toLocaleString()} engagements</div>
-                      <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#22c55e" }}>{post.engagementRate?.toFixed(2)}%</div>
+                      <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#166534" }}>{post.engagementRate?.toFixed(2)}%</div>
                     </div>
                   </div>
                 ))}

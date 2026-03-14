@@ -63,15 +63,15 @@ export default function ToolContent() {
             {/* Niche Insights */}
             {result.nicheInsights && (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 4 }}>
-                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
+                <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
                   <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Saturation</div>
                   <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#1a1a2e", textTransform: "capitalize" }}>{result.nicheInsights.saturation}</div>
                 </div>
-                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
+                <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
                   <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Trend</div>
                   <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#1a1a2e", textTransform: "capitalize" }}>{result.nicheInsights.growthTrend}</div>
                 </div>
-                <div style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
+                <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 12, padding: 16, textAlign: "center" }}>
                   <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: "rgba(10,30,94,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Top Format</div>
                   <div style={{ fontSize: 14, fontWeight: 700, fontFamily: "'Syne', sans-serif", color: "#1a1a2e" }}>{result.nicheInsights.topContentFormats?.[0] || "—"}</div>
                 </div>
@@ -83,7 +83,7 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "rgba(255,255,255,0.2)",
+                  background: "rgba(10,30,94,0.1)",
                   border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
@@ -97,7 +97,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 28,
                     fontWeight: 800,
-                    color: "rgba(255,255,255,0.3)",
+                    color: "rgba(10,30,94,0.2)",
                     lineHeight: 1,
                     minWidth: 36,
                   }}
@@ -106,10 +106,10 @@ export default function ToolContent() {
                 </span>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#ffffff" }}>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: "#0a1e5e" }}>
                       {ch.channelName}
                     </span>
-                    <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#FF0000", letterSpacing: 1 }}>
+                    <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#0a1e5e", letterSpacing: 1 }}>
                       {ch.estimatedSubscribers} subs
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export default function ToolContent() {
             ))}
 
             {/* Disclaimer */}
-            <div style={{ marginTop: 8, background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.15)", color: "#fbbf24", fontSize: 12, padding: 12, borderRadius: 8, fontFamily: "'DM Sans', sans-serif" }}>
+            <div style={{ marginTop: 8, background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.15)", color: "#92400e", fontSize: 12, padding: 12, borderRadius: 8, fontFamily: "'DM Sans', sans-serif" }}>
               These results are AI-generated estimates. Channel names, subscriber counts, and content details should be verified on YouTube before outreach.
             </div>
           </div>

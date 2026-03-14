@@ -40,10 +40,10 @@ export default function ToolContent() {
 
   const postTypeColor = (type: string) => {
     const t = type.toLowerCase();
-    if (t.includes("reel") || t.includes("video")) return "#E1306C";
-    if (t.includes("carousel")) return "#06b6d4";
-    if (t.includes("story")) return "#fbbf24";
-    return "#22c55e";
+    if (t.includes("reel") || t.includes("video")) return "#7c2d54";
+    if (t.includes("carousel")) return "#0a1e5e";
+    if (t.includes("story")) return "#92400e";
+    return "#166534";
   };
 
   return (
@@ -68,7 +68,7 @@ export default function ToolContent() {
               <div
                 key={i}
                 style={{
-                  background: "rgba(255,255,255,0.2)",
+                  background: "rgba(10,30,94,0.1)",
                   border: "1px solid rgba(10,30,94,0.12)",
                   borderRadius: 12,
                   padding: 20,
@@ -80,7 +80,7 @@ export default function ToolContent() {
                       fontFamily: "'Syne', sans-serif",
                       fontSize: 28,
                       fontWeight: 800,
-                      color: "rgba(255,255,255,0.3)",
+                      color: "rgba(10,30,94,0.2)",
                       lineHeight: 1,
                     }}
                   >
@@ -108,7 +108,7 @@ export default function ToolContent() {
                     fontFamily: "'Syne', sans-serif",
                     fontSize: 16,
                     fontWeight: 700,
-                    color: "#ffffff",
+                    color: "#0a1e5e",
                     margin: "0 0 6px",
                   }}
                 >

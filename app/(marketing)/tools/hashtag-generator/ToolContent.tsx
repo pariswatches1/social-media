@@ -62,9 +62,9 @@ export default function ToolContent() {
   };
 
   const sectionColors: Record<string, string> = {
-    Popular: "#E1306C",
-    Niche: "#06b6d4",
-    "Branded/Unique": "#22c55e",
+    Popular: "#7c2d54",
+    Niche: "#0a1e5e",
+    "Branded/Unique": "#166534",
   };
 
   return (
@@ -93,7 +93,7 @@ export default function ToolContent() {
                   borderRadius: 8,
                   border: "1px solid rgba(10,30,94,0.12)",
                   background: copied === "ALL" ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.15)",
-                  color: copied === "ALL" ? "#22c55e" : "rgba(255,255,255,0.8)",
+                  color: copied === "ALL" ? "#166534" : "rgba(10,30,94,0.7)",
                   fontSize: 12,
                   fontFamily: "'DM Mono', monospace",
                   cursor: "pointer",
@@ -105,7 +105,7 @@ export default function ToolContent() {
             </div>
 
             {result.sections.map((section: HashtagSection, si: number) => {
-              const color = sectionColors[section.category] || "#06b6d4";
+              const color = sectionColors[section.category] || "#0a1e5e";
               return (
                 <div key={si}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -120,7 +120,7 @@ export default function ToolContent() {
                     >
                       {section.category}
                     </span>
-                    <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.3)" }} />
+                    <div style={{ flex: 1, height: 1, background: "rgba(10,30,94,0.08)" }} />
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {section.hashtags.map((tag: string, hi: number) => {
@@ -138,7 +138,7 @@ export default function ToolContent() {
                             border: isCopied
                               ? "1px solid rgba(34,197,94,0.4)"
                               : "1px solid rgba(6,182,212,0.2)",
-                            color: isCopied ? "#22c55e" : "#06b6d4",
+                            color: isCopied ? "#166534" : "#0a1e5e",
                             fontSize: 13,
                             fontFamily: "'DM Mono', monospace",
                             cursor: "pointer",

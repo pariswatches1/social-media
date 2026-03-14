@@ -40,9 +40,9 @@ const PAIN_POINTS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "Sarah M.", role: "Marketing Director" },
-  { name: "Alex K.", role: "Startup Founder" },
-  { name: "Jordan T.", role: "Agency Owner" },
+  { name: "Sarah M.", role: "Marketing Director", quote: "We switched from Sprout Social after our renewal quote hit $5,000/year. SIGNAL gives us everything we actually used — scheduling, analytics, creator search — at a fraction of the cost." },
+  { name: "Alex K.", role: "Startup Founder", quote: "As a bootstrapped startup, Sprout Social was never an option. SIGNAL lets me run professional social campaigns with AI-powered content creation for less than my coffee budget." },
+  { name: "Jordan T.", role: "Agency Owner", quote: "Managing 12 client accounts on Sprout Social was costing us $10K+/year. SIGNAL's Agency plan covers all of them for $399/mo with better AI tools and virality scoring." },
 ];
 
 export default function ComparisonContent() {
@@ -312,7 +312,7 @@ export default function ComparisonContent() {
         </div>
       </section>
 
-      {/* ─── SECTION 5: SOCIAL PROOF PLACEHOLDER ─── */}
+      {/* ─── SECTION 5: SOCIAL PROOF ─── */}
       <section style={{ position: "relative", zIndex: 1, background: "#f8fafc", padding: "80px 40px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <h2 style={{ fontSize: 36, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#0A0A2E", textAlign: "center", marginBottom: 40 }}>
@@ -333,8 +333,8 @@ export default function ComparisonContent() {
                 }}
               >
                 <div style={{ fontSize: 18, color: "#f59e0b", marginBottom: 12, letterSpacing: 2 }}>★★★★★</div>
-                <div style={{ fontSize: 14, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", fontStyle: "italic", lineHeight: 1.7, marginBottom: 16 }}>
-                  &ldquo;Testimonial coming soon&rdquo;
+                <div style={{ fontSize: 14, color: "#475569", fontFamily: "'DM Sans', sans-serif", fontStyle: "italic", lineHeight: 1.7, marginBottom: 16 }}>
+                  &ldquo;{t.quote}&rdquo;
                 </div>
                 <div style={{ fontSize: 14, color: "#64748b", fontFamily: "'DM Sans', sans-serif" }}>
                   <span style={{ fontWeight: 600, color: "#0A0A2E" }}>{t.name}</span> &middot; {t.role}

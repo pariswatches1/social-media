@@ -24,6 +24,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=snapchat_state", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_snapchat")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=snapchat_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.snapchat;
     const clientId = getClientId("snapchat");
     const clientSecret = getClientSecret("snapchat");
@@ -65,7 +71,8 @@ export async function GET(request: NextRequest) {
         accountName = profileData.data.me?.displayName || "";
         accountAvatar = profileData.data.me?.bitmoji?.avatar || "";
       }
-    } catch {
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[Snapchat OAuth] profile fetch failed:", err);
       accountId = tokenData.scope || "snapchat_user";
     }
 
@@ -101,6 +108,7 @@ export async function GET(request: NextRequest) {
 
     const response = NextResponse.redirect(new URL("/settings/accounts?connected=snapchat", request.url));
     response.cookies.delete("snapchat_code_verifier");
+    response.cookies.delete("oauth_state_snapchat");
     return response;
   } catch (error) {
     console.error("[Snapchat OAuth callback]", error);

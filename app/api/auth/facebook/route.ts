@@ -18,5 +18,13 @@ export async function GET() {
     state,
   });
 
-  return NextResponse.redirect(`${config.authUrl}?${params.toString()}`);
+  const response = NextResponse.redirect(`${config.authUrl}?${params.toString()}`);
+  response.cookies.set("oauth_state_facebook", state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 600,
+    path: "/",
+  });
+  return response;
 }

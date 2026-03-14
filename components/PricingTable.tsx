@@ -104,8 +104,8 @@ export default function PricingTable({ currentPlan = "FREE", onUpgrade, variant 
           window.location.href = data.url;
         }
       }
-    } catch {
-      // Handle error silently
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to start checkout. Please try again.");
     }
     setLoading(null);
   };

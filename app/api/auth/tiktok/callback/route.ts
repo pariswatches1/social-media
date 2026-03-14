@@ -24,6 +24,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/settings/accounts?error=tiktok_state", request.url));
     }
 
+    const state = searchParams.get("state");
+    const storedState = request.cookies.get("oauth_state_tiktok")?.value;
+    if (!state || !storedState || state !== storedState) {
+      return NextResponse.redirect(new URL("/settings/accounts?error=tiktok_state", request.url));
+    }
+
     const config = OAUTH_CONFIGS.tiktok;
     const tokenRes = await fetch(config.tokenUrl, {
       method: "POST",
@@ -58,7 +64,8 @@ export async function GET(request: NextRequest) {
         accountName = profileData.data.user.display_name || "";
         accountAvatar = profileData.data.user.avatar_url || "";
       }
-    } catch {
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") console.error("[TikTok OAuth] profile fetch failed:", err);
       accountId = tokenData.open_id || "";
     }
 
@@ -94,6 +101,7 @@ export async function GET(request: NextRequest) {
 
     const response = NextResponse.redirect(new URL("/settings/accounts?connected=tiktok", request.url));
     response.cookies.delete("tiktok_code_verifier");
+    response.cookies.delete("oauth_state_tiktok");
     return response;
   } catch (error) {
     console.error("[TikTok OAuth callback]", error);

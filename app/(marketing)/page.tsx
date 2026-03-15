@@ -194,11 +194,11 @@ const FEATURES = [
 
 /* ── TRUSTED BY LOGOS ──────────────────────────────────── */
 const TRUST_LOGOS = [
-  { name: "TechCrunch", opacity: 0.5 },
-  { name: "Forbes", opacity: 0.5 },
-  { name: "Product Hunt", opacity: 0.5 },
-  { name: "Shopify", opacity: 0.5 },
-  { name: "HubSpot", opacity: 0.5 },
+  { name: "TechCrunch", width: 120 },
+  { name: "Forbes", width: 80 },
+  { name: "Product Hunt", width: 115 },
+  { name: "Shopify", width: 90 },
+  { name: "HubSpot", width: 90 },
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────────── */
@@ -571,169 +571,228 @@ export default function HomePage() {
         {/* ── SOCIAL PROOF STATS — premium ── */}
         <div className="anim-fadeUp d4" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 0, marginTop: 56, width: "100%", maxWidth: 780,
+          gap: 0, marginTop: 56, width: "100%", maxWidth: 860,
         }}>
           <div className="stats-row" style={{
             display: "flex", alignItems: "stretch", gap: 0, width: "100%",
-            background: "linear-gradient(135deg, rgba(9,13,26,.9), rgba(6,182,212,.03))",
-            border: "1px solid rgba(6,182,212,.12)",
-            borderRadius: 18, overflow: "hidden",
-            boxShadow: "0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04)",
+            background: "linear-gradient(135deg, rgba(9,13,26,.95), rgba(6,182,212,.03))",
+            border: "1px solid rgba(6,182,212,.15)",
+            borderRadius: 20, overflow: "hidden",
+            boxShadow: "0 12px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05)",
           }}>
             {[
-              { val: "2,400+", label: "Brands trust SIGNAL", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
-              { val: "47M+", label: "Posts analysed", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> },
-              { val: "4.9", label: "Average rating", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>, suffix: <span style={{ display: "inline-flex", gap: 1, marginLeft: 4 }}>{[1,2,3,4,5].map(s => <svg key={s} width="12" height="12" viewBox="0 0 24 24" fill={s <= 4 ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</span> },
-            ].map(({ val, label, icon, suffix }, i) => (
+              { val: "2,400+", label: "Active brands", sub: "and growing weekly", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
+              { val: "47M+", label: "Posts analysed", sub: "across 9 platforms", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> },
+              { val: "3.2×", label: "Avg. engagement lift", sub: "vs. manual posting", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> },
+              { val: "4.9", label: "Average rating", sub: "", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>, suffix: <span style={{ display: "inline-flex", gap: 2, marginLeft: 6 }}>{[1,2,3,4,5].map(s => <svg key={s} width="13" height="13" viewBox="0 0 24 24" fill={s <= 4 ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</span> },
+            ].map(({ val, label, sub, icon, suffix }, i) => (
               <div key={val} style={{
-                flex: 1, padding: "24px 28px", textAlign: "center",
-                borderRight: i < 2 ? "1px solid rgba(6,182,212,.08)" : "none",
+                flex: 1, padding: "28px 20px", textAlign: "center",
+                borderRight: i < 3 ? "1px solid rgba(6,182,212,.08)" : "none",
                 transition: "background .2s",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 6 }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: 8,
-                    background: "rgba(6,182,212,.08)", border: "1px solid rgba(6,182,212,.15)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>{icon}</div>
-                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 28, color: "#e2e8f0", letterSpacing: "-0.5px" }}>{val}</span>
+                position: "relative",
+              }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "rgba(6,182,212,.03)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
+              >
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10,
+                  background: "rgba(6,182,212,.08)", border: "1px solid rgba(6,182,212,.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 12px",
+                }}>{icon}</div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, marginBottom: 4 }}>
+                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 30, color: "#e2e8f0", letterSpacing: "-0.5px" }}>{val}</span>
                   {suffix}
                 </div>
-                <div style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5 }}>{label}</div>
+                <div style={{ fontSize: 11, color: "#94a3b8", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, letterSpacing: 0.3, marginBottom: 2 }}>{label}</div>
+                {sub && <div style={{ fontSize: 10, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5 }}>{sub}</div>}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Trusted by logos — premium wordmark strip */}
+        {/* As seen in — premium editorial strip */}
         <div className="anim-fadeUp d4" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 40, marginTop: 32,
-          padding: "20px 32px",
-          background: "rgba(9,13,26,.4)", border: "1px solid rgba(255,255,255,.04)",
-          borderRadius: 14,
-          maxWidth: 780,
+          gap: 0, marginTop: 28,
+          maxWidth: 860,
+          position: "relative",
         }}>
-          <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, whiteSpace: "nowrap", flexShrink: 0 }}>FEATURED IN</span>
-          <div style={{ width: 1, height: 20, background: "rgba(255,255,255,.06)" }} />
-          {TRUST_LOGOS.map((logo, i) => (
-            <span key={logo.name} style={{
-              fontSize: 15, fontFamily: "'Syne',sans-serif", fontWeight: 700,
-              color: "#475569", letterSpacing: 0.3,
-              opacity: 0.7, transition: "opacity .2s",
-            }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
-            >{logo.name}</span>
-          ))}
+          {/* Fade edges */}
+          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 60, background: "linear-gradient(90deg, #050811, transparent)", zIndex: 2, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 60, background: "linear-gradient(270deg, #050811, transparent)", zIndex: 2, pointerEvents: "none" }} />
+          <div style={{
+            display: "flex", alignItems: "center", gap: 0, width: "100%",
+            padding: "18px 32px",
+            background: "rgba(9,13,26,.5)", border: "1px solid rgba(255,255,255,.04)",
+            borderRadius: 16, overflow: "hidden",
+          }}>
+            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2.5, whiteSpace: "nowrap", flexShrink: 0, textTransform: "uppercase" }}>As seen in</span>
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,.06)", margin: "0 24px", flexShrink: 0 }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 36, flex: 1, justifyContent: "space-between" }}>
+              {TRUST_LOGOS.map((logo) => (
+                <span key={logo.name} style={{
+                  fontSize: 16, fontFamily: "'Syne',sans-serif", fontWeight: 800,
+                  color: "#334155", letterSpacing: logo.name === "Forbes" ? 2 : 0.5,
+                  textTransform: logo.name === "Forbes" ? "uppercase" : "none",
+                  transition: "color .25s",
+                  whiteSpace: "nowrap",
+                }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#94a3b8")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#334155")}
+                >{logo.name}</span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ════ SUPPORTED PLATFORMS — premium polish ════════════════════════════ */}
-      <section id="platforms" style={{ padding: "80px 40px 100px", maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 56 }}>
-          <div className="pill" style={{ marginBottom: 16 }}>MULTI-PLATFORM</div>
-          <h2 className="sec-head" style={{ marginBottom: 12 }}>One dashboard. Nine platforms.</h2>
-          <p className="sec-sub" style={{ margin: "0 auto" }}>
-            Create once, publish everywhere. SIGNAL connects all your social channels into a single workflow.
-          </p>
-        </div>
+      {/* ════ SUPPORTED PLATFORMS — premium visual showcase ════════════════════ */}
+      <section id="platforms" style={{ padding: "100px 40px 120px", maxWidth: 1100, margin: "0 auto", position: "relative" }}>
+        {/* Ambient glow behind section */}
+        <div style={{
+          position: "absolute", top: "40%", left: "50%", transform: "translate(-50%,-50%)",
+          width: 700, height: 500, borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(6,182,212,.04) 0%, transparent 70%)",
+          pointerEvents: "none", zIndex: 0,
+        }} />
 
-        {/* Platform flow visual */}
-        <div className="platform-flow" style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 40, marginBottom: 0,
-        }}>
-          {/* SIGNAL Hub — elevated */}
-          <div style={{
-            background: "linear-gradient(135deg, rgba(6,182,212,.06), rgba(6,182,212,.02))",
-            border: "1px solid rgba(6,182,212,.25)",
-            borderRadius: 24, padding: "32px 40px", textAlign: "center",
-            boxShadow: "0 0 80px rgba(6,182,212,.08), inset 0 1px 0 rgba(255,255,255,.04)",
-            minWidth: 200, position: "relative",
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <div className="pill" style={{ marginBottom: 16 }}>MULTI-PLATFORM</div>
+            <h2 className="sec-head" style={{ marginBottom: 12 }}>One dashboard. Nine platforms.</h2>
+            <p className="sec-sub" style={{ margin: "0 auto" }}>
+              Write once, publish everywhere. SIGNAL adapts your content to each platform’s format, tone, and audience automatically.
+            </p>
+          </div>
+
+          {/* ── Central hub + radiating platforms visual ── */}
+          <div className="platform-flow" style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            gap: 48, marginBottom: 0,
           }}>
-            {/* Subtle ring glow */}
+            {/* SIGNAL Hub — elevated command center */}
             <div style={{
-              position: "absolute", inset: -1, borderRadius: 24,
-              background: "linear-gradient(135deg, rgba(6,182,212,.15), transparent 50%, rgba(6,182,212,.08))",
-              zIndex: -1, filter: "blur(1px)", opacity: 0.6,
-            }} />
-            <div style={{
-              width: 60, height: 60, borderRadius: 16,
-              background: "linear-gradient(135deg, #0891b2, #0e7490)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 14px", boxShadow: "0 6px 24px rgba(8,145,178,.35)",
+              background: "linear-gradient(135deg, rgba(6,182,212,.08), rgba(6,182,212,.02))",
+              border: "1px solid rgba(6,182,212,.3)",
+              borderRadius: 28, padding: "36px 44px", textAlign: "center",
+              boxShadow: "0 0 100px rgba(6,182,212,.1), 0 20px 60px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.06)",
+              minWidth: 220, position: "relative",
             }}>
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
+              {/* Glow ring */}
+              <div style={{
+                position: "absolute", inset: -2, borderRadius: 30,
+                background: "linear-gradient(135deg, rgba(6,182,212,.2), transparent 40%, transparent 60%, rgba(6,182,212,.12))",
+                zIndex: -1, filter: "blur(1px)", opacity: 0.7,
+              }} />
+              <div style={{
+                width: 64, height: 64, borderRadius: 18,
+                background: "linear-gradient(135deg, #0891b2, #0e7490)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                margin: "0 auto 16px", boxShadow: "0 8px 32px rgba(8,145,178,.4)",
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#e2e8f0", marginBottom: 6 }}>SIGNAL</div>
+              <div style={{ fontSize: 9, color: "#06b6d4", fontFamily: "'DM Mono',monospace", letterSpacing: 2, textTransform: "uppercase" }}>Command Center</div>
+              {/* Live pulse dot */}
+              <div style={{
+                position: "absolute", top: 16, right: 16,
+                width: 8, height: 8, borderRadius: "50%",
+                background: "#10b981",
+                boxShadow: "0 0 8px rgba(16,185,129,.6)",
+                animation: "pulse 2s ease infinite",
+              }} />
             </div>
-            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, color: "#e2e8f0", marginBottom: 4 }}>SIGNAL</div>
-            <div style={{ fontSize: 10, color: "#06b6d4", fontFamily: "'DM Mono',monospace", letterSpacing: 1.5 }}>COMMAND CENTER</div>
+
+            {/* Animated connector */}
+            <div className="platform-flow-arrow" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <svg width="100" height="24" viewBox="0 0 100 24" fill="none">
+                <path d="M0 12h86" stroke="url(#arrowGrad)" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.6">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.2s" repeatCount="indefinite"/>
+                </path>
+                <path d="M82 6l10 6-10 6" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
+                <defs><linearGradient id="arrowGrad" x1="0" y1="12" x2="100" y2="12"><stop offset="0%" stopColor="#0891b2" stopOpacity="0.2"/><stop offset="100%" stopColor="#06b6d4" stopOpacity="0.9"/></linearGradient></defs>
+              </svg>
+              <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#0891b2", letterSpacing: 2, textTransform: "uppercase", fontWeight: 600 }}>Auto-publish</span>
+            </div>
+
+            {/* Platform grid — large branded cards */}
+            <div style={{
+              display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12,
+            }}>
+              {PLATFORMS.map((p) => (
+                <div key={p.name} style={{
+                  display: "flex", alignItems: "center", gap: 12,
+                  padding: "16px 20px", cursor: "default",
+                  background: p.bg,
+                  border: `1px solid ${p.border}`,
+                  borderRadius: 16,
+                  transition: "transform .25s ease, box-shadow .25s ease, border-color .25s ease",
+                  minWidth: 160, position: "relative",
+                }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px) scale(1.03)";
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 16px 40px ${p.a20}, 0 0 0 1px ${p.border}`;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.transform = "";
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "";
+                  }}
+                >
+                  {/* Live indicator dot */}
+                  <div style={{
+                    position: "absolute", top: 8, right: 8,
+                    width: 5, height: 5, borderRadius: "50%",
+                    background: p.color, opacity: 0.5,
+                  }} />
+                  <div style={{ flexShrink: 0, width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {p.icon}
+                  </div>
+                  <div>
+                    <span style={{ fontSize: 14, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: "#e2e8f0", display: "block", lineHeight: 1.2 }}>{p.name}</span>
+                    <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: p.color, opacity: 0.8, letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 4 }}>
+                      <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#10b981", display: "inline-block" }} />
+                      Connected
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Animated arrow connector */}
-          <div className="platform-flow-arrow" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-            <svg width="80" height="24" viewBox="0 0 80 24" fill="none">
-              <path d="M0 12h68" stroke="url(#arrowGrad)" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.6">
-                <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.5s" repeatCount="indefinite"/>
-              </path>
-              <path d="M64 6l8 6-8 6" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
-              <defs><linearGradient id="arrowGrad" x1="0" y1="12" x2="80" y2="12"><stop offset="0%" stopColor="#0891b2" stopOpacity="0.3"/><stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8"/></linearGradient></defs>
-            </svg>
-            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 1.5, textTransform: "uppercase" }}>Publish</span>
-          </div>
-
-          {/* Platform grid — premium cards */}
+          {/* Bottom capabilities bar */}
           <div style={{
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10,
+            display: "flex", justifyContent: "center", gap: 0, marginTop: 56,
+            background: "var(--card)", border: "1px solid rgba(255,255,255,.06)",
+            borderRadius: 18, overflow: "hidden",
+            maxWidth: 720, margin: "56px auto 0",
           }}>
-            {PLATFORMS.map((p) => (
-              <div key={p.name} style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "14px 18px", cursor: "default",
-                background: p.bg,
-                border: `1px solid ${p.border}`,
-                borderRadius: 14,
-                transition: "transform .25s ease, box-shadow .25s ease, border-color .25s ease",
-                minWidth: 150,
+            {[
+              { val: "9", label: "Platforms", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg> },
+              { val: "1-click", label: "Multi-publish", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> },
+              { val: "Real-time", label: "Cross-platform sync", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg> },
+              { val: "Auto", label: "Format adaptation", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg> },
+            ].map((s, i) => (
+              <div key={s.label} style={{
+                flex: 1, textAlign: "center", padding: "22px 16px",
+                borderRight: i < 3 ? "1px solid rgba(255,255,255,.04)" : "none",
+                transition: "background .2s",
               }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px) scale(1.02)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 32px ${p.a20}, 0 0 0 1px ${p.border}`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform = "";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "";
-                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "rgba(6,182,212,.03)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
               >
-                <div style={{ flexShrink: 0, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {p.icon}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 4 }}>
+                  {s.icon}
+                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, color: "#06b6d4" }}>{s.val}</span>
                 </div>
-                <div>
-                  <span style={{ fontSize: 13, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: "#e2e8f0", display: "block" }}>{p.name}</span>
-                  <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: p.color, opacity: 0.7, letterSpacing: 0.5 }}>Connected</span>
-                </div>
+                <div style={{ fontSize: 10, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5 }}>{s.label}</div>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Bottom stat line */}
-        <div style={{
-          textAlign: "center", marginTop: 48,
-          display: "flex", justifyContent: "center", gap: 40, flexWrap: "wrap",
-        }}>
-          {[
-            { val: "9", label: "Platforms supported" },
-            { val: "1-click", label: "Multi-publish" },
-            { val: "Real-time", label: "Analytics sync" },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: "center" }}>
-              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#06b6d4" }}>{s.val}</div>
-              <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5, marginTop: 4 }}>{s.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -842,7 +901,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════ PRICING — premium polish ══════════════════════════════════════════ */}
+      {/* ════ PRICING — premium differentiated ══════════════════════════════════ */}
       <section id="pricing" style={{
         padding: "100px 40px", maxWidth: 1100, margin: "0 auto",
         position: "relative",
@@ -858,9 +917,26 @@ export default function HomePage() {
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>PRICING</div>
           <h2 className="sec-head">Simple, transparent pricing</h2>
-          <p className="sec-sub" style={{ margin: "16px auto 24px" }}>
+          <p className="sec-sub" style={{ margin: "16px auto 12px" }}>
             Start free for 14 days. No credit card required.
           </p>
+          {/* Trust micro-proof */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Sans',sans-serif" }}>Cancel anytime</span>
+            </div>
+            <div style={{ width: 1, height: 14, background: "rgba(255,255,255,.06)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Sans',sans-serif" }}>No credit card needed</span>
+            </div>
+            <div style={{ width: 1, height: 14, background: "rgba(255,255,255,.06)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Sans',sans-serif" }}>Upgrade or downgrade freely</span>
+            </div>
+          </div>
 
           {/* Billing toggle — elevated */}
           <div style={{
@@ -997,16 +1073,49 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        {/* Guarantee bar */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 32, marginTop: 40,
+          padding: "20px 32px",
+          background: "rgba(16,185,129,.04)", border: "1px solid rgba(16,185,129,.12)",
+          borderRadius: 16,
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 12 15 16 10"/>
+          </svg>
+          <div>
+            <span style={{ fontSize: 13, color: "#e2e8f0", fontFamily: "'DM Sans',sans-serif", fontWeight: 600 }}>14-day money-back guarantee</span>
+            <span style={{ fontSize: 12, color: "#4a5568", marginLeft: 8 }}>— no questions asked. If SIGNAL isn’t right for you, get a full refund.</span>
+          </div>
         </div>
         </div>
       </section>
 
-      {/* ════ TESTIMONIALS — premium polish ═════════════════════════════════ */}
+      {/* ════ TESTIMONIALS — premium deep trust ═════════════════════ */}
       <section style={{ padding: "100px 40px", maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>TESTIMONIALS</div>
           <h2 className="sec-head">Loved by 2,400+ brands</h2>
           <p className="sec-sub" style={{ margin: "12px auto 0" }}>See why top creators and agencies choose SIGNAL to power their social strategy.</p>
+          {/* Aggregate rating bar */}
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 12, marginTop: 20,
+            padding: "10px 24px",
+            background: "rgba(245,158,11,.04)", border: "1px solid rgba(245,158,11,.12)",
+            borderRadius: 999,
+          }}>
+            <div style={{ display: "flex", gap: 2 }}>
+              {[1,2,3,4,5].map(s => (
+                <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill={s <= 4 ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+            </div>
+            <span style={{ fontSize: 13, fontFamily: "'Syne',sans-serif", fontWeight: 800, color: "#f59e0b" }}>4.9</span>
+            <div style={{ width: 1, height: 14, background: "rgba(245,158,11,.15)" }} />
+            <span style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Sans',sans-serif" }}>Based on 340+ reviews</span>
+          </div>
         </div>
 
         {/* Featured testimonial — first one gets prominence */}
@@ -1031,9 +1140,19 @@ export default function HomePage() {
               </svg>
             ))}
           </div>
-          <p style={{ fontSize: 18, color: "#e2e8f0", lineHeight: 1.7, marginBottom: 28, fontStyle: "italic", maxWidth: 700 }}>
+          <p style={{ fontSize: 18, color: "#e2e8f0", lineHeight: 1.7, marginBottom: 20, fontStyle: "italic", maxWidth: 700 }}>
             &ldquo;{TESTIMONIALS[0].quote}&rdquo;
           </p>
+          {/* Result metric */}
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "6px 16px", marginBottom: 20,
+            background: "rgba(16,185,129,.06)", border: "1px solid rgba(16,185,129,.15)",
+            borderRadius: 999,
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+            <span style={{ fontSize: 12, color: "#10b981", fontFamily: "'DM Mono',monospace", fontWeight: 600 }}>3× engagement increase in 6 weeks</span>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{
               width: 52, height: 52, borderRadius: "50%", overflow: "hidden",
@@ -1083,9 +1202,21 @@ export default function HomePage() {
               </div>
 
               {/* Quote */}
-              <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.7, marginBottom: 24, flex: 1, fontStyle: "italic" }}>
+              <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.7, marginBottom: 16, flex: 1, fontStyle: "italic" }}>
                 &ldquo;{t.quote}&rdquo;
               </p>
+              {/* Result highlight */}
+              <div style={{
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "5px 12px", marginBottom: 16,
+                background: "rgba(6,182,212,.04)", border: "1px solid rgba(6,182,212,.1)",
+                borderRadius: 8, alignSelf: "flex-start",
+              }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span style={{ fontSize: 10, color: "#06b6d4", fontFamily: "'DM Mono',monospace", fontWeight: 600 }}>
+                  {t.company === "GrowthLab" ? "5× content output" : t.company === "NovaTech" ? "Found 12 content gaps" : "Daily posting, 0 extra hires"}
+                </span>
+              </div>
 
               {/* Author */}
               <div style={{ display: "flex", alignItems: "center", gap: 12, borderTop: "1px solid rgba(255,255,255,.04)", paddingTop: 16 }}>
@@ -1107,18 +1238,34 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Trust company logos strip */}
+        {/* Trust company bar — enriched */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 48, marginTop: 48, padding: "20px 0",
-          borderTop: "1px solid rgba(255,255,255,.04)",
+          gap: 0, marginTop: 48,
+          background: "var(--card)", border: "1px solid rgba(255,255,255,.06)",
+          borderRadius: 16, overflow: "hidden",
         }}>
-          <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, flexShrink: 0 }}>TRUSTED BY TEAMS AT</span>
-          {["Luxe Brands", "GrowthLab", "NovaTech", "UrbanEdge"].map((co) => (
-            <span key={co} style={{
-              fontSize: 14, fontFamily: "'Syne',sans-serif", fontWeight: 700,
-              color: "#2d3748", letterSpacing: 0.3,
-            }}>{co}</span>
+          <div style={{
+            padding: "18px 24px", borderRight: "1px solid rgba(255,255,255,.04)",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+          }}>
+            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#4a5568", letterSpacing: 2 }}>TRUSTED BY</span>
+            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 1 }}>TEAMS AT</span>
+          </div>
+          {["Luxe Brands", "GrowthLab", "NovaTech", "UrbanEdge"].map((co, i) => (
+            <div key={co} style={{
+              flex: 1, textAlign: "center", padding: "16px 20px",
+              borderRight: i < 3 ? "1px solid rgba(255,255,255,.04)" : "none",
+              transition: "background .2s",
+            }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "rgba(6,182,212,.03)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
+            >
+              <span style={{
+                fontSize: 15, fontFamily: "'Syne',sans-serif", fontWeight: 700,
+                color: "#475569", letterSpacing: 0.3,
+              }}>{co}</span>
+            </div>
           ))}
         </div>
       </section>

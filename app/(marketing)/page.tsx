@@ -1073,6 +1073,7 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
         {/* Guarantee bar */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center", gap: 32, marginTop: 40,

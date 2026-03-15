@@ -103,10 +103,10 @@ const TIERS = [
 
 /* ── TESTIMONIALS ─────────────────────────────────────────── */
 const TESTIMONIALS = [
-  { quote: "SIGNAL tripled our engagement in 6 weeks. The virality scorer alone is worth every penny.", name: "Priya M.", role: "Head of Social, Luxe Brands", avatar: "P" },
-  { quote: "Finally an AI tool that sounds like us, not a robot. Our content feels authentic and still gets results.", name: "Jake R.", role: "Founder, GrowthLab", avatar: "J" },
-  { quote: "The competitor analysis feature revealed gaps we had no idea existed. Total game-changer.", name: "Sofia K.", role: "CMO, NovaTech", avatar: "S" },
-  { quote: "We went from posting twice a week to every day across 5 platforms. No extra headcount.", name: "Marcus T.", role: "VP Marketing, UrbanEdge", avatar: "M" },
+  { quote: "SIGNAL tripled our engagement in 6 weeks. The virality scorer alone is worth every penny.", name: "Priya M.", role: "Head of Social, Luxe Brands", avatar: "P", img: "/testimonial-sarah-opt.webp" },
+  { quote: "Finally an AI tool that sounds like us, not a robot. Our content feels authentic and still gets results.", name: "Jake R.", role: "Founder, GrowthLab", avatar: "J", img: "/testimonial-marcus-opt.webp" },
+  { quote: "The competitor analysis feature revealed gaps we had no idea existed. Total game-changer.", name: "Sofia K.", role: "CMO, NovaTech", avatar: "S", img: "/testimonial-emily-opt.webp" },
+  { quote: "We went from posting twice a week to every day across 5 platforms. No extra headcount.", name: "Marcus T.", role: "VP Marketing, UrbanEdge", avatar: "M", img: "/testimonial-james-opt.webp" },
 ];
 
 /* ── FAQs ───────────────────────────────────────────────────────────── */
@@ -406,7 +406,6 @@ export default function HomePage() {
         minHeight: "100vh", display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         padding: "120px 24px 80px", position: "relative", overflow: "hidden",
-        textAlign: "center",
       }}>
         {/* Background glow */}
         <div style={{
@@ -415,68 +414,100 @@ export default function HomePage() {
           top: "10%", left: "50%", transform: "translateX(-50%)", pointerEvents: "none",
         }} />
 
-        <div className="pill anim-fadeIn" style={{ marginBottom: 28 }}>
-          ✨ AI-Powered Social Media Intelligence
-        </div>
-
-        <h1 className="anim-fadeUp" style={{
-          fontFamily: "'Syne',sans-serif", fontWeight: 900,
-          fontSize: "clamp(36px,7vw,80px)", lineHeight: 1.05,
-          letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 900,
+        <div className="hero-split" style={{
+          display: "flex", alignItems: "center", gap: 48, maxWidth: 1200, width: "100%",
         }}>
-          Dominate every feed with
-          <span style={{
-            background: "linear-gradient(135deg,#06b6d4,#0ea5e9,#38bdf8)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          }}> AI-crafted content</span>
-        </h1>
-
-        <p className="anim-fadeUp d1" style={{
-          fontSize: "clamp(15px,2vw,19px)", color: "#64748b", lineHeight: 1.7,
-          maxWidth: 560, marginBottom: 40,
-        }}>
-          SIGNAL analyses competitors, generates on-brand posts, scores virality,
-          and auto-publishes across 9 platforms — so you show up everywhere, every day.
-        </p>
-
-        {/* CTA row */}
-        <div className="anim-fadeUp d2" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 16 }}>
-          <Link href="/sign-up" className="cta-btn">
-            Start free — 14-day trial
-          </Link>
-          <button className="ghost-btn" onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })}>
-            Explore features ↓
-          </button>
-        </div>
-
-        <p className="anim-fadeUp d3" style={{ fontSize: 12, color: "#2d3748", letterSpacing: ".5px", fontFamily: "'DM Mono',monospace" }}>
-          No credit card required · Cancel any time
-        </p>
-
-        {/* Email capture */}
-        <div className="anim-fadeUp d4" style={{
-          display: "flex", gap: 10, marginTop: 36, width: "100%", maxWidth: 480, flexWrap: "wrap",
-        }}>
-          <input ref={emailRef} className="hero-input" placeholder="Enter your work email" type="email" onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()} />
-          <button className="cta-btn" onClick={handleEmailSubmit} style={{ whiteSpace: "nowrap", padding: "14px 24px" }}>
-            {emailSubmitted ? "Thank you!" : "Get early access"}
-          </button>
-        </div>
-
-        {/* Social proof */}
-        <div className="anim-fadeUp d4" style={{
-          display: "flex", alignItems: "center", gap: 20, marginTop: 48, flexWrap: "wrap", justifyContent: "center",
-        }}>
-          {[
-            { val: "2,400+", label: "brands" },
-            { val: "47M+",   label: "posts scheduled" },
-            { val: "4.9★",   label: "avg rating" },
-          ].map(({ val, label }) => (
-            <div key={val} style={{ textAlign: "center" }}>
-              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#e2e8f0" }}>{val}</div>
-              <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 1 }}>{label}</div>
+          {/* Left: Text content */}
+          <div style={{ flex: "1 1 50%", textAlign: "left" }}>
+            <div className="pill anim-fadeIn" style={{ marginBottom: 28 }}>
+              ✨ AI-Powered Social Media Intelligence
             </div>
-          ))}
+
+            <h1 className="anim-fadeUp" style={{
+              fontFamily: "'Syne',sans-serif", fontWeight: 900,
+              fontSize: "clamp(32px,5vw,64px)", lineHeight: 1.05,
+              letterSpacing: "-1.5px", marginBottom: 24,
+            }}>
+              Dominate every feed with
+              <span style={{
+                background: "linear-gradient(135deg,#06b6d4,#0ea5e9,#38bdf8)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              }}> AI-crafted content</span>
+            </h1>
+
+            <p className="anim-fadeUp d1" style={{
+              fontSize: "clamp(15px,2vw,18px)", color: "#64748b", lineHeight: 1.7,
+              maxWidth: 520, marginBottom: 32,
+            }}>
+              SIGNAL analyses competitors, generates on-brand posts, scores virality,
+              and auto-publishes across 9 platforms — so you show up everywhere, every day.
+            </p>
+
+            {/* CTA row */}
+            <div className="anim-fadeUp d2" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
+              <Link href="/sign-up" className="cta-btn">
+                Start free — 14-day trial
+              </Link>
+              <button className="ghost-btn" onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })}>
+                Explore features ↓
+              </button>
+            </div>
+
+            <p className="anim-fadeUp d3" style={{ fontSize: 12, color: "#2d3748", letterSpacing: ".5px", fontFamily: "'DM Mono',monospace" }}>
+              No credit card required · Cancel any time
+            </p>
+
+            {/* Email capture */}
+            <div className="anim-fadeUp d4" style={{
+              display: "flex", gap: 10, marginTop: 28, width: "100%", maxWidth: 480, flexWrap: "wrap",
+            }}>
+              <input ref={emailRef} className="hero-input" placeholder="Enter your work email" type="email" onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()} />
+              <button className="cta-btn" onClick={handleEmailSubmit} style={{ whiteSpace: "nowrap", padding: "14px 24px" }}>
+                {emailSubmitted ? "Thank you!" : "Get early access"}
+              </button>
+            </div>
+
+            {/* Social proof */}
+            <div className="anim-fadeUp d4" style={{
+              display: "flex", alignItems: "center", gap: 20, marginTop: 36, flexWrap: "wrap",
+            }}>
+              {[
+                { val: "2,400+", label: "brands" },
+                { val: "47M+",   label: "posts scheduled" },
+                { val: "4.9★",   label: "avg rating" },
+              ].map(({ val, label }) => (
+                <div key={val} style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#e2e8f0" }}>{val}</div>
+                  <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 1 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Hero product image */}
+          <div className="hero-image anim-fadeUp d2" style={{
+            flex: "1 1 50%", position: "relative",
+          }}>
+            <div style={{
+              borderRadius: 16, overflow: "hidden",
+              border: "1px solid rgba(6,182,212,.15)",
+              boxShadow: "0 20px 60px rgba(6,182,212,.08), 0 0 120px rgba(6,182,212,.04)",
+            }}>
+              <img
+                src="/signal-hero-dashboard-opt.webp"
+                alt="SIGNAL AI Dashboard — content creation, virality scoring, analytics, and multi-platform publishing"
+                width={700} height={394}
+                style={{ width: "100%", height: "auto", display: "block" }}
+                loading="eager"
+              />
+            </div>
+            {/* Glow behind image */}
+            <div style={{
+              position: "absolute", inset: -40, borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(6,182,212,.08) 0%, transparent 70%)",
+              zIndex: -1, pointerEvents: "none",
+            }} />
+          </div>
         </div>
       </section>
 
@@ -528,41 +559,48 @@ export default function HomePage() {
               title: "AI Content Generation",
               desc: "Generate 3 angle-tested post variations per topic. Trained on your brand voice and top-performing content.",
               color: "#06b6d4",
+              img: "/feature-ai-content-opt.webp",
             },
             {
               icon: "🔍",
               title: "Competitor Analysis",
               desc: "Reverse-engineer any competitor’s top content. Find the gaps they’re missing and own them.",
               color: "#8b5cf6",
+              img: "/feature-competitor-opt.webp",
             },
             {
               icon: "📈",
               title: "Virality Scoring",
               desc: "Score every post before publishing with our proprietary algorithm trained on 47M+ posts.",
               color: "#f59e0b",
+              img: "/feature-virality-opt.webp",
             },
             {
               icon: "⏰",
               title: "Auto-Publishing",
               desc: "Schedule and publish across all 9 platforms simultaneously. Set it and forget it.",
               color: "#10b981",
+              img: "/feature-autopublish-opt.webp",
             },
             {
               icon: "🎨",
               title: "Brand Voice Kit",
               desc: "Define your tone, vocabulary, and style once. SIGNAL applies it consistently across every post.",
               color: "#ec4899",
+              img: "/feature-brandvoice-opt.webp",
             },
             {
               icon: "📊",
               title: "Real-Time Analytics",
               desc: "Track reach, engagement, and ROI across all platforms in one unified dashboard.",
               color: "#f97316",
+              img: "/feature-analytics-opt.webp",
             },
-          ].map(({ icon, title, desc, color }) => (
+          ].map(({ icon, title, desc, color, img }) => (
             <div key={title} className="glass" style={{
-              padding: 24, border: `1px solid rgba(255,255,255,.06)`,
+              padding: 0, border: `1px solid rgba(255,255,255,.06)`,
               transition: "border-color .2s, transform .2s",
+              overflow: "hidden",
             }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
@@ -575,16 +613,40 @@ export default function HomePage() {
                 el.style.transform = "";
               }}
             >
-              <div style={{ fontSize: 28, marginBottom: 14 }}>{icon}</div>
-              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, marginBottom: 10, color: "#e2e8f0" }}>{title}</div>
-              <div style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.7 }}>{desc}</div>
+              <div style={{
+                width: "100%", aspectRatio: "4/3", overflow: "hidden",
+                borderBottom: "1px solid rgba(255,255,255,.06)",
+              }}>
+                <img src={img} alt={title} width={400} height={300}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  loading="lazy"
+                />
+              </div>
+              <div style={{ padding: "20px 24px 24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ fontSize: 22 }}>{icon}</span>
+                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 16, color: "#e2e8f0" }}>{title}</span>
+                </div>
+                <div style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.7 }}>{desc}</div>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ════ PRICING ═══════════════════════════════════════════════════════════ */}
-      <section id="pricing" style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
+      <section id="pricing" style={{
+        padding: "80px 40px", maxWidth: 1100, margin: "0 auto",
+        position: "relative",
+      }}>
+        {/* Subtle background treatment */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 0, opacity: 0.3,
+          backgroundImage: "url(/pricing-bg-opt.webp)",
+          backgroundSize: "cover", backgroundPosition: "center",
+          pointerEvents: "none", borderRadius: 24,
+        }} />
+        <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div className="pill" style={{ marginBottom: 16 }}>PRICING</div>
           <h2 className="sec-head">Simple, transparent pricing</h2>
@@ -672,6 +734,7 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+        </div>
       </section>
 
       {/* ════ TESTIMONIALS ══════════════════════════════════════════════════════ */}
@@ -689,12 +752,16 @@ export default function HomePage() {
                 “{t.quote}”
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: "50%",
-                  background: "linear-gradient(135deg,#0891b2,#0e7490)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: "'Syne',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff",
-                }}>{t.avatar}</div>
+                <img
+                  src={t.img}
+                  alt={t.name}
+                  width={40} height={40}
+                  style={{
+                    width: 40, height: 40, borderRadius: "50%", objectFit: "cover",
+                    border: "2px solid rgba(6,182,212,.3)",
+                  }}
+                  loading="lazy"
+                />
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{t.name}</div>
                   <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace" }}>{t.role}</div>
@@ -750,15 +817,25 @@ export default function HomePage() {
         background: "linear-gradient(135deg, rgba(8,145,178,.12), rgba(14,116,144,.08))",
         borderTop: "1px solid rgba(6,182,212,.12)",
         borderBottom: "1px solid rgba(6,182,212,.12)",
+        position: "relative", overflow: "hidden",
       }}>
-        <div className="pill" style={{ marginBottom: 20 }}>GET STARTED TODAY</div>
-        <h2 className="sec-head" style={{ marginBottom: 16 }}>Ready to dominate your feeds?</h2>
-        <p className="sec-sub" style={{ margin: "0 auto 32px" }}>
-          Join 2,400+ brands already using SIGNAL to outpace their competition every single day.
-        </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/sign-up" className="cta-btn">Start free — 14 days</Link>
-          <button className="ghost-btn" onClick={() => document.querySelector("#faq")?.scrollIntoView({ behavior: "smooth" })}>Learn more</button>
+        {/* CTA background visual */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 0, opacity: 0.12,
+          backgroundImage: "url(/cta-visual-opt.webp)",
+          backgroundSize: "cover", backgroundPosition: "center",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div className="pill" style={{ marginBottom: 20 }}>GET STARTED TODAY</div>
+          <h2 className="sec-head" style={{ marginBottom: 16 }}>Ready to dominate your feeds?</h2>
+          <p className="sec-sub" style={{ margin: "0 auto 32px" }}>
+            Join 2,400+ brands already using SIGNAL to outpace their competition every single day.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/sign-up" className="cta-btn">Start free — 14 days</Link>
+            <button className="ghost-btn" onClick={() => document.querySelector("#faq")?.scrollIntoView({ behavior: "smooth" })}>Learn more</button>
+          </div>
         </div>
       </section>
 

@@ -568,53 +568,70 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ── SOCIAL PROOF STATS — redesigned ── */}
+        {/* ── SOCIAL PROOF STATS — premium ── */}
         <div className="anim-fadeUp d4" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 0, marginTop: 56, width: "100%", maxWidth: 720,
+          gap: 0, marginTop: 56, width: "100%", maxWidth: 780,
         }}>
           <div className="stats-row" style={{
             display: "flex", alignItems: "stretch", gap: 0, width: "100%",
-            background: "rgba(9,13,26,.8)", border: "1px solid rgba(255,255,255,.06)",
-            borderRadius: 16, overflow: "hidden",
+            background: "linear-gradient(135deg, rgba(9,13,26,.9), rgba(6,182,212,.03))",
+            border: "1px solid rgba(6,182,212,.12)",
+            borderRadius: 18, overflow: "hidden",
+            boxShadow: "0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04)",
           }}>
             {[
-              { val: "2,400+", label: "Brands trust SIGNAL", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg> },
-              { val: "47M+", label: "Posts analysed", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> },
-              { val: "4.9★", label: "Average rating", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> },
-            ].map(({ val, label, icon }, i) => (
+              { val: "2,400+", label: "Brands trust SIGNAL", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
+              { val: "47M+", label: "Posts analysed", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> },
+              { val: "4.9", label: "Average rating", icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>, suffix: <span style={{ display: "inline-flex", gap: 1, marginLeft: 4 }}>{[1,2,3,4,5].map(s => <svg key={s} width="12" height="12" viewBox="0 0 24 24" fill={s <= 4 ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</span> },
+            ].map(({ val, label, icon, suffix }, i) => (
               <div key={val} style={{
-                flex: 1, padding: "20px 24px", textAlign: "center",
-                borderRight: i < 2 ? "1px solid rgba(255,255,255,.06)" : "none",
+                flex: 1, padding: "24px 28px", textAlign: "center",
+                borderRight: i < 2 ? "1px solid rgba(6,182,212,.08)" : "none",
+                transition: "background .2s",
               }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 4 }}>
-                  {icon}
-                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 24, color: "#e2e8f0" }}>{val}</span>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 6 }}>
+                  <div style={{
+                    width: 32, height: 32, borderRadius: 8,
+                    background: "rgba(6,182,212,.08)", border: "1px solid rgba(6,182,212,.15)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>{icon}</div>
+                  <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 28, color: "#e2e8f0", letterSpacing: "-0.5px" }}>{val}</span>
+                  {suffix}
                 </div>
-                <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5 }}>{label}</div>
+                <div style={{ fontSize: 11, color: "#64748b", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5 }}>{label}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Trusted by logos */}
+        {/* Trusted by logos — premium wordmark strip */}
         <div className="anim-fadeUp d4" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 32, marginTop: 28, opacity: 0.4,
+          gap: 40, marginTop: 32,
+          padding: "20px 32px",
+          background: "rgba(9,13,26,.4)", border: "1px solid rgba(255,255,255,.04)",
+          borderRadius: 14,
+          maxWidth: 780,
         }}>
-          <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, whiteSpace: "nowrap" }}>TRUSTED BY</span>
-          {TRUST_LOGOS.map((logo) => (
+          <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, whiteSpace: "nowrap", flexShrink: 0 }}>FEATURED IN</span>
+          <div style={{ width: 1, height: 20, background: "rgba(255,255,255,.06)" }} />
+          {TRUST_LOGOS.map((logo, i) => (
             <span key={logo.name} style={{
-              fontSize: 13, fontFamily: "'Syne',sans-serif", fontWeight: 700,
-              color: "#64748b", letterSpacing: 0.5,
-            }}>{logo.name}</span>
+              fontSize: 15, fontFamily: "'Syne',sans-serif", fontWeight: 700,
+              color: "#475569", letterSpacing: 0.3,
+              opacity: 0.7, transition: "opacity .2s",
+            }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
+            >{logo.name}</span>
           ))}
         </div>
       </section>
 
-      {/* ════ SUPPORTED PLATFORMS — redesigned ════════════════════════════════ */}
-      <section id="platforms" style={{ padding: "60px 40px 80px", maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
+      {/* ════ SUPPORTED PLATFORMS — premium polish ════════════════════════════ */}
+      <section id="platforms" style={{ padding: "80px 40px 100px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>MULTI-PLATFORM</div>
           <h2 className="sec-head" style={{ marginBottom: 12 }}>One dashboard. Nine platforms.</h2>
           <p className="sec-sub" style={{ margin: "0 auto" }}>
@@ -625,65 +642,98 @@ export default function HomePage() {
         {/* Platform flow visual */}
         <div className="platform-flow" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 32, marginBottom: 0,
+          gap: 40, marginBottom: 0,
         }}>
-          {/* SIGNAL Hub */}
+          {/* SIGNAL Hub — elevated */}
           <div style={{
-            background: "rgba(6,182,212,.08)", border: "1px solid rgba(6,182,212,.25)",
-            borderRadius: 20, padding: "28px 36px", textAlign: "center",
-            boxShadow: "0 0 60px rgba(6,182,212,.08)",
-            minWidth: 180,
+            background: "linear-gradient(135deg, rgba(6,182,212,.06), rgba(6,182,212,.02))",
+            border: "1px solid rgba(6,182,212,.25)",
+            borderRadius: 24, padding: "32px 40px", textAlign: "center",
+            boxShadow: "0 0 80px rgba(6,182,212,.08), inset 0 1px 0 rgba(255,255,255,.04)",
+            minWidth: 200, position: "relative",
           }}>
+            {/* Subtle ring glow */}
             <div style={{
-              width: 56, height: 56, borderRadius: 14,
+              position: "absolute", inset: -1, borderRadius: 24,
+              background: "linear-gradient(135deg, rgba(6,182,212,.15), transparent 50%, rgba(6,182,212,.08))",
+              zIndex: -1, filter: "blur(1px)", opacity: 0.6,
+            }} />
+            <div style={{
+              width: 60, height: 60, borderRadius: 16,
               background: "linear-gradient(135deg, #0891b2, #0e7490)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 12px", boxShadow: "0 4px 16px rgba(8,145,178,.3)",
+              margin: "0 auto 14px", boxShadow: "0 6px 24px rgba(8,145,178,.35)",
             }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
               </svg>
             </div>
-            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 18, color: "#e2e8f0", marginBottom: 4 }}>SIGNAL</div>
-            <div style={{ fontSize: 11, color: "#06b6d4", fontFamily: "'DM Mono',monospace", letterSpacing: 1 }}>YOUR HUB</div>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, color: "#e2e8f0", marginBottom: 4 }}>SIGNAL</div>
+            <div style={{ fontSize: 10, color: "#06b6d4", fontFamily: "'DM Mono',monospace", letterSpacing: 1.5 }}>COMMAND CENTER</div>
           </div>
 
-          {/* Arrow */}
-          <div className="platform-flow-arrow" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            <svg width="60" height="24" viewBox="0 0 60 24" fill="none">
-              <path d="M0 12h52M46 6l6 6-6 6" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 3" opacity="0.5"/>
+          {/* Animated arrow connector */}
+          <div className="platform-flow-arrow" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+            <svg width="80" height="24" viewBox="0 0 80 24" fill="none">
+              <path d="M0 12h68" stroke="url(#arrowGrad)" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.6">
+                <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.5s" repeatCount="indefinite"/>
+              </path>
+              <path d="M64 6l8 6-8 6" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+              <defs><linearGradient id="arrowGrad" x1="0" y1="12" x2="80" y2="12"><stop offset="0%" stopColor="#0891b2" stopOpacity="0.3"/><stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8"/></linearGradient></defs>
             </svg>
-            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 1 }}>PUBLISH</span>
+            <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 1.5, textTransform: "uppercase" }}>Publish</span>
           </div>
 
-          {/* Platform grid */}
+          {/* Platform grid — premium cards */}
           <div style={{
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12,
+            display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10,
           }}>
             {PLATFORMS.map((p) => (
-              <div key={p.name} className="glass" style={{
+              <div key={p.name} style={{
                 display: "flex", alignItems: "center", gap: 10,
-                padding: "12px 16px", cursor: "default",
+                padding: "14px 18px", cursor: "default",
+                background: p.bg,
                 border: `1px solid ${p.border}`,
-                transition: "transform .2s, box-shadow .2s",
-                minWidth: 140,
+                borderRadius: 14,
+                transition: "transform .25s ease, box-shadow .25s ease, border-color .25s ease",
+                minWidth: 150,
               }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${p.a20}`;
+                  (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px) scale(1.02)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 32px ${p.a20}, 0 0 0 1px ${p.border}`;
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.transform = "";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "";
                 }}
               >
-                <div style={{ flexShrink: 0, width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ flexShrink: 0, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {p.icon}
                 </div>
-                <span style={{ fontSize: 12, fontFamily: "'DM Sans',sans-serif", fontWeight: 500, color: "#e2e8f0" }}>{p.name}</span>
+                <div>
+                  <span style={{ fontSize: 13, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, color: "#e2e8f0", display: "block" }}>{p.name}</span>
+                  <span style={{ fontSize: 9, fontFamily: "'DM Mono',monospace", color: p.color, opacity: 0.7, letterSpacing: 0.5 }}>Connected</span>
+                </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Bottom stat line */}
+        <div style={{
+          textAlign: "center", marginTop: 48,
+          display: "flex", justifyContent: "center", gap: 40, flexWrap: "wrap",
+        }}>
+          {[
+            { val: "9", label: "Platforms supported" },
+            { val: "1-click", label: "Multi-publish" },
+            { val: "Real-time", label: "Analytics sync" },
+          ].map(s => (
+            <div key={s.label} style={{ textAlign: "center" }}>
+              <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, color: "#06b6d4" }}>{s.val}</div>
+              <div style={{ fontSize: 11, color: "#4a5568", fontFamily: "'DM Mono',monospace", letterSpacing: 0.5, marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -792,39 +842,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════ PRICING — refined ═══════════════════════════════════════════════ */}
+      {/* ════ PRICING — premium polish ══════════════════════════════════════════ */}
       <section id="pricing" style={{
-        padding: "80px 40px", maxWidth: 1100, margin: "0 auto",
+        padding: "100px 40px", maxWidth: 1100, margin: "0 auto",
         position: "relative",
       }}>
+        {/* Ambient glow */}
+        <div style={{
+          position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+          width: 600, height: 400, borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(6,182,212,.04) 0%, transparent 70%)",
+          pointerEvents: "none", zIndex: 0,
+        }} />
         <div style={{ position: "relative", zIndex: 1 }}>
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>PRICING</div>
           <h2 className="sec-head">Simple, transparent pricing</h2>
           <p className="sec-sub" style={{ margin: "16px auto 24px" }}>
             Start free for 14 days. No credit card required.
           </p>
 
-          {/* Billing toggle */}
+          {/* Billing toggle — elevated */}
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 0,
-            background: "#090d1a", border: "1px solid rgba(255,255,255,.08)",
+            background: "rgba(9,13,26,.9)", border: "1px solid rgba(255,255,255,.08)",
             borderRadius: 999, padding: "4px",
+            boxShadow: "0 4px 16px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.03)",
           }}>
             <button onClick={() => setAnnual(false)} style={{
-              padding: "8px 22px", borderRadius: 999, border: "none",
+              padding: "10px 24px", borderRadius: 999, border: "none",
               background: !annual ? "rgba(6,182,212,.15)" : "transparent",
               color: !annual ? "#06b6d4" : "#4a5568",
               fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: 1,
-              transition: "all .2s",
+              transition: "all .2s", fontWeight: !annual ? 600 : 400,
             }}>Monthly</button>
             <button onClick={() => setAnnual(true)} style={{
-              padding: "8px 22px", borderRadius: 999, border: "none",
+              padding: "10px 24px", borderRadius: 999, border: "none",
               background: annual ? "rgba(6,182,212,.15)" : "transparent",
               color: annual ? "#06b6d4" : "#4a5568",
               fontSize: 12, fontFamily: "'DM Mono',monospace", letterSpacing: 1,
-              transition: "all .2s",
-            }}>Annual <span style={{ fontSize: 10, color: "#10b981", marginLeft: 4 }}>Save 20%</span></button>
+              transition: "all .2s", fontWeight: annual ? 600 : 400,
+            }}>Annual <span style={{ fontSize: 10, color: "#10b981", marginLeft: 4, fontWeight: 700 }}>Save 20%</span></button>
           </div>
         </div>
 
@@ -836,66 +894,100 @@ export default function HomePage() {
         }}>
           {TIERS.map((tier) => (
             <div key={tier.name} style={{
-              background: tier.highlight ? "rgba(6,182,212,.04)" : "var(--card)",
+              background: tier.highlight
+                ? "linear-gradient(180deg, rgba(6,182,212,.06) 0%, rgba(6,182,212,.02) 100%)"
+                : "var(--card)",
               border: `1px solid ${tier.highlight ? "rgba(6,182,212,.35)" : "rgba(255,255,255,.06)"}`,
-              borderRadius: 18, padding: "32px 24px",
+              borderRadius: 20, padding: "36px 26px",
               position: "relative",
-              boxShadow: tier.highlight ? "0 0 60px rgba(6,182,212,.08), 0 20px 40px rgba(0,0,0,.2)" : "none",
-              transition: "border-color .2s, transform .2s",
+              boxShadow: tier.highlight
+                ? "0 0 80px rgba(6,182,212,.08), 0 24px 48px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.06)"
+                : "inset 0 1px 0 rgba(255,255,255,.03)",
+              transition: "border-color .25s, transform .25s, box-shadow .25s",
               display: "flex", flexDirection: "column",
             }}
               onMouseEnter={(e) => {
-                if (!tier.highlight) (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,.12)";
-                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+                if (!tier.highlight) {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,.14)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05)";
+                }
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-4px)";
               }}
               onMouseLeave={(e) => {
-                if (!tier.highlight) (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,.06)";
+                if (!tier.highlight) {
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,.06)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.03)";
+                }
                 (e.currentTarget as HTMLDivElement).style.transform = "";
               }}
             >
               {tier.highlight && (
                 <div style={{
-                  position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)",
+                  position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)",
                   background: "var(--grad)", color: "#fff",
                   fontSize: 10, fontFamily: "'DM Mono',monospace", letterSpacing: 1.5,
-                  padding: "4px 16px", borderRadius: 999,
-                  boxShadow: "0 4px 12px rgba(8,145,178,.3)",
+                  padding: "5px 18px", borderRadius: 999,
+                  boxShadow: "0 4px 16px rgba(8,145,178,.35)",
+                  fontWeight: 600,
                 }}>MOST POPULAR</div>
               )}
 
               <div style={{ marginBottom: 20 }}>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>{tier.name}</div>
-                <div style={{ fontSize: 12, color: "#4a5568", fontFamily: "'DM Mono',monospace" }}>{tier.tagline}</div>
+                <div style={{
+                  fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 20, marginBottom: 6,
+                  color: tier.highlight ? "#06b6d4" : "#e2e8f0",
+                }}>{tier.name}</div>
+                <div style={{ fontSize: 12, color: "#4a5568", fontFamily: "'DM Mono',monospace", lineHeight: 1.5 }}>{tier.tagline}</div>
               </div>
 
               <div style={{ marginBottom: 24 }}>
-                <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 900, fontSize: 40, lineHeight: 1 }}>
+                <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 900, fontSize: 42, lineHeight: 1, color: "#e2e8f0" }}>
                   {tier.price.monthly === 0 ? "$0" : `$${annual ? tier.price.annual : tier.price.monthly}`}
                 </span>
                 <span style={{ fontSize: 13, color: "#4a5568", marginLeft: 4 }}>
                   {tier.price.monthly === 0 ? "forever" : "/mo"}
                 </span>
+                {annual && tier.price.monthly > 0 && (
+                  <div style={{ fontSize: 11, color: "#10b981", fontFamily: "'DM Mono',monospace", marginTop: 4 }}>
+                    ${(tier.price.monthly - tier.price.annual) * 12}/yr saved
+                  </div>
+                )}
               </div>
 
               <Link href="/sign-up" style={{
                 display: "block", textAlign: "center", width: "100%",
-                padding: "12px 0", fontSize: 12, letterSpacing: 1, marginBottom: 24,
+                padding: "13px 0", fontSize: 12, letterSpacing: 1, marginBottom: 24,
                 background: tier.highlight ? "var(--grad)" : "transparent",
                 border: tier.highlight ? "none" : "1px solid rgba(255,255,255,.10)",
                 color: tier.highlight ? "#fff" : "#94a3b8",
-                borderRadius: 10, fontFamily: "'DM Mono',monospace", fontWeight: 600,
-                boxShadow: tier.highlight ? "0 4px 16px rgba(8,145,178,.25)" : "none",
-                transition: "all .2s",
+                borderRadius: 12, fontFamily: "'DM Mono',monospace", fontWeight: 600,
+                boxShadow: tier.highlight ? "0 4px 20px rgba(8,145,178,.3)" : "none",
+                transition: "all .25s",
                 textDecoration: "none",
-              }}>
+              }}
+                onMouseEnter={(e) => {
+                  if (!tier.highlight) {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(6,182,212,.4)";
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(6,182,212,.06)";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#06b6d4";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!tier.highlight) {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,.10)";
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#94a3b8";
+                  }
+                }}
+              >
                 {tier.price.monthly === 0 ? "Get started free" : "Start free trial"}
               </Link>
 
               <div style={{ borderTop: "1px solid rgba(255,255,255,.04)", paddingTop: 20, flex: 1 }}>
-                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
                   {tier.features.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#94a3b8" }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={tier.highlight ? "#06b6d4" : "#0891b2"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                       {f}
@@ -909,35 +1001,82 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════ TESTIMONIALS — premium redesign ═════════════════════════════════ */}
-      <section style={{ padding: "80px 40px", maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
+      {/* ════ TESTIMONIALS — premium polish ═════════════════════════════════ */}
+      <section style={{ padding: "100px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>TESTIMONIALS</div>
           <h2 className="sec-head">Loved by 2,400+ brands</h2>
           <p className="sec-sub" style={{ margin: "12px auto 0" }}>See why top creators and agencies choose SIGNAL to power their social strategy.</p>
         </div>
 
-        <div className="testimonials-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20 }}>
-          {TESTIMONIALS.map((t) => (
+        {/* Featured testimonial — first one gets prominence */}
+        <div style={{
+          background: "linear-gradient(135deg, rgba(6,182,212,.05), rgba(6,182,212,.01))",
+          border: "1px solid rgba(6,182,212,.2)",
+          borderRadius: 24, padding: "40px 44px",
+          marginBottom: 20,
+          position: "relative",
+          boxShadow: "0 8px 40px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.04)",
+        }}>
+          {/* Large quote mark */}
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style={{ position: "absolute", top: 24, left: 32, opacity: 0.06 }}>
+            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" fill="#06b6d4"/>
+            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" fill="#06b6d4"/>
+          </svg>
+
+          <div style={{ display: "flex", gap: 2, marginBottom: 20 }}>
+            {[1,2,3,4,5].map((s) => (
+              <svg key={s} width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            ))}
+          </div>
+          <p style={{ fontSize: 18, color: "#e2e8f0", lineHeight: 1.7, marginBottom: 28, fontStyle: "italic", maxWidth: 700 }}>
+            &ldquo;{TESTIMONIALS[0].quote}&rdquo;
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{
+              width: 52, height: 52, borderRadius: "50%", overflow: "hidden",
+              border: "2px solid rgba(6,182,212,.3)",
+              boxShadow: "0 4px 12px rgba(0,0,0,.3)",
+              flexShrink: 0,
+            }}>
+              <img src={TESTIMONIALS[0].img} alt={TESTIMONIALS[0].name} width={52} height={52}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} loading="lazy" />
+            </div>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "#e2e8f0" }}>{TESTIMONIALS[0].name}</div>
+              <div style={{ fontSize: 12, color: "#64748b" }}>{TESTIMONIALS[0].role}</div>
+              <div style={{ fontSize: 12, color: "#06b6d4", fontFamily: "'DM Mono',monospace", fontWeight: 500 }}>{TESTIMONIALS[0].company}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Remaining testimonials grid */}
+        <div className="testimonials-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          {TESTIMONIALS.slice(1).map((t) => (
             <div key={t.name} style={{
               background: "var(--card)", border: "1px solid rgba(255,255,255,.06)",
-              borderRadius: 18, padding: "28px 24px",
-              transition: "border-color .2s, transform .2s",
+              borderRadius: 20, padding: "28px 24px",
+              transition: "border-color .25s, transform .25s, box-shadow .25s",
               display: "flex", flexDirection: "column",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,.03)",
             }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(6,182,212,.2)";
-                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,.06)";
                 (e.currentTarget as HTMLDivElement).style.transform = "";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.03)";
               }}
             >
               {/* Star rating */}
               <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>
                 {[1,2,3,4,5].map((s) => (
-                  <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
+                  <svg key={s} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                 ))}
@@ -951,73 +1090,103 @@ export default function HomePage() {
               {/* Author */}
               <div style={{ display: "flex", alignItems: "center", gap: 12, borderTop: "1px solid rgba(255,255,255,.04)", paddingTop: 16 }}>
                 <div style={{
-                  width: 44, height: 44, borderRadius: "50%", overflow: "hidden",
-                  border: "2px solid rgba(6,182,212,.25)",
+                  width: 40, height: 40, borderRadius: "50%", overflow: "hidden",
+                  border: "2px solid rgba(6,182,212,.2)",
                   flexShrink: 0,
                 }}>
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    width={44} height={44}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                    loading="lazy"
-                  />
+                  <img src={t.img} alt={t.name} width={40} height={40}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} loading="lazy" />
                 </div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#e2e8f0" }}>{t.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{t.name}</div>
                   <div style={{ fontSize: 11, color: "#64748b" }}>{t.role}</div>
-                  <div style={{ fontSize: 11, color: "#06b6d4", fontFamily: "'DM Mono',monospace", fontWeight: 500 }}>{t.company}</div>
+                  <div style={{ fontSize: 10, color: "#06b6d4", fontFamily: "'DM Mono',monospace", fontWeight: 500 }}>{t.company}</div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Trust company logos strip */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: 48, marginTop: 48, padding: "20px 0",
+          borderTop: "1px solid rgba(255,255,255,.04)",
+        }}>
+          <span style={{ fontSize: 10, fontFamily: "'DM Mono',monospace", color: "#2d3748", letterSpacing: 2, flexShrink: 0 }}>TRUSTED BY TEAMS AT</span>
+          {["Luxe Brands", "GrowthLab", "NovaTech", "UrbanEdge"].map((co) => (
+            <span key={co} style={{
+              fontSize: 14, fontFamily: "'Syne',sans-serif", fontWeight: 700,
+              color: "#2d3748", letterSpacing: 0.3,
+            }}>{co}</span>
+          ))}
+        </div>
       </section>
 
-      {/* ════ FAQ — polished ═══════════════════════════════════════════════════ */}
-      <section id="faq" style={{ padding: "80px 40px", maxWidth: 720, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
+      {/* ════ FAQ — premium polish ═══════════════════════════════════════════════ */}
+      <section id="faq" style={{ padding: "100px 40px", maxWidth: 760, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
           <div className="pill" style={{ marginBottom: 16 }}>FAQ</div>
           <h2 className="sec-head">Common questions</h2>
           <p className="sec-sub" style={{ margin: "12px auto 0" }}>Everything you need to know about SIGNAL.</p>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {FAQS.map((faq, i) => {
             const isOpen = openFaq === i;
             return (
               <div key={i} style={{
-                background: isOpen ? "rgba(6,182,212,.03)" : "var(--card)",
+                background: isOpen
+                  ? "linear-gradient(135deg, rgba(6,182,212,.04), rgba(6,182,212,.01))"
+                  : "var(--card)",
                 border: `1px solid ${isOpen ? "rgba(6,182,212,.25)" : "rgba(255,255,255,.06)"}`,
-                borderRadius: 14, overflow: "hidden",
-                transition: "border-color .2s, background .2s",
+                borderRadius: 16, overflow: "hidden",
+                transition: "border-color .25s, background .25s, box-shadow .25s",
+                boxShadow: isOpen
+                  ? "0 8px 32px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.04)"
+                  : "inset 0 1px 0 rgba(255,255,255,.03)",
               }}>
                 <button onClick={() => setOpenFaq(isOpen ? null : i)} style={{
-                  width: "100%", padding: "20px 24px",
+                  width: "100%", padding: "22px 28px",
                   display: "flex", justifyContent: "space-between", alignItems: "center",
                   border: "none", background: "transparent",
-                  textAlign: "left", color: "#e2e8f0", fontSize: 15,
-                  fontFamily: "'DM Sans',sans-serif", fontWeight: 500,
+                  textAlign: "left", color: isOpen ? "#e2e8f0" : "#94a3b8", fontSize: 15,
+                  fontFamily: "'DM Sans',sans-serif", fontWeight: isOpen ? 600 : 500,
                   transition: "color .2s",
                 }}>
-                  {faq.q}
+                  <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{
+                      width: 24, height: 24, borderRadius: 6,
+                      background: isOpen ? "rgba(6,182,212,.12)" : "rgba(255,255,255,.03)",
+                      border: `1px solid ${isOpen ? "rgba(6,182,212,.2)" : "rgba(255,255,255,.06)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 11, fontFamily: "'DM Mono',monospace",
+                      color: isOpen ? "#06b6d4" : "#4a5568",
+                      flexShrink: 0,
+                      transition: "all .2s",
+                    }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {faq.q}
+                  </span>
                   <span style={{
-                    width: 28, height: 28, borderRadius: 8,
+                    width: 30, height: 30, borderRadius: 10,
                     background: isOpen ? "rgba(6,182,212,.15)" : "rgba(255,255,255,.04)",
+                    border: `1px solid ${isOpen ? "rgba(6,182,212,.2)" : "rgba(255,255,255,.06)"}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0, marginLeft: 16,
-                    transition: "all .2s",
+                    transition: "all .25s",
                   }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isOpen ? "#06b6d4" : "#64748b"} strokeWidth="2" strokeLinecap="round"
-                      style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                      style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .25s" }}>
                       <path d="M6 9l6 6 6-6"/>
                     </svg>
                   </span>
                 </button>
                 {isOpen && (
                   <div style={{
-                    padding: "0 24px 20px", fontSize: 14, color: "#64748b", lineHeight: 1.8,
-                    borderTop: "1px solid rgba(255,255,255,.04)", marginTop: 0, paddingTop: 16,
+                    padding: "0 28px 24px 64px", fontSize: 14, color: "#64748b", lineHeight: 1.8,
+                    borderTop: "1px solid rgba(255,255,255,.04)", marginTop: 0, paddingTop: 18,
                   }}>
                     {faq.a}
                   </div>
@@ -1025,6 +1194,21 @@ export default function HomePage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom helper link */}
+        <div style={{ textAlign: "center", marginTop: 40 }}>
+          <p style={{ fontSize: 13, color: "#4a5568" }}>
+            Still have questions?{" "}
+            <a href="mailto:support@influencccer.com" style={{
+              color: "#06b6d4", textDecoration: "none",
+              borderBottom: "1px solid rgba(6,182,212,.3)",
+              transition: "border-color .2s",
+            }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(6,182,212,.7)")}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(6,182,212,.3)")}
+            >Reach out to our team</a>
+          </p>
         </div>
       </section>
 
@@ -1098,36 +1282,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════ FOOTER — refined ════════════════════════════════════════════════ */}
+      {/* ════ FOOTER — premium polish ═════════════════════════════════════════ */}
       <footer style={{
-        padding: "60px 40px 32px", maxWidth: 1100, margin: "0 auto",
-        borderTop: "1px solid rgba(255,255,255,.04)",
+        padding: "72px 40px 36px", maxWidth: 1100, margin: "0 auto",
+        borderTop: "1px solid rgba(255,255,255,.06)",
       }}>
         <div className="footer-grid" style={{
-          display: "grid", gridTemplateColumns: "2fr repeat(4,1fr)", gap: 40, marginBottom: 48,
+          display: "grid", gridTemplateColumns: "2fr repeat(4,1fr)", gap: 48, marginBottom: 56,
         }}>
           {/* Brand column */}
           <div>
-            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 22, marginBottom: 12 }}>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: 24, marginBottom: 14, letterSpacing: "-0.5px" }}>
               SIGNAL<span style={{ color: "#06b6d4" }}>.</span>
             </div>
-            <p style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.7, maxWidth: 220, marginBottom: 20 }}>
+            <p style={{ fontSize: 13, color: "#4a5568", lineHeight: 1.8, maxWidth: 240, marginBottom: 24 }}>
               The AI-powered social media platform for brands that want to move faster than the algorithm.
             </p>
             {/* Social icons */}
-            <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ display: "flex", gap: 10 }}>
               {[
                 { href: "#", label: "Twitter", path: "M4 4l6.5 7.5L4 20h2.5l5.2-6 4.8 6H20l-7-8.5L19.5 4H17l-4.8 5.5L7.5 4H4z" },
                 { href: "#", label: "LinkedIn", path: "M7 10v7M7 7.5v.5M11 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M11 10v7" },
+                { href: "#", label: "Instagram", path: "M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM17.5 6.5h.01" },
               ].map((s) => (
                 <a key={s.label} href={s.href} aria-label={s.label} style={{
-                  width: 32, height: 32, borderRadius: 8,
+                  width: 34, height: 34, borderRadius: 10,
                   background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.06)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "border-color .2s, background .2s",
+                  transition: "border-color .25s, background .25s",
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(6,182,212,.3)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,.06)"; }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(6,182,212,.3)";
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(6,182,212,.06)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,.06)";
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,.04)";
+                  }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d={s.path}/>
@@ -1140,10 +1331,10 @@ export default function HomePage() {
           {/* Link columns */}
           {Object.entries(FOOTER_LINKS).map(([col, links]) => (
             <div key={col}>
-              <div style={{ fontSize: 11, fontFamily: "'DM Mono',monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 18, fontWeight: 500 }}>
+              <div style={{ fontSize: 11, fontFamily: "'DM Mono',monospace", color: "#4a5568", letterSpacing: 1.5, marginBottom: 20, fontWeight: 600 }}>
                 {col.toUpperCase()}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {links.map((t) => (
                   <a key={t.label} href={t.href} onClick={(e) => { if (t.href.startsWith("#")) { e.preventDefault(); const el = document.querySelector(t.href); if (el) el.scrollIntoView({ behavior: "smooth" }); } }} style={{
                     fontSize: 13, fontWeight: 400, color: "#4a5568", transition: "color .2s", textDecoration: "none",
@@ -1158,14 +1349,14 @@ export default function HomePage() {
         </div>
 
         <div style={{
-          borderTop: "1px solid rgba(255,255,255,.04)",
-          paddingTop: 24, display: "flex", justifyContent: "space-between",
+          borderTop: "1px solid rgba(255,255,255,.06)",
+          paddingTop: 28, display: "flex", justifyContent: "space-between",
           alignItems: "center", flexWrap: "wrap", gap: 12,
         }}>
           <span style={{ fontSize: 12, color: "#2d3748", fontFamily: "'DM Mono',monospace" }}>
-            © 2026 SIGNAL. All rights reserved.
+            &copy; 2026 SIGNAL. All rights reserved.
           </span>
-          <div style={{ display: "flex", gap: 20 }}>
+          <div style={{ display: "flex", gap: 24 }}>
             {[{ label: "Privacy", href: "/privacy" }, { label: "Terms", href: "/terms" }, { label: "Cookies", href: "/privacy#cookies" }].map((t) => (
               <a key={t.label} href={t.href} style={{ fontSize: 12, fontWeight: 400, color: "#2d3748", transition: "color .2s", textDecoration: "none" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#4a5568")}

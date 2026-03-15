@@ -48,6 +48,7 @@ const NAV_SECTIONS = [
     items: [
       { href: "/brand", label: "BRAND", icon: "🎨" },
       { href: "/settings/accounts", label: "ACCOUNTS", icon: "🔗" },
+      { href: "/help", label: "HELP", icon: "❓" },
     ],
   },
 ];
@@ -70,6 +71,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/brand": "Brand Voice Kit",
   "/inbox": "SIGNAL Inbox",
   "/settings/accounts": "Connected Accounts",
+  "/help": "Help & Tutorials",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

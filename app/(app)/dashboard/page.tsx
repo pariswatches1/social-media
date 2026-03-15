@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import PricingTable from "@/components/PricingTable";
 import UsageBadge from "@/components/UsageBadge";
 import PlatformBadge from "@/components/ui/PlatformBadge";
+import TutorialCard from "@/components/TutorialCard";
 
 interface DashboardData {
   stats: {
@@ -119,6 +120,9 @@ export default function DashboardPage() {
         </div>
         <UsageBadge used={analysesUsed} limit={analysesLimit} plan={plan} />
       </div>
+
+      {/* Tutorial Video Card — dismissible onboarding help */}
+      <TutorialCard />
 
       {/* Stats row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 24 }}>

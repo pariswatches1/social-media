@@ -69,6 +69,12 @@ export default function ToolContent() {
       title="Influencer Pricing Calculator"
       subtitle="Calculate how much influencers charge. Estimate rates for posts, stories, and reels based on followers and engagement."
       platform="general"
+      faq={[
+        { question: "How are influencer rates calculated?", answer: "SIGNAL's pricing model factors in follower count, engagement rate, platform, niche, and current market rates. We analyze thousands of real brand deals to provide accurate estimates." },
+        { question: "Why do rates vary so much between niches?", answer: "High-value niches like finance, tech, and luxury fashion command higher rates because their audiences have more purchasing power. Lifestyle and entertainment niches have larger audiences but lower per-follower value." },
+        { question: "Should I negotiate with influencers?", answer: "Yes — most influencer rates are negotiable. Use SIGNAL's estimates as a starting point. Offering long-term partnerships, creative freedom, or product bundles can help you negotiate better rates." },
+        { question: "What's the difference between CPM and CPE?", answer: "CPM (Cost Per Mille) is cost per 1,000 impressions — what you pay for eyeballs. CPE (Cost Per Engagement) is cost per like, comment, or share — what you pay for action. CPE is usually the better ROI metric." },
+      ]}
     >
       <div style={{ background: "rgba(10,30,94,0.1)", border: "1px solid rgba(10,30,94,0.12)", borderRadius: 14, padding: 24 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>

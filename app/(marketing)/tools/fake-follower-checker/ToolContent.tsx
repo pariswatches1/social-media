@@ -51,6 +51,13 @@ export default function ToolContent() {
       title="Fake Follower Checker"
       subtitle="Check any Instagram account for fake followers. AI-powered fraud detection analyzes engagement patterns and follower quality."
       platform="instagram"
+      faq={[
+        { question: "How does the fake follower checker work?", answer: "SIGNAL analyzes engagement patterns, follower-to-following ratios, comment quality, and growth anomalies to detect fake followers. Our AI model is trained on thousands of verified authentic and fraudulent accounts." },
+        { question: "What percentage of fake followers is normal?", answer: "Most accounts have 5-15% inactive or bot followers, which is normal. Anything above 25% is a red flag, and above 40% suggests deliberate follower purchasing." },
+        { question: "Can this tool detect bought followers?", answer: "Yes. Purchased followers typically show specific patterns — sudden follower spikes, low engagement rates, generic profile photos, and foreign-language comments unrelated to the content." },
+        { question: "Should I use this before partnering with an influencer?", answer: "Absolutely. Checking for fake followers is essential before any paid collaboration. Fake followers mean your sponsored content reaches bots, not real people — wasting your marketing budget." },
+        { question: "How can I remove fake followers from my own account?", answer: "You can manually remove suspicious followers through Instagram's settings, or use Instagram's 'Restrict' feature. Regular posting of quality content and avoiding engagement pods also helps maintain authentic followers." },
+      ]}
     >
       <ToolInput
         value={handle}

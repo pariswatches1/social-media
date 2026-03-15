@@ -73,6 +73,12 @@ export default function ToolContent() {
       title="Instagram Hashtag Generator"
       subtitle="Enter a topic or paste your caption and get 30 categorized hashtags — ready to copy and use."
       platform="instagram"
+      faq={[
+        { question: "How many hashtags should I use on Instagram?", answer: "Instagram allows up to 30 hashtags per post. Research shows 5-15 well-chosen hashtags perform best. SIGNAL generates 30 across categories so you can pick the most relevant ones." },
+        { question: "Should I use popular or niche hashtags?", answer: "Use a mix. High-volume hashtags (1M+ posts) give brief visibility, medium-volume (100K-1M) provide sustained reach, and niche hashtags (under 100K) target your exact audience. SIGNAL categorizes them for you." },
+        { question: "Do hashtags still work in 2025?", answer: "Yes, but strategy matters more than ever. Instagram's algorithm now uses hashtags as topic signals rather than just discovery tools. Relevant, specific hashtags outperform generic popular ones." },
+        { question: "Can I use the same hashtags on every post?", answer: "No — Instagram may flag this as spammy behavior. Rotate your hashtag sets and tailor them to each post's specific topic. Use SIGNAL to generate fresh sets for each post." },
+      ]}
     >
       <ToolInput
         value={input}

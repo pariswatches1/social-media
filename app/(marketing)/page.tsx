@@ -10,12 +10,13 @@ const PLATFORM_LINKS: { num: string; title: string; sub: string; href: string }[
   { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live", href: "#features" },
 ];
 const SOLUTIONS_LINKS: { num: string; title: string; sub: string; href: string }[] = [
-  { num: "01", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#features" },
-  { num: "02", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#features" },
-  { num: "03", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#platforms" },
-  { num: "04", title: "SIGNAL Inbox", sub: "Your content activity hub", href: "#features" },
-  { num: "05", title: "Content Library", sub: "Save, search, export, import content", href: "#features" },
-  { num: "06", title: "Analytics", sub: "Track performance across all platforms", href: "#features" },
+  { num: "01", title: "Solutions by Industry", sub: "Fashion, beauty, tech, food & more", href: "/solutions" },
+  { num: "02", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#features" },
+  { num: "03", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#features" },
+  { num: "04", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#platforms" },
+  { num: "05", title: "SIGNAL Inbox", sub: "Your content activity hub", href: "#features" },
+  { num: "06", title: "Content Library", sub: "Save, search, export, import content", href: "#features" },
+  { num: "07", title: "Analytics", sub: "Track performance across all platforms", href: "#features" },
 ];
 
 /* ── PLATFORM CARDS DATA ─────────────────────────────────── */
@@ -128,6 +129,7 @@ const FOOTER_LINKS = {
   ],
   Company: [
     { label: "About", href: "#features" },
+    { label: "Solutions", href: "/solutions" },
     { label: "Pricing", href: "#pricing" },
     { label: "Free Tools", href: "/tools" },
     { label: "Compare", href: "/compare/signal-vs-sprout-social" },
@@ -384,7 +386,7 @@ export default function HomePage() {
                     animation: "fadeIn .15s ease",
                   }}>
                     {links.map((l) => (
-                      <a key={l.num} href={l.href} onClick={(e) => { e.preventDefault(); setNavOpen(null); const el = document.querySelector(l.href); if (el) el.scrollIntoView({ behavior: "smooth" }); }} style={{
+                      <a key={l.num} href={l.href} onClick={(e) => { if (l.href.startsWith("/")) { setNavOpen(null); return; } e.preventDefault(); setNavOpen(null); const el = document.querySelector(l.href); if (el) el.scrollIntoView({ behavior: "smooth" }); }} style={{
                         display: "flex", gap: 12, padding: "10px 12px", borderRadius: 8,
                         transition: "background .15s", textDecoration: "none",
                       }}

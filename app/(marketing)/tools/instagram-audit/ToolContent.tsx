@@ -59,6 +59,12 @@ export default function ToolContent() {
       title="Instagram Account Audit"
       subtitle="Get a comprehensive health score, engagement analysis, and AI-powered recommendations for any Instagram account."
       platform="instagram"
+      faq={[
+        { question: "What does an Instagram audit include?", answer: "SIGNAL's audit analyzes engagement rate, follower quality, posting frequency, content mix, growth patterns, and provides an overall health score from 0-100 with specific recommendations." },
+        { question: "How is the health score calculated?", answer: "The health score combines multiple factors: engagement rate vs industry benchmarks, posting consistency, follower growth trends, content diversity, and audience authenticity signals." },
+        { question: "Can I audit a competitor's Instagram account?", answer: "Yes! Enter any public Instagram handle. This is great for competitive analysis — compare your metrics against industry leaders to identify areas for improvement." },
+        { question: "How often should I audit my Instagram account?", answer: "Monthly audits help you track progress and catch issues early. After major strategy changes (new content pillars, posting frequency shifts), audit within 2-3 weeks to measure impact." },
+      ]}
     >
       <ToolInput
         value={handle}

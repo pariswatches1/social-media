@@ -73,6 +73,13 @@ export default function ToolContent() {
       title="Instagram Engagement Rate Calculator"
       subtitle="Calculate the real engagement rate of any Instagram account. Get a full breakdown of likes, comments, and media performance."
       platform="instagram"
+      faq={[
+        { question: "How is Instagram engagement rate calculated?", answer: "Engagement rate is calculated by dividing total interactions (likes + comments) by the number of followers, then multiplying by 100. SIGNAL analyzes the most recent posts to give you an accurate, up-to-date rate." },
+        { question: "What is a good engagement rate on Instagram?", answer: "For most accounts, 1-3% is average, 3-6% is good, and above 6% is excellent. However, engagement rates vary by niche — micro-influencers (10K-50K followers) typically have higher rates than mega-influencers." },
+        { question: "Does this tool use real Instagram data?", answer: "Yes! When available, SIGNAL pulls real data from Instagram's API including actual likes, comments, and follower counts. If the API quota is exhausted, we provide AI-powered estimates clearly labeled as such." },
+        { question: "How often should I check my engagement rate?", answer: "We recommend checking monthly to track trends. Sudden drops may indicate algorithm changes, content quality issues, or fake follower purchases. Consistent growth means your content strategy is working." },
+        { question: "Why is my engagement rate different from other calculators?", answer: "Different tools use different sample sizes and formulas. Some only look at the last 12 posts, others at 30. SIGNAL analyzes all available recent posts and includes both likes and comments for accuracy." },
+      ]}
     >
       <ToolInput
         value={handle}

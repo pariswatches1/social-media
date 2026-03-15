@@ -1,0 +1,431 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ═══════════════════════════════════════════════
+// EXISTING MODELS (unchanged)
+// ═══════════════════════════════════════════════
+
+model User {
+  id                   String          @id @default(cuid())
+  clerkId              String          @unique
+  email                String          @unique
+  plan                 Plan            @default(FREE)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  analysesUsed         Int             @default(0)
+  analysesReset        DateTime        @default(now())
+  generationsUsed      Int             @default(0)
+  brandProfiles        BrandProfile[]
+  savedIdeas           SavedIdea[]
+  savedContents        SavedContent[]
+  scheduledPosts       ScheduledPost[]
+  activities           Activity[]
+  socialAccounts       SocialAccount[]
+  // New relations
+  creatorLists         CreatorList[]
+  campaigns            Campaign[]
+  outreachEmails       OutreachEmail[]
+  createdAt            DateTime        @default(now())
+}
+
+model BrandProfile {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  name       String
+  voice      String
+  tone       String
+  audience   String   @default("")
+  guidelines String   @default("")
+  examples   String   @default("")
+  colors     String   @default("")
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model SavedIdea {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  angle     String
+  hook      String
+  platform  String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SavedContent {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  topic          String
+  platform       String
+  copy           String
+  hook           String   @default("")
+  cta            String   @default("")
+  hashtags       String   @default("[]")
+  viralityScore  Int      @default(0)
+  tone           String   @default("")
+  postType       String   @default("")
+  imagePrompt    String   @default("")
+  brandProfileId String?
+  tags           String   @default("[]")
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([platform])
+}
+
+model ScheduledPost {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  content        String
+  platform       String
+  hashtags       String     @default("[]")
+  imagePrompt    String     @default("")
+  scheduledFor   DateTime?
+  status         PostStatus @default(DRAFT)
+  brandProfileId String?
+  calendarColor  String     @default("#06b6d4")
+  notes          String     @default("")
+  tags           String     @default("[]")
+  mediaUrls      String     @default("[]")
+  approvedBy     String?
+  publishLogs    PublishLog[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  publishedAt    DateTime?
+
+  @@index([userId])
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+model Activity {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  type      ActivityType
+  title     String
+  metadata  String       @default("{}")
+  createdAt DateTime     @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model SocialAccount {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  platform      String
+  accountId     String
+  accountName   String    @default("")
+  accountAvatar String    @default("")
+  accessToken   String
+  refreshToken  String?
+  tokenExpiresAt DateTime?
+  scope         String    @default("")
+  isActive      Boolean   @default(true)
+  connectedAt   DateTime  @default(now())
+
+  @@unique([userId, platform])
+  @@index([userId])
+}
+
+model PublishLog {
+  id              String        @id @default(cuid())
+  scheduledPostId String
+  scheduledPost   ScheduledPost @relation(fields: [scheduledPostId], references: [id])
+  platform        String
+  status          PublishStatus
+  platformPostId  String?
+  errorMessage    String?
+  attemptedAt     DateTime      @default(now())
+  completedAt     DateTime?
+
+  @@index([scheduledPostId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════
+// NEW MODELS — Creator Discovery + CRM
+// ═══════════════════════════════════════════════
+
+model Creator {
+  id              String   @id @default(cuid())
+  platform        String   // instagram, tiktok, youtube, etc.
+  platformId      String   // their platform-specific ID
+  handle          String
+  displayName     String   @default("")
+  avatarUrl       String   @default("")
+  bio             String   @default("")
+  followerCount   Int      @default(0)
+  followingCount  Int      @default(0)
+  postCount       Int      @default(0)
+  engagementRate  Float    @default(0)
+  trustScore      Int      @default(0) // 0-100 fraud/authenticity
+  avgLikes        Int      @default(0)
+  avgComments     Int      @default(0)
+  niche           String   @default("")
+  location        String   @default("")
+  email           String   @default("")
+  website         String   @default("")
+  audienceData    String   @default("{}") // JSON: demographics, interests, etc.
+  rateEstimate    String   @default("{}") // JSON: { post: 500, story: 200, reel: 800 }
+  lastUpdated     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  // Relations
+  listMemberships CreatorListMember[]
+  campaignCreators CampaignCreator[]
+  outreachEmails  OutreachEmail[]
+
+  @@unique([platform, platformId])
+  @@index([handle])
+  @@index([platform])
+  @@index([niche])
+  @@index([followerCount])
+  @@index([engagementRate])
+  @@index([trustScore])
+}
+
+model CreatorList {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  description String   @default("")
+  color       String   @default("#06b6d4")
+  members     CreatorListMember[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CreatorListMember {
+  id        String      @id @default(cuid())
+  listId    String
+  list      CreatorList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  creatorId String
+  creator   Creator     @relation(fields: [creatorId], references: [id])
+  notes     String      @default("")
+  tags      String      @default("[]") // JSON array: ["prospect", "active", "vip"]
+  status    CreatorStatus @default(PROSPECT)
+  addedAt   DateTime    @default(now())
+
+  @@unique([listId, creatorId])
+  @@index([listId])
+  @@index([creatorId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════
+// NEW MODELS — Campaign Management
+// ═══════════════════════════════════════════════
+
+model Campaign {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  name         String
+  description  String         @default("")
+  goal         String         @default("") // awareness, engagement, conversions, etc.
+  budget       Float          @default(0)
+  startDate    DateTime?
+  endDate      DateTime?
+  status       CampaignStatus @default(DRAFT)
+  brief        String         @default("") // full campaign brief text
+  hashtags     String         @default("[]")
+  platforms    String         @default("[]") // target platforms
+  creators     CampaignCreator[]
+  deliverables CampaignDeliverable[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model CampaignCreator {
+  id           String              @id @default(cuid())
+  campaignId   String
+  campaign     Campaign            @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creatorId    String
+  creator      Creator             @relation(fields: [creatorId], references: [id])
+  status       CampaignCreatorStatus @default(INVITED)
+  agreedRate   Float?
+  notes        String              @default("")
+  deliverables CampaignDeliverable[]
+  addedAt      DateTime            @default(now())
+
+  @@unique([campaignId, creatorId])
+  @@index([campaignId])
+  @@index([creatorId])
+  @@index([status])
+}
+
+model CampaignDeliverable {
+  id                String            @id @default(cuid())
+  campaignId        String
+  campaign          Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaignCreatorId String?
+  campaignCreator   CampaignCreator?  @relation(fields: [campaignCreatorId], references: [id])
+  type              String            // post, story, reel, video, etc.
+  platform          String
+  description       String            @default("")
+  contentUrl        String            @default("")
+  status            DeliverableStatus @default(PENDING)
+  dueDate           DateTime?
+  submittedAt       DateTime?
+  approvedAt        DateTime?
+  metrics           String            @default("{}") // JSON: reach, impressions, engagement, etc.
+  createdAt         DateTime          @default(now())
+
+  @@index([campaignId])
+  @@index([campaignCreatorId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════
+// NEW MODELS — Outreach
+// ═══════════════════════════════════════════════
+
+model OutreachEmail {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  creatorId String
+  creator   Creator       @relation(fields: [creatorId], references: [id])
+  subject   String
+  body      String
+  status    OutreachStatus @default(DRAFT)
+  sentAt    DateTime?
+  openedAt  DateTime?
+  repliedAt DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([userId])
+  @@index([creatorId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════
+// NEW MODELS — Virality Scoring
+// ═══════════════════════════════════════════════
+
+model ViralityAnalysis {
+  id             String   @id @default(cuid())
+  userId         String
+  inputType      String   // "text", "url"
+  inputContent   String
+  platform       String
+  overallScore   Int      // 0-100
+  hookScore      Int      @default(0)
+  formatScore    Int      @default(0)
+  trendScore     Int      @default(0)
+  timingScore    Int      @default(0)
+  engagementScore Int     @default(0)
+  suggestions    String   @default("[]") // JSON array of improvement tips
+  breakdown      String   @default("{}") // detailed JSON analysis
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ═══════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════
+
+enum Plan {
+  FREE
+  CREATOR
+  PRO
+  AGENCY
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PENDING_APPROVAL
+  PUBLISHED
+  FAILED
+}
+
+enum PublishStatus {
+  SUCCESS
+  FAILED
+  RETRYING
+}
+
+enum ActivityType {
+  ANALYSIS
+  GENERATION
+  CONTENT_SAVED
+  CONTENT_SCHEDULED
+  CONTENT_PUBLISHED
+  BRAND_PROFILE_CREATED
+  BRAND_PROFILE_UPDATED
+  // New activity types
+  CREATOR_ADDED
+  CAMPAIGN_CREATED
+  CAMPAIGN_UPDATED
+  OUTREACH_SENT
+  DELIVERABLE_SUBMITTED
+  DELIVERABLE_APPROVED
+  VIRALITY_SCORED
+}
+
+enum CreatorStatus {
+  PROSPECT
+  CONTACTED
+  NEGOTIATING
+  ACTIVE
+  COMPLETED
+  DECLINED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum CampaignCreatorStatus {
+  INVITED
+  ACCEPTED
+  DECLINED
+  ACTIVE
+  CONTENT_SUBMITTED
+  COMPLETED
+}
+
+enum DeliverableStatus {
+  PENDING
+  IN_PROGRESS
+  SUBMITTED
+  REVISION_NEEDED
+  APPROVED
+  PUBLISHED
+}
+
+enum OutreachStatus {
+  DRAFT
+  SENT
+  OPENED
+  REPLIED
+  BOUNCED
+}

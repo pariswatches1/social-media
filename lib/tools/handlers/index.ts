@@ -17,6 +17,13 @@ import hashtagGenerator from "./hashtag-generator";
 import instagramLookalikeFinder from "./instagram-lookalike-finder";
 import influencerPricingCalculator from "./influencer-pricing-calculator";
 
+// TikTok AI tools
+import tiktokEngagementCalculator from "./tiktok-engagement-calculator";
+import tiktokAccountQualityChecker from "./tiktok-account-quality-checker";
+import tiktokFakeFollowerChecker from "./tiktok-fake-follower-checker";
+import tiktokInfluencerPricingCalculator from "./tiktok-influencer-pricing-calculator";
+import tiktokAccountsComparison from "./tiktok-accounts-comparison";
+
 // YouTube AI tools
 import youtubeSearchByNiche from "./youtube-search-by-niche";
 import youtubeLookalikeFinder from "./youtube-lookalike-finder";
@@ -50,4 +57,10 @@ export const TOOL_HANDLERS: Record<string, ToolHandler> = {
   "youtube-engagement-calculator": youtubeEngagementCalculator,
   "youtube-channels-comparison": youtubeChannelsComparison,
   "youtube-subscriber-count-checker": youtubeSubscriberCountChecker,
+  // TikTok AI tools
+  "tiktok-engagement-calculator": tiktokEngagementCalculator,
+  "tiktok-account-quality-checker": tiktokAccountQualityChecker,
+  "tiktok-fake-follower-checker": tiktokFakeFollowerChecker,
+  "tiktok-influencer-pricing-calculator": tiktokInfluencerPricingCalculator,
+  "tiktok-accounts-comparison": tiktokAccountsComparison,
 };

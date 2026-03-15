@@ -1,18 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+
+function FAQAccordion({ items }: { items: { question: string; answer: string }[] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  return (
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px 40px" }}>
+      <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 700, color: "#0a1e5e", textAlign: "center", marginBottom: 20 }}>Frequently Asked Questions</h2>
+      <div style={{ background: "rgba(10,30,94,0.05)", borderRadius: 16, padding: 4, border: "1px solid rgba(10,30,94,0.1)" }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ borderBottom: i < items.length - 1 ? "1px solid rgba(10,30,94,0.1)" : "none" }}>
+            <button
+              onClick={() => setOpenIndex(openIndex === i ? null : i)}
+              style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+            >
+              <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: "#0a1e5e", flex: 1, paddingRight: 16 }}>{item.question}</span>
+              <span style={{ fontSize: 20, color: "#0a1e5e", fontWeight: 300, transition: "transform 0.2s", transform: openIndex === i ? "rotate(45deg)" : "none", flexShrink: 0 }}>+</span>
+            </button>
+            <div style={{ maxHeight: openIndex === i ? 200 : 0, overflow: "hidden", transition: "max-height 0.3s ease" }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(10,30,94,0.7)", lineHeight: 1.7, padding: "0 20px 16px", margin: 0 }}>{item.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface ToolLayoutProps {
   badge: string;
   title: string;
   subtitle: string;
-  platform: "instagram" | "youtube" | "general";
+  platform: "instagram" | "youtube" | "tiktok" | "general";
+  faq?: { question: string; answer: string }[];
   children: React.ReactNode;
   seoContent?: React.ReactNode;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function ToolLayout({ badge, title, subtitle, platform, children, seoContent }: ToolLayoutProps) {
+export default function ToolLayout({ badge, title, subtitle, platform, children, seoContent, faq }: ToolLayoutProps) {
   return (
     <div data-tool-page style={{ minHeight: "100vh", background: "linear-gradient(180deg, #00FFFF 0%, #0066FF 100%)", color: "#0a1e5e" }}>
       {/* Nav */}
@@ -46,6 +73,9 @@ export default function ToolLayout({ badge, title, subtitle, platform, children,
           {seoContent}
         </div>
       )}
+
+      {/* FAQ */}
+      {faq && faq.length > 0 && <FAQAccordion items={faq} />}
 
       {/* CTA */}
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px 60px" }}>

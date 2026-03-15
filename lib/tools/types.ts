@@ -1,6 +1,8 @@
 export interface ToolInput {
   handle?: string;
+  handle1?: string;
   handle2?: string;
+  username?: string;
   topic?: string;
   niche?: string;
   location?: string;

@@ -129,7 +129,8 @@ const FOOTER_LINKS = {
   ],
   Company: [
     { label: "Solutions", href: "/solutions" },
-    { label: "Compare", href: "/compare/signal-vs-sprout-social" },
+    { label: "vs Sprout Social", href: "/compare/signal-vs-sprout-social" },
+    { label: "vs GRIN", href: "/compare/signal-vs-grin" },
     { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "mailto:support@influencccer.com" },
   ],

@@ -13,7 +13,7 @@ export default function HelpPage() {
   };
 
   const handleResetTour = () => {
-    try { localStorage.removeItem("signal_tutorial_dismissed"); } catch {}
+    try { localStorage.removeItem("signal_guided_tour_dismissed"); } catch {}
     setTourOpen(true);
   };
 

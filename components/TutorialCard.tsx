@@ -241,14 +241,14 @@ export default function TutorialCard() {
 
   useEffect(() => {
     try {
-      const d = localStorage.getItem("signal_tutorial_dismissed");
+      const d = localStorage.getItem("signal_guided_tour_dismissed");
       if (d === "true") setDismissed(true);
     } catch {}
   }, []);
 
   const handleDismiss = () => {
     setDismissed(true);
-    try { localStorage.setItem("signal_tutorial_dismissed", "true"); } catch {}
+    try { localStorage.setItem("signal_guided_tour_dismissed", "true"); } catch {}
   };
 
   const handleStartTour = () => {

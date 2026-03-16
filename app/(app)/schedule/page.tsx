@@ -378,7 +378,7 @@ export default function SchedulePage() {
             style={{
               padding: "8px 18px", borderRadius: 8, border: "none",
               background: "linear-gradient(135deg, #0891b2, #0e7490)",
-              color: "#fff", fontSize: 11, fontFamily: "'DM Mono', monospace",
+              color: "#0a1e3d", fontSize: 11, fontFamily: "'DM Mono', monospace",
               cursor: "pointer", letterSpacing: 0.5,
             }}
           >
@@ -830,7 +830,7 @@ export default function SchedulePage() {
               style={{
                 flex: 1, padding: "10px", borderRadius: 8, border: "none",
                 background: saving || !formContent.trim() ? "#0d1017" : "linear-gradient(135deg, #0891b2, #0e7490)",
-                color: saving || !formContent.trim() ? "#4a5568" : "#fff",
+                color: saving || !formContent.trim() ? "#4a5568" : "#0a1e3d",
                 fontSize: 12, fontFamily: "'DM Mono', monospace", cursor: saving || !formContent.trim() ? "not-allowed" : "pointer",
                 letterSpacing: 0.5,
               }}
@@ -848,7 +848,7 @@ export default function SchedulePage() {
                     style={{
                       padding: "10px 16px", borderRadius: 8, border: "none",
                       background: publishing ? "#0d1017" : "linear-gradient(135deg, #0891b2, #06b6d4)",
-                      color: publishing ? "#4a5568" : "#fff",
+                      color: publishing ? "#4a5568" : "#0a1e3d",
                       fontSize: 11, fontFamily: "'DM Mono', monospace",
                       cursor: publishing ? "wait" : "pointer", letterSpacing: 0.5,
                     }}

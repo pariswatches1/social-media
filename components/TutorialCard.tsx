@@ -304,7 +304,7 @@ export default function TutorialCard() {
               <button onClick={handleStartTour} style={{
                 padding: "8px 20px", borderRadius: 8,
                 background: "linear-gradient(135deg, #0891b2, #7c3aed)",
-                color: "#fff", border: "none", fontSize: 12,
+                color: "#0a1e3d", border: "none", fontSize: 12,
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 0.5,
                 cursor: "pointer", transition: "transform .15s, box-shadow .15s",
                 boxShadow: "0 0 16px rgba(6,182,212,.15)",
@@ -572,7 +572,7 @@ export function GuidedTourModal({ onClose }: { onClose: () => void }) {
             background: currentStep === TOUR_STEPS.length - 1
               ? "linear-gradient(135deg, #22c55e, #16a34a)"
               : "linear-gradient(135deg, #0891b2, #0e7490)",
-            border: "none", color: "#fff", fontSize: 12,
+            border: "none", color: "#0a1e3d", fontSize: 12,
             fontFamily: "'Syne', sans-serif", fontWeight: 700,
             cursor: "pointer", transition: "transform .15s",
             letterSpacing: 0.5,

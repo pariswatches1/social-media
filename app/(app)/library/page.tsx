@@ -361,7 +361,7 @@ export default function LibraryPage() {
                   borderRadius: 6,
                   border: "none",
                   background: "linear-gradient(135deg, #0891b2, #0e7490)",
-                  color: "#fff",
+                  color: "#0a1e3d",
                   fontSize: 11,
                   fontFamily: "'DM Mono', monospace",
                   cursor: "pointer",

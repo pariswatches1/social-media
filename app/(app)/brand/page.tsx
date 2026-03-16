@@ -222,7 +222,7 @@ export default function BrandPage() {
             borderRadius: 8,
             border: "none",
             background: "linear-gradient(135deg, #0891b2, #0e7490)",
-            color: "#fff",
+            color: "#0a1e3d",
             fontSize: 12,
             fontFamily: "'DM Mono', monospace",
             letterSpacing: 1,
@@ -580,7 +580,7 @@ export default function BrandPage() {
               background: saving || !name.trim() || !voice.trim() || !tone.trim()
                 ? "#1e2535"
                 : "linear-gradient(135deg, #0891b2, #0e7490)",
-              color: saving || !name.trim() || !voice.trim() || !tone.trim() ? "#4a5568" : "#fff",
+              color: saving || !name.trim() || !voice.trim() || !tone.trim() ? "#4a5568" : "#0a1e3d",
               fontSize: 13,
               fontFamily: "'DM Mono', monospace",
               letterSpacing: 1,

@@ -131,7 +131,7 @@ export default function DashboardPage() {
         <p style={{ fontSize: 13, color: "#64748b", fontFamily: "'DM Mono', monospace", marginBottom: 20 }}>{error}</p>
         <button onClick={() => window.location.reload()} style={{
           padding: "10px 24px", borderRadius: 8, background: "linear-gradient(135deg, #0891b2, #0e7490)",
-          color: "#fff", border: "none", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: "pointer",
+          color: "#0a1e3d", border: "none", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: "pointer",
         }}>Retry</button>
       </div>
     );
@@ -663,7 +663,7 @@ export default function DashboardPage() {
                   padding: "12px 28px", borderRadius: 10, fontSize: 13,
                   fontFamily: "'Syne', sans-serif", fontWeight: 700,
                   background: "linear-gradient(135deg, #0891b2, #7c3aed)",
-                  color: "#fff", textDecoration: "none", border: "none",
+                  color: "#0a1e3d", textDecoration: "none", border: "none",
                   transition: "transform .15s, box-shadow .15s",
                   boxShadow: "0 0 20px rgba(6,182,212,.15)",
                 }}

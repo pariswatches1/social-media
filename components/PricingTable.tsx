@@ -144,7 +144,7 @@ export default function PricingTable({ currentPlan = "FREE", onUpgrade, variant 
                 borderRadius: 20,
                 fontSize: 11,
                 fontFamily: "'DM Mono', monospace",
-                color: "#fff",
+                color: isDark ? "#0a1e3d" : "#fff",
                 letterSpacing: 1,
               }}
             >

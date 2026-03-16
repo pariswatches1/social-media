@@ -259,7 +259,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 padding: "7px 16px",
                 borderRadius: 8,
                 background: "linear-gradient(135deg, #0891b2, #0e7490)",
-                color: "#fff",
+                color: "#0a1e3d",
                 fontSize: 11,
                 fontFamily: "'DM Mono', monospace",
                 letterSpacing: 0.5,

@@ -79,7 +79,7 @@ export default function HelpPage() {
             <button onClick={handleLaunchTour} style={{
               padding: "10px 24px", borderRadius: 10,
               background: "linear-gradient(135deg, #0891b2, #7c3aed)",
-              color: "#fff", border: "none", fontSize: 13,
+              color: "#0a1e3d", border: "none", fontSize: 13,
               fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 0.5,
               cursor: "pointer", boxShadow: "0 0 16px rgba(6,182,212,.15)",
             }}>

@@ -344,7 +344,7 @@ function CampaignModal({
             style={{
               flex: 2, padding: "11px 0", borderRadius: 8, border: "none",
               background: canSubmit ? "linear-gradient(135deg, #0891b2, #0e7490)" : "#1e2535",
-              color: canSubmit ? "#fff" : "#4a5568", fontSize: 12,
+              color: canSubmit ? "#0a1e3d" : "#4a5568", fontSize: 12,
               fontFamily: "'DM Mono', monospace", letterSpacing: 1,
               cursor: canSubmit ? "pointer" : "not-allowed", fontWeight: 600,
             }}
@@ -814,7 +814,7 @@ export default function CampaignsPage() {
           onClick={() => { setIsLoading(true); fetchCampaigns(); }}
           style={{
             padding: "10px 24px", borderRadius: 8, background: "linear-gradient(135deg, #0891b2, #0e7490)",
-            color: "#fff", border: "none", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: "pointer",
+            color: "#0a1e3d", border: "none", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: "pointer",
           }}
         >
           Retry
@@ -860,7 +860,7 @@ export default function CampaignsPage() {
           onClick={() => setShowCreateModal(true)}
           style={{
             padding: "10px 20px", borderRadius: 8, border: "none",
-            background: "linear-gradient(135deg, #0891b2, #0e7490)", color: "#fff",
+            background: "linear-gradient(135deg, #0891b2, #0e7490)", color: "#0a1e3d",
             fontSize: 12, fontFamily: "'DM Mono', monospace", letterSpacing: 1,
             cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
             fontWeight: 600, boxShadow: "0 4px 14px rgba(8,145,178,0.3)",
@@ -963,7 +963,7 @@ export default function CampaignsPage() {
               onClick={() => setShowCreateModal(true)}
               style={{
                 padding: "10px 20px", borderRadius: 8, border: "none",
-                background: "linear-gradient(135deg, #0891b2, #0e7490)", color: "#fff",
+                background: "linear-gradient(135deg, #0891b2, #0e7490)", color: "#0a1e3d",
                 fontSize: 12, fontFamily: "'DM Mono', monospace", letterSpacing: 1,
                 cursor: "pointer", fontWeight: 600,
               }}

@@ -274,7 +274,7 @@ export default function CreatePanel({ prefill, clearPrefill }: Props) {
         <button
           onClick={generate}
           disabled={loading || !topic.trim() || selPlatforms.length === 0}
-          style={{ padding: "14px", borderRadius: 10, cursor: loading || !topic.trim() || selPlatforms.length === 0 ? "not-allowed" : "pointer", background: loading || !topic.trim() ? "#0d1017" : "linear-gradient(135deg, #0891b2, #0e7490)", border: "none", color: loading ? "#4a5568" : "#fff", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 1, transition: "all 0.2s" }}
+          style={{ padding: "14px", borderRadius: 10, cursor: loading || !topic.trim() || selPlatforms.length === 0 ? "not-allowed" : "pointer", background: loading || !topic.trim() ? "#0d1017" : "linear-gradient(135deg, #0891b2, #0e7490)", border: "none", color: loading ? "#4a5568" : "#0a1e3d", fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 1, transition: "all 0.2s" }}
         >
           {loading ? (
             <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
@@ -421,7 +421,7 @@ export default function CreatePanel({ prefill, clearPrefill }: Props) {
                               borderRadius: 6,
                               border: "none",
                               background: "linear-gradient(135deg, #0891b2, #0e7490)",
-                              color: "#fff",
+                              color: "#0a1e3d",
                               fontSize: 10,
                               fontFamily: "'DM Mono', monospace",
                               cursor: "pointer",

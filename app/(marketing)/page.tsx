@@ -267,7 +267,7 @@ export default function HomePage() {
         .glass { background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px; }
         /* cta button */
         .cta-btn { padding:14px 32px;border-radius:10px;border:none;
-                   background:var(--grad);color:#fff;
+                   background:var(--grad);color:#0a1e3d;
                    font-size:14px;font-family:'DM Mono',monospace;letter-spacing:1.2px;font-weight:600;
                    box-shadow:0 4px 20px rgba(8,145,178,.35);
                    transition:box-shadow .2s,transform .15s; }
@@ -1002,7 +1002,7 @@ export default function HomePage() {
               {tier.highlight && (
                 <div style={{
                   position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)",
-                  background: "var(--grad)", color: "#fff",
+                  background: "var(--grad)", color: "#0a1e3d",
                   fontSize: 10, fontFamily: "'DM Mono',monospace", letterSpacing: 1.5,
                   padding: "5px 18px", borderRadius: 999,
                   boxShadow: "0 4px 16px rgba(8,145,178,.35)",
@@ -1037,7 +1037,7 @@ export default function HomePage() {
                 padding: "13px 0", fontSize: 12, letterSpacing: 1, marginBottom: 24,
                 background: tier.highlight ? "var(--grad)" : "transparent",
                 border: tier.highlight ? "none" : "1px solid rgba(255,255,255,.10)",
-                color: tier.highlight ? "#fff" : "#94a3b8",
+                color: tier.highlight ? "#0a1e3d" : "#94a3b8",
                 borderRadius: 12, fontFamily: "'DM Mono',monospace", fontWeight: 600,
                 boxShadow: tier.highlight ? "0 4px 20px rgba(8,145,178,.3)" : "none",
                 transition: "all .25s",

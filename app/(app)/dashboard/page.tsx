@@ -631,10 +631,10 @@ export default function DashboardPage() {
                 {/* Feature highlights */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 4 }}>
                   {[
-                    "Unlimited AI analyses & content generation",
-                    "Multi-platform publishing (IG, TikTok, YouTube, X)",
-                    "Advanced competitor tracking & alerts",
-                    "Priority support + custom brand voices",
+                    "25 analyses / month (vs 3 on Free)",
+                    "All 9 platforms + 2 A/B variations",
+                    "Virality scoring + brand voice profiles",
+                    "Content calendar + unlimited library saves",
                   ].map((feat) => (
                     <div key={feat} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ color: "#06b6d4", fontSize: 12, flexShrink: 0 }}>✓</span>
@@ -647,12 +647,12 @@ export default function DashboardPage() {
               {/* CTA side */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, paddingTop: 20 }}>
                 <div style={{
-                  fontSize: 36, fontFamily: "'Syne', sans-serif", fontWeight: 800,
+                  fontSize: 32, fontFamily: "'Syne', sans-serif", fontWeight: 800,
                   background: "linear-gradient(135deg, #06b6d4, #8b5cf6)",
                   WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                   lineHeight: 1,
                 }}>
-                  PRO
+                  CREATOR
                 </div>
                 <div style={{ fontSize: 11, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", textAlign: "center" }}>
                   Starting at<br />

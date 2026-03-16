@@ -5,18 +5,18 @@ import Link from "next/link";
 
 /* ── NAV DROPDOWN DATA ──────────────────────────────── */
 const PLATFORM_LINKS: { num: string; title: string; sub: string; href: string }[] = [
-  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor's content", href: "#features" },
-  { num: "02", title: "AI Generation", sub: "3 angle-tested variations per topic", href: "#features" },
-  { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live", href: "#features" },
+  { num: "01", title: "Competitor Analysis", sub: "Reverse-engineer any competitor's content", href: "#feature-competitor-analysis" },
+  { num: "02", title: "AI Generation", sub: "3 angle-tested variations per topic", href: "#feature-ai-content-generation" },
+  { num: "03", title: "Virality Scoring", sub: "Score every post before it goes live", href: "#feature-virality-scoring" },
 ];
 const SOLUTIONS_LINKS: { num: string; title: string; sub: string; href: string }[] = [
   { num: "01", title: "Solutions by Industry", sub: "Fashion, beauty, tech, food & more", href: "/solutions" },
-  { num: "02", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#features" },
-  { num: "03", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#features" },
-  { num: "04", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#platforms" },
-  { num: "05", title: "SIGNAL Inbox", sub: "Your content activity hub", href: "#features" },
-  { num: "06", title: "Content Library", sub: "Save, search, export, import content", href: "#features" },
-  { num: "07", title: "Analytics", sub: "Track performance across all platforms", href: "#features" },
+  { num: "02", title: "Brand Voice Kit", sub: "Define and apply your brand voice at scale", href: "#feature-brand-voice-kit" },
+  { num: "03", title: "Content Calendar", sub: "Visual month/week planner for all platforms", href: "#feature-auto-publishing" },
+  { num: "04", title: "Auto-Publishing", sub: "Connect 9 platforms, publish automatically", href: "#feature-auto-publishing" },
+  { num: "05", title: "SIGNAL Inbox", sub: "Your content activity hub", href: "#feature-ai-content-generation" },
+  { num: "06", title: "Content Library", sub: "Save, search, export, import content", href: "#feature-ai-content-generation" },
+  { num: "07", title: "Analytics", sub: "Track performance across all platforms", href: "#feature-analytics" },
 ];
 
 /* ── PLATFORM CARDS DATA ─────────────────────────────────── */
@@ -153,6 +153,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-2 5.5-4 7l-3 3-3-3c-2-1.5-4-4-4-7a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/><path d="M8 21h8"/></svg>,
     title: "AI Content Generation",
+    slug: "ai-content-generation",
     desc: "Generate 3 angle-tested post variations per topic, trained on your brand voice and top-performing content.",
     color: "#06b6d4",
     img: "/feat-ai-content-v2-opt.webp",
@@ -160,6 +161,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 8h6M8 11h4"/></svg>,
     title: "Competitor Analysis",
+    slug: "competitor-analysis",
     desc: "Reverse-engineer any competitor's top content. Find the gaps they're missing and own them.",
     color: "#8b5cf6",
     img: "/feat-competitor-v2-opt.webp",
@@ -167,6 +169,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
     title: "Virality Scoring",
+    slug: "virality-scoring",
     desc: "Score every post before publishing with our proprietary algorithm trained on 47M+ posts.",
     color: "#f59e0b",
     img: "/feat-virality-v2-opt.webp",
@@ -174,6 +177,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
     title: "Auto-Publishing",
+    slug: "auto-publishing",
     desc: "Schedule and publish across all 9 platforms simultaneously. Set it and forget it.",
     color: "#10b981",
     img: "/feat-autopublish-v2-opt.webp",
@@ -181,6 +185,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec4899" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>,
     title: "Brand Voice Kit",
+    slug: "brand-voice-kit",
     desc: "Define your tone, vocabulary, and style once. SIGNAL applies it consistently across every post.",
     color: "#ec4899",
     img: "/feat-brandvoice-v2-opt.webp",
@@ -188,6 +193,7 @@ const FEATURES = [
   {
     icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>,
     title: "Real-Time Analytics",
+    slug: "analytics",
     desc: "Track reach, engagement, and ROI across all platforms in one unified dashboard.",
     color: "#f97316",
     img: "/feat-analytics-v2-opt.webp",
@@ -242,6 +248,8 @@ export default function HomePage() {
           --grad: linear-gradient(135deg,#0891b2,#0e7490);
           --hi:   #e2e8f0;
         }
+        [id^="feature-"] { scroll-margin-top: 80px; }
+        #features, #platforms, #pricing { scroll-margin-top: 80px; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--hi); font-family: 'DM Sans', sans-serif; }
@@ -811,8 +819,8 @@ export default function HomePage() {
         {/* Alternating feature rows for top 2, then grid for rest */}
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {/* Top 2 features as large showcases */}
-          {FEATURES.slice(0, 2).map(({ icon, title, desc, color, img }, idx) => (
-            <div key={title} className="glass" style={{
+          {FEATURES.slice(0, 2).map(({ icon, title, slug, desc, color, img }, idx) => (
+            <div key={title} id={`feature-${slug}`} className="glass" style={{
               display: "flex", flexDirection: idx % 2 === 0 ? "row" : "row-reverse",
               overflow: "hidden", border: "1px solid rgba(255,255,255,.06)",
               transition: "border-color .3s",
@@ -850,8 +858,8 @@ export default function HomePage() {
 
           {/* Bottom 4 features as grid */}
           <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20 }}>
-            {FEATURES.slice(2).map(({ icon, title, desc, color, img }) => (
-              <div key={title} className="glass" style={{
+            {FEATURES.slice(2).map(({ icon, title, slug, desc, color, img }) => (
+              <div key={title} id={`feature-${slug}`} className="glass" style={{
                 padding: 0, border: "1px solid rgba(255,255,255,.06)",
                 transition: "border-color .2s, transform .2s",
                 overflow: "hidden",

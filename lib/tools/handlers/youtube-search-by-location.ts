@@ -1,60 +1,61 @@
 import { callClaude } from "@/lib/anthropic";
-import { ToolInput, ToolResult, ToolHandler } from "../types";
+import { searchChannels, formatCount, subscriberTier, hasYouTubeApiKey } from "@/lib/youtube-api";
+import type { ToolHandler, ToolResult } from "@/lib/tools/types";
 
-function cleanJsonResponse(text: string): string {
-  return text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-}
+const handler: ToolHandler = async (input): Promise<ToolResult> => {
+  const location = input.location || input.country;
+  const niche = input.niche || input.topic || "";
 
-const handler: ToolHandler = async (input: ToolInput): Promise<ToolResult> => {
-  if (!input.location) {
-    throw new Error("A location is required to search for YouTube channels.");
+  if (!location) {
+    throw new Error("A location (city or country) is required.");
   }
 
-  const niche = input.niche || "general";
+  // ── Try real YouTube API first ───────────────────────────────────────────
+  if (hasYouTubeApiKey()) {
+    try {
+      const query = niche ? `${niche} creators ${location}` : `YouTubers from ${location}`;
+      const channels = await searchChannels(query, 10);
 
-  const systemPrompt = `You are a YouTube regional content analyst. Return ONLY valid JSON with no additional text. Suggest YouTube channels that are based in or strongly associated with a specific location. Consider local language content, regional topics, and creators known to be from that area.
+      if (channels.length > 0) {
+        const channelResults = channels
+          .sort((a, b) => b.subscriberCount - a.subscriberCount)
+          .map((ch) => ({
+            channelName: ch.title, handle: ch.customUrl || ch.title,
+            subscribers: formatCount(ch.subscriberCount), subscriberCount: ch.subscriberCount,
+            subscriberTier: subscriberTier(ch.subscriberCount),
+            totalVideos: ch.videoCount, totalViews: formatCount(ch.viewCount),
+            country: ch.country || "Unknown", description: ch.description.slice(0, 200),
+            thumbnailUrl: ch.thumbnailUrl, channelId: ch.channelId,
+          }));
 
-Return a JSON object with this exact structure:
-{
-  "location": "<the location>",
-  "niche": "<the niche>",
-  "channels": [
-    {
-      "channelName": "<channel name>",
-      "handle": "<@handle>",
-      "estimatedSubscribers": "<e.g. 500K>",
-      "language": "<primary content language>",
-      "contentFocus": "<what they cover>",
-      "locationRelevance": "<how they're connected to the location>",
-      "audienceRegion": "<where most viewers are from>",
-      "notableFor": "<what makes them stand out in this region>"
+        return {
+          success: true,
+          data: {
+            location, niche: niche || "All niches", channels: channelResults,
+            totalFound: channelResults.length,
+            note: "Results based on YouTube search. Channel locations are self-reported.",
+          },
+          dataSource: "real",
+        };
+      }
+    } catch (error) {
+      console.error("[YouTube Search by Location] API error, falling back to AI:", error);
     }
-  ],
-  "regionalInsights": {
-    "dominantLanguage": "<main content language in region>",
-    "popularCategories": ["<category1>", "<category2>"],
-    "marketNotes": "<observations about the YouTube market in this region>"
   }
-}`;
 
-  const userPrompt = `Suggest 10 YouTube channels from or associated with "${input.location}" in the "${niche}" niche. Include both local-language and English-language creators if applicable. Mix subscriber levels from emerging (10K-100K) to established (500K+). Note the primary language of each channel and why they're relevant to the region.`;
+  // ── AI fallback ──────────────────────────────────────────────────────────
+  const systemPrompt = `You are a YouTube creator discovery specialist. Return ONLY valid JSON. Suggest channels based in a location.
+Return: { "location": "string", "niche": "string", "channels": [{ "channelName": "string", "handle": "string", "estimatedSubscribers": "string", "contentStyle": "string", "language": "string", "whyRelevant": "string" }], "locationInsights": { "creatorDensity": "string", "dominantNiches": ["string"], "growthTrend": "string" } }`;
 
+  const userPrompt = `Suggest 10 YouTube channels based in ${location}${niche ? ` in the "${niche}" niche` : ""}.`;
   const response = await callClaude(systemPrompt, userPrompt);
-  const cleaned = cleanJsonResponse(response);
+  const cleaned = response.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 
   try {
     const parsed = JSON.parse(cleaned);
-    return {
-      success: true,
-      data: {
-        ...parsed,
-        disclaimer:
-          "These YouTube channel suggestions are AI-generated based on general knowledge of the region and niche. Channel names, subscriber counts, locations, and content details should be verified on YouTube.",
-      },
-      dataSource: "ai_estimate",
-    };
+    return { success: true, data: { ...parsed, disclaimer: "These are AI-generated suggestions. Verify on YouTube." }, dataSource: "ai_estimate" };
   } catch {
-    throw new Error("Failed to parse AI response for location-based YouTube search.");
+    throw new Error("Failed to parse AI response for YouTube location search.");
   }
 };
 

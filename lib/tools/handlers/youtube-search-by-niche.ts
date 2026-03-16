@@ -1,56 +1,100 @@
 import { callClaude } from "@/lib/anthropic";
-import { ToolInput, ToolResult, ToolHandler } from "../types";
+import { searchChannels, formatCount, subscriberTier, engagementRating, hasYouTubeApiKey, getRecentVideos } from "@/lib/youtube-api";
+import type { ToolHandler, ToolResult } from "@/lib/tools/types";
 
-function cleanJsonResponse(text: string): string {
-  return text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-}
-
-const handler: ToolHandler = async (input: ToolInput): Promise<ToolResult> => {
+const handler: ToolHandler = async (input): Promise<ToolResult> => {
   const niche = input.niche || input.topic;
   if (!niche) {
     throw new Error("A niche keyword is required to search YouTube channels.");
   }
 
-  const systemPrompt = `You are a YouTube creator discovery specialist. Return ONLY valid JSON with no additional text. Suggest YouTube channels that are prominent in a given niche. Include a mix of channel sizes and content approaches. Base suggestions on well-known creators and typical content patterns.
+  // ── Try real YouTube API first ───────────────────────────────────────────
+  if (hasYouTubeApiKey()) {
+    try {
+      const channels = await searchChannels(`${niche} creators`, 10);
 
-Return a JSON object with this exact structure:
-{
-  "niche": "<the niche>",
-  "channels": [
-    {
-      "channelName": "<channel name>",
-      "handle": "<@handle if known>",
-      "estimatedSubscribers": "<e.g. 1.2M>",
-      "contentStyle": "<what kind of videos they make>",
-      "uploadFrequency": "<e.g. 2x per week>",
-      "averageViews": "<estimated avg views per video>",
-      "audienceType": "<who watches them>",
-      "standoutContent": "<their most notable series or video type>"
+      if (channels.length > 0) {
+        // Enrich top 5 with engagement data (conserve quota)
+        const enrichedChannels = await Promise.all(
+          channels.slice(0, 5).map(async (ch) => {
+            try {
+              const videos = await getRecentVideos(ch.channelId, 5);
+              const avgViews = videos.length > 0
+                ? Math.round(videos.reduce((s, v) => s + v.viewCount, 0) / videos.length) : 0;
+              const avgLikes = videos.length > 0
+                ? Math.round(videos.reduce((s, v) => s + v.likeCount, 0) / videos.length) : 0;
+              const avgComments = videos.length > 0
+                ? Math.round(videos.reduce((s, v) => s + v.commentCount, 0) / videos.length) : 0;
+              const engRate = ch.subscriberCount > 0
+                ? ((avgLikes + avgComments) / ch.subscriberCount) * 100 : 0;
+
+              return {
+                channelName: ch.title, handle: ch.customUrl || ch.title,
+                subscribers: formatCount(ch.subscriberCount), subscriberCount: ch.subscriberCount,
+                subscriberTier: subscriberTier(ch.subscriberCount),
+                averageViews: formatCount(avgViews),
+                engagementRate: `${Math.round(engRate * 100) / 100}%`,
+                engagementRating: engagementRating(engRate),
+                totalVideos: ch.videoCount, country: ch.country || "Unknown",
+                description: ch.description.slice(0, 200), thumbnailUrl: ch.thumbnailUrl,
+                channelId: ch.channelId,
+              };
+            } catch {
+              return {
+                channelName: ch.title, handle: ch.customUrl || ch.title,
+                subscribers: formatCount(ch.subscriberCount), subscriberCount: ch.subscriberCount,
+                subscriberTier: subscriberTier(ch.subscriberCount),
+                averageViews: "N/A", engagementRate: "N/A", engagementRating: "Unknown",
+                totalVideos: ch.videoCount, country: ch.country || "Unknown",
+                description: ch.description.slice(0, 200), thumbnailUrl: ch.thumbnailUrl,
+                channelId: ch.channelId,
+              };
+            }
+          })
+        );
+
+        const remaining = channels.slice(5).map((ch) => ({
+          channelName: ch.title, handle: ch.customUrl || ch.title,
+          subscribers: formatCount(ch.subscriberCount), subscriberCount: ch.subscriberCount,
+          subscriberTier: subscriberTier(ch.subscriberCount),
+          averageViews: "N/A", engagementRate: "N/A", engagementRating: "Unknown",
+          totalVideos: ch.videoCount, country: ch.country || "Unknown",
+          description: ch.description.slice(0, 200), thumbnailUrl: ch.thumbnailUrl,
+          channelId: ch.channelId,
+        }));
+
+        const allChannels = [...enrichedChannels, ...remaining]
+          .sort((a, b) => b.subscriberCount - a.subscriberCount);
+
+        return {
+          success: true,
+          data: {
+            niche, channels: allChannels, totalFound: allChannels.length,
+            nicheInsights: {
+              saturation: allChannels.length >= 10 ? "high" : allChannels.length >= 5 ? "moderate" : "low",
+              topChannelSubscribers: formatCount(allChannels[0]?.subscriberCount || 0),
+              avgSubscribers: formatCount(Math.round(allChannels.reduce((s, c) => s + c.subscriberCount, 0) / allChannels.length)),
+            },
+          },
+          dataSource: "real",
+        };
+      }
+    } catch (error) {
+      console.error("[YouTube Search by Niche] API error, falling back to AI:", error);
     }
-  ],
-  "nicheInsights": {
-    "saturation": "<low | moderate | high | oversaturated>",
-    "growthTrend": "<growing | stable | declining>",
-    "topContentFormats": ["<format1>", "<format2>"]
   }
-}`;
 
-  const userPrompt = `Suggest 10 YouTube channels in the "${niche}" niche. Include a range from smaller creators (10K-100K subs) to larger ones (1M+). For each, describe their content approach, upload frequency, and what makes them stand out. Also provide insights on the niche's saturation and growth trend.`;
+  // ── AI fallback ──────────────────────────────────────────────────────────
+  const systemPrompt = `You are a YouTube creator discovery specialist. Return ONLY valid JSON. Suggest YouTube channels in a given niche.
+Return: { "niche": "string", "channels": [{ "channelName": "string", "handle": "string", "estimatedSubscribers": "string", "contentStyle": "string", "uploadFrequency": "string", "averageViews": "string", "audienceType": "string", "standoutContent": "string" }], "nicheInsights": { "saturation": "string", "growthTrend": "string", "topContentFormats": ["string"] } }`;
 
+  const userPrompt = `Suggest 10 YouTube channels in the "${niche}" niche.`;
   const response = await callClaude(systemPrompt, userPrompt);
-  const cleaned = cleanJsonResponse(response);
+  const cleaned = response.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 
   try {
     const parsed = JSON.parse(cleaned);
-    return {
-      success: true,
-      data: {
-        ...parsed,
-        disclaimer:
-          "These YouTube channel suggestions are AI-generated estimates. Channel names, subscriber counts, and content details should be verified on YouTube.",
-      },
-      dataSource: "ai_estimate",
-    };
+    return { success: true, data: { ...parsed, disclaimer: "These are AI-generated suggestions. Verify on YouTube." }, dataSource: "ai_estimate" };
   } catch {
     throw new Error("Failed to parse AI response for YouTube niche search.");
   }

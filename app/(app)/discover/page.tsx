@@ -32,9 +32,11 @@ const PLATFORM_COLORS: Record<string, string> = {
   twitter: "#3b82f6",
   linkedin: "#8b5cf6",
   facebook: "#1877f2",
+  twitch: "#9146ff",
   reddit: "#ff4500",
   pinterest: "#e60023",
   snapchat: "#fffc00",
+  threads: "#000000",
 };
 
 const PLATFORM_ICONS: Record<string, string> = {
@@ -44,9 +46,11 @@ const PLATFORM_ICONS: Record<string, string> = {
   twitter: "\u{1f426}",
   linkedin: "\u{1f4bc}",
   facebook: "\u{1f310}",
+  twitch: "\u{1f3ae}",
   reddit: "\u{1f4e2}",
   pinterest: "\u{1f4cc}",
   snapchat: "\u{1f47b}",
+  threads: "\u{1f9f5}",
 };
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -56,13 +60,15 @@ const PLATFORM_LABELS: Record<string, string> = {
   twitter: "X / Twitter",
   linkedin: "LinkedIn",
   facebook: "Facebook",
+  twitch: "Twitch",
   reddit: "Reddit",
   pinterest: "Pinterest",
   snapchat: "Snapchat",
+  threads: "Threads",
 };
 
 const PLATFORM_OPTIONS = [
-  "all", "instagram", "tiktok", "youtube", "twitter", "linkedin", "reddit", "facebook", "pinterest", "snapchat",
+  "all", "instagram", "tiktok", "youtube", "twitter", "facebook", "twitch", "linkedin", "reddit", "pinterest", "snapchat", "threads",
 ];
 
 const CARDS_PER_PAGE = 9;
@@ -472,8 +478,10 @@ export default function DiscoverPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dataSource, setDataSource] = useState<string>("");
+  const [hasSearched, setHasSearched] = useState(false);
 
   // Filters
   const [searchInput, setSearchInput] = useState("");
@@ -518,6 +526,8 @@ export default function DiscoverPage() {
       setCreators(data.creators || []);
       setTotal(data.total || 0);
       setTotalPages(data.totalPages || 1);
+      setDataSource(data.source || "");
+      setHasSearched(true);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to search creators";
       setError(message);
@@ -527,8 +537,10 @@ export default function DiscoverPage() {
   }, [searchQuery, platformFilter, nicheFilter, minFollowers, minEngagement, minTrust]);
 
   useEffect(() => {
-    fetchCreators(currentPage);
-  }, [fetchCreators, currentPage]);
+    if (hasSearched) {
+      fetchCreators(currentPage);
+    }
+  }, [fetchCreators, currentPage, hasSearched]);
 
   // ── Search handler ─────────────────────────────────────────────────────────
 
@@ -557,6 +569,111 @@ export default function DiscoverPage() {
   }
 
   const hasActiveFilters = searchQuery || platformFilter !== "all" || nicheFilter || minFollowers || minEngagement || minTrust;
+
+  // ── Welcome State (before first search) ────────────────────────────────────
+
+  if (!hasSearched && creators.length === 0 && !isLoading) {
+    return (
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        {/* Header */}
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 24, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0", marginBottom: 4, display: "flex", alignItems: "center", gap: 10 }}>
+            <span>{"\u{1f50d}"}</span> Discover Creators
+          </h1>
+          <p style={{ fontSize: 13, color: "#94a3b8", fontFamily: "'DM Mono', monospace", margin: 0 }}>
+            Search millions of creators across Instagram, TikTok & YouTube
+          </p>
+        </div>
+
+        {/* Search Bar */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+          <div style={{ position: "relative", flex: 1 }}>
+            <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", fontSize: 16, pointerEvents: "none", zIndex: 1 }}>
+              {"\u{1f50d}"}
+            </span>
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              placeholder="Search creators by name, niche, or keyword..."
+              style={{
+                width: "100%", background: "#0a0d14", border: "1px solid #1e2535",
+                borderRadius: 10, padding: "14px 16px 14px 46px", color: "#e2e8f0",
+                fontSize: 14, fontFamily: "'DM Sans', sans-serif", outline: "none",
+                boxSizing: "border-box" as const, transition: "border-color 0.15s",
+              }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(6,182,212,0.4)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "#1e2535")}
+            />
+          </div>
+          <button
+            onClick={handleSearch}
+            style={{
+              padding: "14px 24px", borderRadius: 10, border: "none",
+              background: "linear-gradient(135deg, #0891b2, #0e7490)",
+              color: "#0a1e3d", fontSize: 13, fontFamily: "'Syne', sans-serif",
+              fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" as const, flexShrink: 0,
+            }}
+          >
+            Search
+          </button>
+        </div>
+
+        {/* Welcome hero */}
+        <div style={{
+          background: "linear-gradient(135deg, rgba(6,182,212,.06), rgba(139,92,246,.03))",
+          border: "1px solid rgba(6,182,212,.15)", borderRadius: 16,
+          padding: "48px 32px", textAlign: "center" as const, marginTop: 20,
+          position: "relative" as const, overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute" as const, top: 0, left: 0, right: 0, height: 2,
+            background: "linear-gradient(90deg, #0891b2, #8b5cf6, #ec4899)",
+          }} />
+          <div style={{ fontSize: 48, marginBottom: 16 }}>{"\u{1f30d}"}</div>
+          <h2 style={{ fontSize: 20, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#f1f5f9", marginBottom: 10 }}>
+            Search Millions of Creators
+          </h2>
+          <p style={{ fontSize: 14, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.7, maxWidth: 500, margin: "0 auto 24px" }}>
+            Find the perfect creators for your brand across Instagram, TikTok, and YouTube. Filter by niche, follower count, engagement rate, and more.
+          </p>
+
+          {/* Quick search suggestions */}
+          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" as const }}>
+            {["fitness influencers", "beauty creators", "tech reviewers", "food bloggers", "travel vloggers", "fashion models"].map((suggestion) => (
+              <button
+                key={suggestion}
+                onClick={() => { setSearchInput(suggestion); setSearchQuery(suggestion); setHasSearched(true); setCurrentPage(1); }}
+                style={{
+                  padding: "8px 16px", borderRadius: 20,
+                  background: "rgba(6,182,212,0.08)", border: "1px solid rgba(6,182,212,0.2)",
+                  color: "#06b6d4", fontSize: 12, fontFamily: "'DM Mono', monospace",
+                  cursor: "pointer", transition: "all 0.15s", letterSpacing: 0.5,
+                }}
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 32, marginTop: 32 }}>
+            {[
+              { label: "CREATORS", value: "340M+" },
+              { label: "PLATFORMS", value: "9" },
+              { label: "DATA POINTS", value: "40+" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#06b6d4" }}>{stat.value}</div>
+                <div style={{ fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#4a5568", letterSpacing: 2, marginTop: 4 }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ── Loading State ──────────────────────────────────────────────────────────
 
@@ -792,16 +909,45 @@ export default function DiscoverPage() {
         />
       </div>
 
+      {/* ── AI Disclaimer ── */}
+      {dataSource === "ai" && creators.length > 0 && (
+        <div style={{
+          background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.2)",
+          borderRadius: 10, padding: "10px 16px", marginBottom: 16,
+          display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <span style={{ fontSize: 16 }}>{"\u{1f916}"}</span>
+          <div style={{ fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: "#f59e0b", lineHeight: 1.5 }}>
+            <strong>AI-Generated Estimates</strong> — These profiles are AI suggestions based on your search.
+            For real creator data, connect a data provider (ScrapeCreators, EnsembleData, or Influencers.club).
+          </div>
+        </div>
+      )}
+
       {/* ── Results Count ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-        <div style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
-          {isLoading ? (
-            <span style={{ color: "#2d3748" }}>Searching...</span>
-          ) : (
-            <>
-              <span style={{ color: "#06b6d4", fontWeight: 700, fontSize: 14, fontFamily: "'Syne', sans-serif" }}>{total}</span>
-              {" "}creator{total !== 1 ? "s" : ""} found
-            </>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: "#4a5568" }}>
+            {isLoading ? (
+              <span style={{ color: "#2d3748" }}>Searching...</span>
+            ) : (
+              <>
+                <span style={{ color: "#06b6d4", fontWeight: 700, fontSize: 14, fontFamily: "'Syne', sans-serif" }}>{total}</span>
+                {" "}creator{total !== 1 ? "s" : ""} found
+              </>
+            )}
+          </div>
+          {/* Data source badge */}
+          {dataSource && !isLoading && creators.length > 0 && (
+            <span style={{
+              padding: "2px 8px", borderRadius: 20, fontSize: 9,
+              fontFamily: "'DM Mono', monospace", letterSpacing: 1,
+              background: dataSource === "ai" ? "rgba(245,158,11,0.1)" : dataSource === "cache" ? "rgba(139,92,246,0.1)" : "rgba(6,182,212,0.1)",
+              border: `1px solid ${dataSource === "ai" ? "rgba(245,158,11,0.2)" : dataSource === "cache" ? "rgba(139,92,246,0.2)" : "rgba(6,182,212,0.2)"}`,
+              color: dataSource === "ai" ? "#f59e0b" : dataSource === "cache" ? "#8b5cf6" : "#06b6d4",
+            }}>
+              {dataSource === "ai" ? "AI POWERED" : dataSource === "cache" ? "CACHED" : "REAL DATA"}
+            </span>
           )}
         </div>
         {totalPages > 1 && !isLoading && (

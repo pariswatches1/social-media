@@ -123,16 +123,15 @@ const FAQS = [
 const FOOTER_LINKS = {
   Product: [
     { label: "Features", href: "#features" },
+    { label: "Platforms", href: "#platforms" },
     { label: "Pricing", href: "#pricing" },
     { label: "Free Tools", href: "/tools" },
-    { label: "FAQ", href: "#faq" },
   ],
   Company: [
-    { label: "About", href: "#features" },
     { label: "Solutions", href: "/solutions" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Free Tools", href: "/tools" },
     { label: "Compare", href: "/compare/signal-vs-sprout-social" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Contact", href: "mailto:support@influencccer.com" },
   ],
   Legal: [
     { label: "Privacy", href: "/privacy" },
@@ -141,8 +140,8 @@ const FOOTER_LINKS = {
     { label: "GDPR", href: "/privacy#gdpr" },
   ],
   Support: [
+    { label: "Free Tools", href: "/tools" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "mailto:support@influencccer.com" },
     { label: "Sign Up", href: "/sign-up" },
     { label: "Sign In", href: "/sign-in" },
   ],
@@ -249,7 +248,7 @@ export default function HomePage() {
           --hi:   #e2e8f0;
         }
         [id^="feature-"] { scroll-margin-top: 80px; }
-        #features, #platforms, #pricing { scroll-margin-top: 80px; }
+        #features, #platforms, #pricing, #faq { scroll-margin-top: 80px; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--hi); font-family: 'DM Sans', sans-serif; }
@@ -1459,11 +1458,11 @@ export default function HomePage() {
             {/* Social icons */}
             <div style={{ display: "flex", gap: 10 }}>
               {[
-                { href: "#", label: "Twitter", path: "M4 4l6.5 7.5L4 20h2.5l5.2-6 4.8 6H20l-7-8.5L19.5 4H17l-4.8 5.5L7.5 4H4z" },
-                { href: "#", label: "LinkedIn", path: "M7 10v7M7 7.5v.5M11 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M11 10v7" },
-                { href: "#", label: "Instagram", path: "M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM17.5 6.5h.01" },
+                { href: "https://x.com", label: "Twitter", path: "M4 4l6.5 7.5L4 20h2.5l5.2-6 4.8 6H20l-7-8.5L19.5 4H17l-4.8 5.5L7.5 4H4z" },
+                { href: "https://linkedin.com", label: "LinkedIn", path: "M7 10v7M7 7.5v.5M11 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M11 10v7" },
+                { href: "https://instagram.com", label: "Instagram", path: "M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM17.5 6.5h.01" },
               ].map((s) => (
-                <a key={s.label} href={s.href} aria-label={s.label} style={{
+                <a key={s.label} href={s.href} aria-label={s.label} target="_blank" rel="noopener noreferrer" style={{
                   width: 34, height: 34, borderRadius: 10,
                   background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.06)",
                   display: "flex", alignItems: "center", justifyContent: "center",

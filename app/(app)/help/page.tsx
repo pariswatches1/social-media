@@ -1,198 +1,211 @@
 "use client";
 
-import { useState, useRef } from "react";
-
-const TUTORIALS = [
-  {
-    id: "main",
-    title: "How to Use SIGNAL",
-    desc: "Complete walkthrough of your dashboard, core features, and how to get started.",
-    duration: "78s",
-    src: "/tutorial-main.mp4",
-    thumbnail: "/tutorial-thumbnail.jpg",
-  },
-  {
-    id: "short",
-    title: "SIGNAL Quick Overview",
-    desc: "A fast-paced summary of the platform for returning users or quick reference.",
-    duration: "25s",
-    src: "/tutorial-short.mp4",
-    thumbnail: "/tutorial-thumbnail.jpg",
-  },
-];
+import { useState } from "react";
+import Link from "next/link";
+import { GuidedTourModal, TOUR_STEPS } from "@/components/TutorialCard";
 
 export default function HelpPage() {
-  const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourStartStep, setTourStartStep] = useState(0);
+
+  const handleLaunchTour = () => {
+    setTourOpen(true);
+  };
+
+  const handleResetTour = () => {
+    try { localStorage.removeItem("signal_tutorial_dismissed"); } catch {}
+    setTourOpen(true);
+  };
+
+  /* Group steps by section for the feature reference */
+  const sections = TOUR_STEPS.reduce<Record<string, typeof TOUR_STEPS>>((acc, step) => {
+    if (!acc[step.section]) acc[step.section] = [];
+    acc[step.section].push(step);
+    return acc;
+  }, {});
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto" }}>
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#e2e8f0", marginBottom: 6 }}>
+        <h1 style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#f1f5f9", marginBottom: 6 }}>
           Help & Tutorials
         </h1>
-        <p style={{ fontSize: 13, color: "#4a5568", fontFamily: "'DM Mono', monospace" }}>
+        <p style={{ fontSize: 13, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif" }}>
           Learn how to get the most out of SIGNAL
         </p>
       </div>
 
-      {/* Active video player */}
-      {activeVideo && (
+      {/* ── Launch Tour Card ── */}
+      <div style={{
+        background: "linear-gradient(135deg, rgba(6,182,212,.08), rgba(139,92,246,.04))",
+        border: "1px solid rgba(6,182,212,.2)", borderRadius: 16,
+        padding: "28px 28px", marginBottom: 32,
+        display: "flex", alignItems: "center", gap: 24,
+        position: "relative", overflow: "hidden",
+      }}>
+        {/* Gradient accent line */}
         <div style={{
-          background: "#0a0d14",
-          border: "1px solid rgba(6,182,212,0.2)",
-          borderRadius: 14,
-          overflow: "hidden",
-          marginBottom: 24,
+          position: "absolute", top: 0, left: 0, right: 0, height: 2,
+          background: "linear-gradient(90deg, #0891b2, #8b5cf6, #ec4899)",
+        }} />
+
+        <div style={{
+          width: 72, height: 72, borderRadius: 18,
+          background: "linear-gradient(135deg, rgba(6,182,212,.15), rgba(139,92,246,.1))",
+          border: "1px solid rgba(6,182,212,.2)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 34, flexShrink: 0,
         }}>
-          <video
-            ref={videoRef}
-            src={TUTORIALS.find(t => t.id === activeVideo)?.src}
-            poster="/tutorial-thumbnail.jpg"
-            controls
-            autoPlay
-            playsInline
-            style={{ width: "100%", aspectRatio: "16/9", display: "block", background: "#060810" }}
-          />
-          <div style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0" }}>
-              {TUTORIALS.find(t => t.id === activeVideo)?.title}
+          🗺️
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <h2 style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#f1f5f9", margin: 0 }}>
+              Interactive Guided Tour
+            </h2>
+            <span style={{
+              fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#06b6d4",
+              background: "rgba(6,182,212,.1)", padding: "3px 10px", borderRadius: 99,
+              letterSpacing: 1, fontWeight: 600,
+            }}>
+              {TOUR_STEPS.length} TABS
             </span>
-            <button
-              onClick={() => setActiveVideo(null)}
-              style={{
-                padding: "5px 12px",
-                borderRadius: 6,
-                background: "rgba(255,255,255,0.04)",
-                color: "#4a5568",
-                border: "1px solid rgba(255,255,255,0.08)",
-                fontSize: 10,
-                fontFamily: "'DM Mono', monospace",
-                cursor: "pointer",
-              }}
-            >
-              Close
+          </div>
+          <p style={{ fontSize: 13, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.7, margin: "0 0 14px" }}>
+            Walk through every section of SIGNAL step by step. Learn what each tab does, get pro tips, and master the platform in minutes. Navigate with arrow keys or click through at your own pace.
+          </p>
+          <div style={{ display: "flex", gap: 12 }}>
+            <button onClick={handleLaunchTour} style={{
+              padding: "10px 24px", borderRadius: 10,
+              background: "linear-gradient(135deg, #0891b2, #7c3aed)",
+              color: "#fff", border: "none", fontSize: 13,
+              fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: 0.5,
+              cursor: "pointer", boxShadow: "0 0 16px rgba(6,182,212,.15)",
+            }}>
+              Launch Tour →
+            </button>
+            <button onClick={handleResetTour} style={{
+              padding: "10px 20px", borderRadius: 10,
+              background: "transparent", color: "#94a3b8",
+              border: "1px solid rgba(255,255,255,.08)", fontSize: 12,
+              fontFamily: "'DM Sans', sans-serif", fontWeight: 500, cursor: "pointer",
+            }}>
+              Reset & Restart
             </button>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Tutorial cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 16 }}>
-        {TUTORIALS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setActiveVideo(t.id)}
-            style={{
-              background: "#0a0d14",
-              border: `1px solid ${activeVideo === t.id ? "rgba(6,182,212,0.4)" : "#1e2535"}`,
-              borderRadius: 14,
-              overflow: "hidden",
-              textAlign: "left",
-              cursor: "pointer",
-              transition: "border-color 0.15s, transform 0.15s",
-              padding: 0,
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(6,182,212,0.3)";
-              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = activeVideo === t.id ? "rgba(6,182,212,0.4)" : "#1e2535";
-              (e.currentTarget as HTMLButtonElement).style.transform = "";
-            }}
-          >
-            {/* Thumbnail */}
-            <div style={{ position: "relative", aspectRatio: "16/9", background: "#060810" }}>
-              <img
-                src={t.thumbnail}
-                alt={t.title}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: 0.6 }}
-              />
-              <div style={{
-                position: "absolute", inset: 0,
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <div style={{
-                  width: 44, height: 44, borderRadius: "50%",
-                  background: "rgba(6,182,212,0.9)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 4px 16px rgba(6,182,212,0.3)",
-                }}>
-                  <svg width="16" height="18" viewBox="0 0 14 16" fill="none">
-                    <path d="M1 1.5L13 8L1 14.5V1.5Z" fill="#fff" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </div>
-              {/* Duration badge */}
-              <div style={{
-                position: "absolute", bottom: 8, right: 8,
-                background: "rgba(0,0,0,0.7)", borderRadius: 4,
-                padding: "2px 6px", fontSize: 10, fontFamily: "'DM Mono', monospace",
-                color: "#e2e8f0",
-              }}>
-                {t.duration}
-              </div>
-            </div>
+      {/* ── Feature Reference (grouped by section) ── */}
+      <h2 style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#f1f5f9", marginBottom: 20 }}>
+        Feature Reference
+      </h2>
 
-            {/* Info */}
-            <div style={{ padding: "14px 16px" }}>
-              <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 6 }}>
-                {t.title}
-              </div>
-              <div style={{ fontSize: 12, color: "#4a5568", lineHeight: 1.6 }}>
-                {t.desc}
-              </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 40 }}>
+        {Object.entries(sections).map(([sectionName, steps]) => (
+          <div key={sectionName}>
+            <div style={{
+              fontSize: 9, fontFamily: "'DM Mono', monospace", color: "#64748b",
+              letterSpacing: 2, marginBottom: 10, paddingLeft: 2,
+            }}>
+              {sectionName}
             </div>
-          </button>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {steps.map((s) => (
+                <Link key={s.id} href={s.route} style={{
+                  display: "flex", alignItems: "center", gap: 14,
+                  background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 12,
+                  padding: "14px 16px", textDecoration: "none",
+                  transition: "border-color .15s, transform .15s",
+                }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = `${s.color}40`;
+                    (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1e2535";
+                    (e.currentTarget as HTMLAnchorElement).style.transform = "";
+                  }}
+                >
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 10,
+                    background: `${s.color}10`, border: `1px solid ${s.color}20`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 20, flexShrink: 0,
+                  }}>
+                    {s.icon}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 14, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#f1f5f9", marginBottom: 2 }}>
+                      {s.title}
+                    </div>
+                    <div style={{ fontSize: 12, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5 }}>
+                      {s.headline} — {s.description.slice(0, 80)}...
+                    </div>
+                  </div>
+                  <span style={{ color: "#334155", fontSize: 14, flexShrink: 0 }}>→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
 
-      {/* Getting started tips */}
-      <div style={{ marginTop: 32 }}>
-        <h2 style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 16 }}>
-          Quick Start Guide
-        </h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {[
-            { step: "1", title: "Set up your brand voice", desc: "Go to Brand and define your tone, style, and keywords.", href: "/brand" },
-            { step: "2", title: "Connect your accounts", desc: "Link your social platforms in Accounts to enable publishing.", href: "/settings/accounts" },
-            { step: "3", title: "Analyze a competitor", desc: "Use Analyze to study any competitor or topic and find content gaps.", href: "/analyze" },
-            { step: "4", title: "Create your first post", desc: "Go to Create, pick a platform, and generate on-brand content.", href: "/create" },
-            { step: "5", title: "Schedule and publish", desc: "Save your best content and schedule it in your calendar.", href: "/schedule" },
-          ].map((item) => (
-            <a
-              key={item.step}
-              href={item.href}
-              style={{
-                display: "flex", alignItems: "center", gap: 14,
-                background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 10,
-                padding: "14px 16px", textDecoration: "none",
-                transition: "border-color 0.15s",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(6,182,212,0.3)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1e2535"; }}
-            >
-              <div style={{
-                width: 28, height: 28, borderRadius: "50%",
-                background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 12, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#06b6d4",
-                flexShrink: 0,
-              }}>
-                {item.step}
+      {/* ── Quick Start Guide ── */}
+      <h2 style={{ fontSize: 16, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#f1f5f9", marginBottom: 16 }}>
+        Quick Start Guide
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
+        {[
+          { step: "1", title: "Set up your brand voice", desc: "Go to Brand and define your tone, style, and keywords so AI content sounds like you.", href: "/brand" },
+          { step: "2", title: "Connect your accounts", desc: "Link your social platforms in Accounts to enable direct publishing.", href: "/settings/accounts" },
+          { step: "3", title: "Analyze a competitor", desc: "Use Analyze to study any competitor or topic and find content gaps.", href: "/analyze" },
+          { step: "4", title: "Create your first post", desc: "Go to Create, pick a platform, and generate on-brand content in seconds.", href: "/create" },
+          { step: "5", title: "Schedule and publish", desc: "Save your best content and schedule it across your content calendar.", href: "/schedule" },
+        ].map((item) => (
+          <Link key={item.step} href={item.href} style={{
+            display: "flex", alignItems: "center", gap: 14,
+            background: "#0a0d14", border: "1px solid #1e2535", borderRadius: 10,
+            padding: "14px 16px", textDecoration: "none", transition: "border-color 0.15s",
+          }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(6,182,212,.3)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1e2535"; }}
+          >
+            <div style={{
+              width: 28, height: 28, borderRadius: "50%",
+              background: "rgba(6,182,212,0.1)", border: "1px solid rgba(6,182,212,0.2)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#06b6d4",
+              flexShrink: 0,
+            }}>
+              {item.step}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#f1f5f9", marginBottom: 2 }}>
+                {item.title}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>
-                  {item.title}
-                </div>
-                <div style={{ fontSize: 11, color: "#4a5568" }}>{item.desc}</div>
-              </div>
-              <span style={{ color: "#2d3748", fontSize: 14 }}>→</span>
-            </a>
-          ))}
-        </div>
+              <div style={{ fontSize: 12, color: "#94a3b8", fontFamily: "'DM Sans', sans-serif" }}>{item.desc}</div>
+            </div>
+            <span style={{ color: "#334155", fontSize: 14 }}>→</span>
+          </Link>
+        ))}
       </div>
+
+      {/* ── Footer note ── */}
+      <div style={{
+        textAlign: "center", padding: "24px 0", borderTop: "1px solid rgba(255,255,255,.04)",
+      }}>
+        <p style={{ fontSize: 12, color: "#475569", fontFamily: "'DM Sans', sans-serif" }}>
+          Need more help? Contact us at{" "}
+          <a href="mailto:support@influencccer.com" style={{ color: "#06b6d4", textDecoration: "none" }}>
+            support@influencccer.com
+          </a>
+        </p>
+      </div>
+
+      {/* ── Tour Modal ── */}
+      {tourOpen && <GuidedTourModal onClose={() => setTourOpen(false)} />}
     </div>
   );
 }

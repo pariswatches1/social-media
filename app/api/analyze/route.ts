@@ -44,6 +44,7 @@ Return JSON with this exact shape:
 {
   "niche": "their content niche based on bio and post content",
   "contentStyle": "2-4 word description of their content style",
+  "contentCategories": ["category1", "category2", "category3", "category4", "category5"],
   "outlierAnalysis": [
     {
       "whyItWorked": "2-3 sentence analysis of why this specific post performed well",
@@ -64,7 +65,45 @@ Return JSON with this exact shape:
   ]
 }
 
+For contentCategories, list 4-6 content theme categories that describe this account (e.g. "Luxury Cars", "Lifestyle", "Technology", "Adventure", "Fashion").
+
 Generate analysis for all ${data.topPosts.length} posts in outlierAnalysis (matching the order above), and generate 5 content ideas. Base everything on the REAL data patterns.`;
+}
+
+// Rate engagement compared to similar-sized accounts
+function rateEngagement(er: number, followers: number): { label: string; level: "excellent" | "good" | "average" | "below" } {
+  // Benchmarks vary by follower tier
+  const thresholds = followers > 1_000_000
+    ? { excellent: 3, good: 1.5, average: 0.8 }
+    : followers > 100_000
+    ? { excellent: 4, good: 2, average: 1 }
+    : followers > 10_000
+    ? { excellent: 5, good: 3, average: 1.5 }
+    : { excellent: 7, good: 4, average: 2 };
+
+  if (er >= thresholds.excellent) return { label: "Excellent", level: "excellent" };
+  if (er >= thresholds.good) return { label: "Good", level: "good" };
+  if (er >= thresholds.average) return { label: "Average", level: "average" };
+  return { label: "Below Average", level: "below" };
+}
+
+// Compute posting frequency
+function getPostingFrequency(posts: InstagramData["posts"]): { postsPerWeek: number; label: string } {
+  if (posts.length < 2) return { postsPerWeek: 0, label: "Unknown" };
+  const sorted = [...posts].sort((a, b) => a.timestamp - b.timestamp);
+  const spanDays = (sorted[sorted.length - 1].timestamp - sorted[0].timestamp) / 86400;
+  if (spanDays <= 0) return { postsPerWeek: posts.length, label: `${posts.length}/week` };
+  const perWeek = (posts.length / spanDays) * 7;
+  return { postsPerWeek: Math.round(perWeek * 10) / 10, label: `~${perWeek.toFixed(1)}/week` };
+}
+
+// Content type breakdown
+function getContentMix(posts: InstagramData["posts"]): { type: string; count: number; pct: number }[] {
+  const counts: Record<string, number> = {};
+  posts.forEach(p => { counts[p.mediaType] = (counts[p.mediaType] || 0) + 1; });
+  return Object.entries(counts)
+    .map(([type, count]) => ({ type, count, pct: Math.round((count / posts.length) * 100) }))
+    .sort((a, b) => b.count - a.count);
 }
 
 // Merge real Instagram data with Claude's qualitative analysis
@@ -73,15 +112,44 @@ function mergeInstagramResult(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   aiAnalysis: any
 ) {
+  const er = igData.avgEngagementRate;
+  const engRating = rateEngagement(er, igData.profile.followerCount);
+  const freq = getPostingFrequency(igData.posts);
+  const contentMix = getContentMix(igData.posts);
+
+  // Compute averages from all posts
+  const totalLikes = igData.posts.reduce((s, p) => s + p.likeCount, 0);
+  const totalComments = igData.posts.reduce((s, p) => s + p.commentCount, 0);
+  const totalShares = igData.posts.reduce((s, p) => s + p.shareCount, 0);
+  const postCount = igData.posts.length || 1;
+
   return {
     profile: {
       handle: igData.profile.username,
+      fullName: igData.profile.fullName,
       platform: "Instagram",
       niche: aiAnalysis.niche || "Content Creator",
+      bio: igData.profile.biography,
+      followerCount: igData.profile.followerCount,
+      followingCount: igData.profile.followingCount,
+      mediaCount: igData.profile.mediaCount,
       followerEstimate: formatFollowers(igData.profile.followerCount),
-      avgEngagement: igData.avgEngagementRate.toFixed(1) + "%",
+      avgEngagement: er.toFixed(2) + "%",
+      avgEngagementRaw: Math.round(er * 100) / 100,
       contentStyle: aiAnalysis.contentStyle || "Mixed content",
+      category: igData.profile.category || aiAnalysis.niche || "Content Creator",
+      profilePicUrl: igData.profile.profilePicUrl,
     },
+    stats: {
+      avgLikes: Math.round(totalLikes / postCount),
+      avgComments: Math.round(totalComments / postCount),
+      avgShares: Math.round(totalShares / postCount),
+      engagementRating: engRating,
+      postingFrequency: freq,
+      contentMix,
+      totalPostsAnalyzed: igData.posts.length,
+    },
+    contentCategories: aiAnalysis.contentCategories || [],
     outliers: igData.topPosts.map((post, i) => ({
       title:
         post.caption.split("\n")[0]?.slice(0, 80) || "Untitled Post",
@@ -93,9 +161,11 @@ function mergeInstagramResult(
       comments: post.commentCount,
       shares: post.shareCount,
       engagementRate: post.engagementRate.toFixed(1) + "%",
+      engagementRateRaw: Math.round(post.engagementRate * 100) / 100,
       whyItWorked: aiAnalysis.outlierAnalysis?.[i]?.whyItWorked || "",
       contentType: post.mediaType,
       keyTactic: aiAnalysis.outlierAnalysis?.[i]?.keyTactic || "",
+      timestamp: post.timestamp,
     })),
     contentStrategy: aiAnalysis.contentStrategy || "",
     contentIdeas: aiAnalysis.contentIdeas || [],

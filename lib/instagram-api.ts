@@ -1,7 +1,9 @@
-// Real Instagram data fetcher via RapidAPI
-// Uses instagram-scraper-stable-api.p.rapidapi.com
+// Real Instagram data fetcher
+// Supports both self-hosted scraper server and RapidAPI as fallback
 
 const RAPIDAPI_HOST = "instagram-scraper-stable-api.p.rapidapi.com";
+const SCRAPER_URL = process.env.SCRAPER_URL; // e.g. https://your-scraper.railway.app
+const SCRAPER_KEY = process.env.SCRAPER_API_KEY || "";
 
 export interface InstagramProfile {
   username: string;
@@ -117,15 +119,85 @@ function extractPostData(post: any, followerCount: number): InstagramPost {
   };
 }
 
+// ── Self-hosted scraper: single call, returns pre-processed data ──
+async function fetchFromScraper(
+  handle: string
+): Promise<InstagramData> {
+  const url = `${SCRAPER_URL}/api/instagram/${encodeURIComponent(handle)}`;
+  const res = await fetch(url, {
+    headers: SCRAPER_KEY ? { "x-api-key": SCRAPER_KEY } : {},
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(body || `Scraper error: ${res.status}`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = (await res.json()) as any;
+  const processed = data.processed;
+
+  if (!processed?.profile) {
+    throw new Error("Invalid scraper response");
+  }
+
+  const profileData = processed.profile;
+  const followerCount = profileData.follower_count || 0;
+
+  const profile: InstagramProfile = {
+    username: profileData.username || handle,
+    fullName: profileData.full_name || "",
+    biography: profileData.biography || "",
+    followerCount,
+    followingCount: profileData.following_count || 0,
+    mediaCount: profileData.media_count || 0,
+    isPrivate: false,
+    category: profileData.category_name || null,
+    profilePicUrl: profileData.profile_pic_url_hd || null,
+  };
+
+  const posts: InstagramPost[] = (processed.posts || []).map(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (p: any) => ({
+      caption: p.caption || "",
+      likeCount: p.likeCount || 0,
+      commentCount: p.commentCount || 0,
+      shareCount: p.shareCount || 0,
+      mediaType: p.mediaType || "image",
+      timestamp: p.timestamp || 0,
+      playCount: p.playCount || null,
+      engagementRate: p.engagementRate || 0,
+    })
+  );
+
+  const avgEngagementRate = processed.avg_engagement_rate || 0;
+
+  const topPosts = [...posts]
+    .sort((a, b) => b.engagementRate - a.engagementRate)
+    .slice(0, 4);
+
+  return { profile, posts, topPosts, avgEngagementRate };
+}
+
 export async function fetchInstagramData(
   handle: string
 ): Promise<InstagramData> {
   // Clean the handle
   const cleanHandle = handle.replace(/^@/, "").trim();
 
-  // ── Strategy: Use Account Data + User Posts (2 calls) ──
-  // Account Data gives full profile info
-  // User Posts gives recent posts with engagement metrics
+  // ── Try self-hosted scraper first (unlimited, free) ──
+  if (SCRAPER_URL) {
+    try {
+      return await fetchFromScraper(cleanHandle);
+    } catch (scraperErr) {
+      console.warn(
+        "[Instagram] Scraper failed, falling back to RapidAPI:",
+        scraperErr instanceof Error ? scraperErr.message : scraperErr
+      );
+    }
+  }
+
+  // ── Fallback: RapidAPI (limited requests) ──
 
   // 1. Fetch profile info
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

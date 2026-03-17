@@ -123,6 +123,30 @@ function mergeInstagramResult(
   const totalShares = igData.posts.reduce((s, p) => s + p.shareCount, 0);
   const postCount = igData.posts.length || 1;
 
+  // Compute estimated reach (followers * engagement rate as a range)
+  const reachLow = Math.round(igData.profile.followerCount * (er / 100) * 0.6);
+  const reachHigh = Math.round(igData.profile.followerCount * (er / 100) * 1.8);
+  const reachPct = ((er / 100) * 100).toFixed(2);
+
+  // Estimate integration price based on follower tiers (industry standard CPM)
+  const fc = igData.profile.followerCount;
+  const baseCPM = fc > 1_000_000 ? 15 : fc > 500_000 ? 20 : fc > 100_000 ? 25 : fc > 50_000 ? 30 : fc > 10_000 ? 40 : 50;
+  const avgReach = (reachLow + reachHigh) / 2;
+  const estPriceMid = Math.round((avgReach / 1000) * baseCPM);
+  const estPriceLow = Math.round(estPriceMid * 0.5);
+  const estPriceHigh = Math.round(estPriceMid * 1.5);
+  const cpm = ((estPriceMid / (avgReach / 1000))).toFixed(2);
+
+  // Account quality score (0-100) based on multiple factors
+  const erScore = Math.min(er * 10, 30); // max 30pts for engagement
+  const freqScore = Math.min(freq.postsPerWeek * 5, 20); // max 20pts for frequency
+  const mixScore = contentMix.length >= 2 ? 15 : 8; // diversity bonus
+  const volScore = Math.min(igData.profile.mediaCount / 20, 20); // max 20pts for volume
+  const sizeScore = Math.min(Math.log10(fc) * 3, 15); // max 15pts for audience size
+  const qualityScore = Math.min(Math.round(erScore + freqScore + mixScore + volScore + sizeScore), 100);
+  const qualityLabel = qualityScore >= 80 ? "Excellent" : qualityScore >= 60 ? "Good" : qualityScore >= 40 ? "Average" : "Below Average";
+  const qualityLevel = qualityScore >= 80 ? "excellent" : qualityScore >= 60 ? "good" : qualityScore >= 40 ? "average" : "below";
+
   return {
     profile: {
       handle: igData.profile.username,
@@ -148,6 +172,32 @@ function mergeInstagramResult(
       postingFrequency: freq,
       contentMix,
       totalPostsAnalyzed: igData.posts.length,
+    },
+    estimatedReach: {
+      low: reachLow,
+      high: reachHigh,
+      pctOfFollowers: reachPct,
+      level: er >= 3 ? "excellent" : er >= 1.5 ? "good" : er >= 0.8 ? "average" : "below",
+      label: er >= 3 ? "Excellent" : er >= 1.5 ? "Good" : er >= 0.8 ? "Average" : "Below Average",
+    },
+    estimatedPrice: {
+      low: estPriceLow,
+      mid: estPriceMid,
+      high: estPriceHigh,
+      cpm,
+      currency: "USD",
+    },
+    accountQuality: {
+      score: qualityScore,
+      label: qualityLabel,
+      level: qualityLevel,
+      breakdown: {
+        engagement: Math.round(erScore),
+        frequency: Math.round(freqScore),
+        contentDiversity: mixScore,
+        volume: Math.round(volScore),
+        audienceSize: Math.round(sizeScore),
+      },
     },
     contentCategories: aiAnalysis.contentCategories || [],
     outliers: igData.topPosts.map((post, i) => ({
